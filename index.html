@@ -188,6 +188,7 @@
 
     section {
       padding: 90px 0;
+      scroll-margin-top: 84px;
     }
 
     .section-title {
@@ -325,6 +326,7 @@
     }
 
     .method-item {
+      padding: 0;
       border: 1px solid #dde4eb;
       border-radius: 16px;
       background: #fff;
@@ -1181,7 +1183,7 @@
 
           <div class="form-field">
             <label for="contact">Как с вами связаться *</label>
-            <input id="contact" name="contact" type="text" autocomplete="email" placeholder="Телефон, Telegram или e-mail" required>
+            <input id="contact" name="contact" type="text" autocomplete="off" placeholder="Телефон, Telegram или e-mail" required>
           </div>
 
           <div class="form-field form-field-wide">
@@ -1329,18 +1331,34 @@
   });
 
   var methodSection = document.getElementById('lot-check');
-  if (methodSection && 'IntersectionObserver' in window) {
+  var methodViewTarget = methodSection ? methodSection.querySelector('.section-title') : null;
+  if (methodViewTarget && 'IntersectionObserver' in window) {
     var viewed = false;
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        if (!viewed && entry.isIntersecting && entry.intersectionRatio >= 0.25) {
+        if (!viewed && entry.isIntersecting && entry.intersectionRatio >= 0.5) {
           viewed = true;
           trackEvent('lot_check_method_view');
           observer.disconnect();
         }
       });
-    }, { threshold: [0.25] });
-    observer.observe(methodSection);
+    }, { threshold: [0.5] });
+    observer.observe(methodViewTarget);
+  }
+
+  var formWrap = document.getElementById('lot-check-form');
+  if (formWrap && 'IntersectionObserver' in window) {
+    var formViewed = false;
+    var formObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!formViewed && entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+          formViewed = true;
+          trackEvent('lot_check_form_view');
+          formObserver.disconnect();
+        }
+      });
+    }, { threshold: [0.35] });
+    formObserver.observe(formWrap);
   }
 
   var form = document.getElementById('lot-check-form-element');
@@ -1425,23 +1443,28 @@
       var message = buildMessage();
       var assetType = assetTypeValue();
 
+      var telegramWindow = window.open('https://t.me/Dmitry_G_Iv', '_blank', 'noopener');
+
+      trackEvent('lot_check_handoff', {
+        channel: 'telegram',
+        asset_type: assetType,
+        handoff: true
+      });
+
       copyText(message).then(function () {
         if (status) {
-          status.textContent = 'Текст обращения скопирован. Telegram открыт — вставьте сообщение в чат и отправьте после проверки.';
+          status.textContent = 'Текст обращения скопирован. Вставьте его в открытый чат Telegram и отправьте после проверки.';
         }
-        trackEvent('lot_check_handoff', {
-          channel: 'telegram',
-          asset_type: assetType,
-          handoff: true
-        });
-        window.open('https://t.me/Dmitry_G_Iv', '_blank', 'noopener');
       }).catch(function () {
         if (status) {
-          status.textContent = 'Не удалось скопировать текст автоматически. Откройте Telegram и отправьте ссылку на лот вручную.';
+          status.textContent = 'Telegram открыт, но текст не удалось скопировать автоматически. Отправьте ссылку на лот вручную.';
         }
         trackEvent('lot_check_form_error', { reason: 'clipboard' });
-        window.open('https://t.me/Dmitry_G_Iv', '_blank', 'noopener');
       });
+
+      if (!telegramWindow && status) {
+        status.textContent = 'Браузер не открыл новую вкладку. Разрешите всплывающие окна или откройте Telegram вручную; текст обращения подготовлен для копирования.';
+      }
     });
   }
 
