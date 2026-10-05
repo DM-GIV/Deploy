@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://deploy-pi-blond-52.vercel.app/sitemap.xml
