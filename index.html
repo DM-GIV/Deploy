@@ -807,7 +807,8 @@
 
       <div class="nav-links">
         <a href="#services">Услуги</a>
-        <a href="#process">Как работаю</a>\n        <a href="#lot-check">Проверка лота</a>
+        <a href="#process">Как работаю</a>
+        <a href="#lot-check">Проверка лота</a>
         <a href="#faq">Вопросы</a>
         <a href="#contacts">Контакты</a>
       </div>
@@ -1428,7 +1429,7 @@
         if (status) {
           status.textContent = 'Текст обращения скопирован. Telegram открыт — вставьте сообщение в чат и отправьте после проверки.';
         }
-        trackEvent('lot_check_form_submit', {
+        trackEvent('lot_check_handoff', {
           channel: 'telegram',
           asset_type: assetType,
           handoff: true
@@ -1452,7 +1453,7 @@
       var assetType = assetTypeValue();
       var subject = 'Лот на первичный разбор';
 
-      trackEvent('lot_check_form_submit', {
+      trackEvent('lot_check_handoff', {
         channel: 'email',
         asset_type: assetType,
         handoff: true
