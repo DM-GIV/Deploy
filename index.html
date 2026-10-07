@@ -865,6 +865,52 @@
       .final-box { padding:30px 22px; }
     }
 
+
+    /* VALUE-FIRST FUNNEL */
+    .search-brief { background:#f6f8fb; }
+    .value-tool { padding:30px; border:1px solid #e1e7ee; border-radius:20px; background:#fff; box-shadow:0 16px 44px rgba(8,29,47,.07); }
+    .value-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .value-form .form-field label { color:var(--ink); }
+    .value-form .form-field input,
+    .value-form .form-field select,
+    .value-form .form-field textarea { border:1px solid #d9e0e8; background:#fff; color:var(--ink); }
+    .value-form .form-field input::placeholder,
+    .value-form .form-field textarea::placeholder { color:#98a2b3; }
+    .tool-note { color:#667085; font-size:13px; align-self:center; }
+    .value-result { margin-top:26px; padding:28px; border:1px solid #dce4eb; border-radius:18px; background:#f8fafc; color:var(--ink); }
+    .value-result[hidden] { display:none !important; }
+    .value-result-head { display:flex; justify-content:space-between; gap:20px; align-items:flex-start; margin-bottom:18px; }
+    .value-result h3 { font-size:clamp(23px,3vw,31px); letter-spacing:-.6px; }
+    .text-button { border:0; background:transparent; color:#b95300; font:inherit; font-size:13px; font-weight:750; cursor:pointer; text-decoration:underline; text-underline-offset:3px; }
+    .result-summary { margin-bottom:18px; padding:16px 18px; border-radius:12px; background:#fff; border:1px solid #e2e8f0; }
+    .result-intro { margin-bottom:18px; color:#455468; }
+    .check-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .check-card { padding:18px; border:1px solid #e1e7ee; border-radius:14px; background:#fff; }
+    .check-card h4 { margin-bottom:8px; font-size:16px; }
+    .check-card ul { margin-left:18px; color:#5f6874; font-size:14px; }
+    .check-card li + li { margin-top:5px; }
+    .result-disclaimer { margin-top:16px; padding:14px 16px; border-left:4px solid var(--orange); border-radius:0 10px 10px 0; background:#fff7e9; color:#66401f; font-size:13px; }
+    .lead-after-value { margin-top:22px; padding-top:22px; border-top:1px solid #dce4eb; }
+    .lead-after-value h4 { margin-bottom:6px; font-size:20px; }
+    .lead-after-value > p { color:#667085; }
+    .lead-contact-field { max-width:620px; margin-top:16px; }
+    .lead-contact-field label { color:var(--ink); }
+    .lead-contact-field input { border:1px solid #d9e0e8; background:#fff; color:var(--ink); }
+    .handoff-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+    .value-secondary { color:var(--ink) !important; border-color:#d6dde5 !important; background:#fff !important; }
+    .value-secondary:hover { background:#f8fafc !important; }
+    .lot-result .section-label { color:#f07b17; }
+    .lot-result .form-status,
+    .value-result .form-status { margin-top:12px; color:#667085; }
+    .lot-check-form-wrap .lot-form .form-actions { margin-top:2px; }
+    .lot-check-form-wrap .tool-note { color:#aebbc6; }
+    @media(max-width:800px) {
+      .value-form,.check-grid { grid-template-columns:1fr; }
+      .value-tool,.value-result { padding:22px 18px; }
+      .value-result-head { flex-direction:column; gap:8px; }
+      .handoff-actions .button { width:100%; }
+    }
+
   </style>
 </head>
 
@@ -898,7 +944,7 @@
         <p class="hero-subline">Уже нашли интересный лот? Пришлите ссылку — начнём с его проверки.</p>
         <div class="hero-buttons">
           <a class="button button-primary" href="#lot-check-form" data-track="lot_check_cta_click">Проверить лот</a>
-          <a class="button button-secondary" href="https://t.me/Dmitry_G_Iv" target="_blank" rel="noopener noreferrer" data-track="lot_search_cta_click">Подобрать объект</a>
+          <a class="button button-secondary" href="#search-brief" data-track="lot_search_cta_click">Подобрать объект</a>
         </div>
         <div class="hero-secondary-note">Работа по всей России.</div>
       </div>
@@ -937,8 +983,81 @@
         <article class="v2-card scenario-card">
           <h3>Вы ещё ищете объект</h3>
           <p>Расскажите, что хотите приобрести, в каком регионе, для какой цели и какой у вас бюджет. Сформируем критерии поиска и будем искать подходящие варианты.</p>
-          <a class="button button-primary" href="https://t.me/Dmitry_G_Iv" target="_blank" rel="noopener noreferrer">Поставить задачу на подбор</a>
+          <a class="button button-primary" href="#search-brief" data-track="search_brief_cta_click">Собрать задачу на подбор</a>
         </article>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="search-brief v2-section" id="search-brief">
+    <div class="container">
+      <div class="section-title">
+        <div class="section-label">Если лота ещё нет</div>
+        <h2>Соберите первичную карту поиска прямо на сайте</h2>
+        <p class="v2-lead">Сначала сформулируем критерии: что ищем, где, в каком бюджете и для какой цели. Контакт на этом шаге не нужен.</p>
+      </div>
+
+      <div class="value-tool">
+        <form class="value-form" id="search-brief-form">
+          <div class="form-field">
+            <label for="search-asset-type">Что ищете *</label>
+            <select id="search-asset-type" name="search_asset_type" required>
+              <option value="">Выберите тип имущества</option>
+              <option value="Недвижимость">Недвижимость</option>
+              <option value="Автомобиль или транспорт">Автомобиль или транспорт</option>
+              <option value="Спецтехника">Спецтехника</option>
+              <option value="Оборудование">Оборудование</option>
+              <option value="Другое имущество">Другое имущество</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="search-region">Регион *</label>
+            <input id="search-region" name="search_region" type="text" placeholder="Например: Москва и область" required>
+          </div>
+          <div class="form-field">
+            <label for="search-budget">Бюджет *</label>
+            <input id="search-budget" name="search_budget" type="text" inputmode="decimal" placeholder="Например: до 5 000 000 ₽" required>
+          </div>
+          <div class="form-field">
+            <label for="search-goal">Цель покупки *</label>
+            <select id="search-goal" name="search_goal" required>
+              <option value="">Выберите цель</option>
+              <option value="Для себя">Для себя</option>
+              <option value="Для бизнеса">Для бизнеса</option>
+              <option value="Для перепродажи">Для перепродажи</option>
+              <option value="Для инвестиций / аренды">Для инвестиций / аренды</option>
+              <option value="Другая задача">Другая задача</option>
+            </select>
+          </div>
+          <div class="form-actions form-field-wide">
+            <button class="button button-primary" type="submit">Собрать карту поиска</button>
+            <span class="tool-note">Без регистрации и перехода в мессенджер.</span>
+          </div>
+        </form>
+
+        <div class="value-result" id="search-brief-result" hidden aria-live="polite">
+          <div class="value-result-head">
+            <div>
+              <div class="section-label">Первая ценность</div>
+              <h3>Ваша первичная карта поиска</h3>
+            </div>
+            <button class="text-button" type="button" id="copy-search-brief">Скопировать</button>
+          </div>
+          <div class="result-summary" id="search-brief-summary"></div>
+          <div class="check-grid" id="search-brief-checks"></div>
+          <div class="result-disclaimer">Это не подбор конкретных лотов и не оценка их качества. Карта помогает зафиксировать критерии, по которым имеет смысл начинать поиск и последующую проверку.</div>
+
+          <div class="lead-after-value">
+            <h4>Хотите передать эту задачу мне?</h4>
+            <p>Теперь можно выбрать удобный канал. До этого шага контакт не требовался.</p>
+            <div class="handoff-actions">
+              <button class="button button-primary" type="button" id="search-send-telegram">Передать в Telegram</button>
+              <button class="button button-secondary value-secondary" type="button" id="search-send-email">Подготовить e-mail</button>
+            </div>
+            <div class="form-status" id="search-status" role="status" aria-live="polite"></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -961,39 +1080,74 @@
       </div>
 
       <div class="lot-check-form-wrap" id="lot-check-form">
-        <h3>Передать лот на первичный разбор</h3>
-        <p>Укажите ссылку на объект и кратко опишите, что особенно важно проверить. Вы сами выбираете Telegram или e-mail для передачи обращения.</p>
-        <form class="lot-form" id="lot-check-form-element" novalidate>
+        <h3>Получите предварительную карту проверки</h3>
+        <p>Укажите ссылку на лот и тип имущества. Сначала сайт сформирует список того, что стоит проверить. Контакт не нужен.</p>
+
+        <form class="lot-form" id="lot-check-form-element">
           <div class="form-field form-field-wide">
             <label for="lot-url">Ссылка на лот *</label>
             <input id="lot-url" name="lot_url" type="url" inputmode="url" autocomplete="url" placeholder="https://..." required>
           </div>
           <div class="form-field">
-            <label for="asset-type">Тип имущества</label>
-            <select id="asset-type" name="asset_type">
-              <option value="Не указано">Выберите при необходимости</option>
+            <label for="asset-type">Тип имущества *</label>
+            <select id="asset-type" name="asset_type" required>
+              <option value="">Выберите тип имущества</option>
               <option value="Недвижимость">Недвижимость</option>
               <option value="Автомобиль">Автомобиль</option>
+              <option value="Спецтехника">Спецтехника</option>
               <option value="Оборудование">Оборудование</option>
               <option value="Другое имущество">Другое имущество</option>
             </select>
           </div>
           <div class="form-field">
-            <label for="contact">Как с вами связаться *</label>
-            <input id="contact" name="contact" type="text" autocomplete="email" placeholder="Телефон, Telegram или e-mail" required>
+            <label for="concern-short">Что беспокоит больше всего?</label>
+            <select id="concern-short" name="concern_short">
+              <option value="Общая проверка">Нужна общая проверка</option>
+              <option value="Документы и права">Документы и права</option>
+              <option value="Ограничения и обременения">Ограничения и обременения</option>
+              <option value="Условия торгов">Условия торгов</option>
+              <option value="Экономика сделки">Экономика сделки</option>
+              <option value="Получение и дальнейшая реализация">Получение и дальнейшая реализация</option>
+            </select>
           </div>
           <div class="form-field form-field-wide">
-            <label for="concern">Что особенно нужно проверить?</label>
-            <textarea id="concern" name="concern" placeholder="Например: документы, ограничения, условия торгов или конкретный вопрос"></textarea>
-            <span class="form-help">Необязательное поле.</span>
+            <label for="concern">Дополнительный вопрос</label>
+            <textarea id="concern" name="concern" placeholder="Необязательно. Например: есть ли риск по зарегистрированным лицам, состоянию автомобиля или передаче имущества"></textarea>
           </div>
           <div class="form-actions">
-            <button class="button button-primary" type="button" id="send-telegram">Передать через Telegram</button>
-            <button class="button button-form-secondary" type="button" id="send-email">Подготовить e-mail</button>
+            <button class="button button-primary" type="submit" id="generate-lot-map">Получить карту проверки</button>
+            <span class="tool-note">Результат появится здесь же. Без отправки данных.</span>
           </div>
           <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
-          <div class="form-privacy">Перед отправкой вы увидите подготовленное обращение в выбранном канале и сможете его проверить.</div>
         </form>
+
+        <div class="value-result lot-result" id="lot-check-result" hidden aria-live="polite">
+          <div class="value-result-head">
+            <div>
+              <div class="section-label">Первая ценность</div>
+              <h3>Предварительная карта проверки</h3>
+            </div>
+            <button class="text-button" type="button" id="copy-lot-check">Скопировать чек-лист</button>
+          </div>
+          <p class="result-intro" id="lot-result-intro"></p>
+          <div class="check-grid" id="lot-result-checks"></div>
+          <div class="result-disclaimer"><strong>Важно:</strong> сайт не открывает и не анализирует содержимое указанной ссылки автоматически. Это предварительный чек-лист по типу имущества и вашей задаче. Фактические выводы по конкретному лоту возможны только после изучения публикации, документов и доступных источников.</div>
+
+          <div class="lead-after-value">
+            <h4>Нужен разбор именно этого лота?</h4>
+            <p>После предварительной карты можно передать ссылку на фактическую проверку. Выберите канал — Telegram не обязателен.</p>
+            <div class="form-field lead-contact-field">
+              <label for="contact">Контакт для обратной связи</label>
+              <input id="contact" name="contact" type="text" autocomplete="email" placeholder="Необязательно: телефон, Telegram или e-mail">
+            </div>
+            <div class="handoff-actions">
+              <button class="button button-primary" type="button" id="send-telegram">Передать через Telegram</button>
+              <button class="button button-secondary value-secondary" type="button" id="send-email">Подготовить e-mail</button>
+              <a class="button button-secondary value-secondary" href="#contacts" data-track="lot_contact_options_click">Другие способы связи</a>
+            </div>
+            <div class="form-status" id="handoff-status" role="status" aria-live="polite"></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1058,7 +1212,7 @@
       <div class="section-title"><div class="section-label">Услуги</div><h2>Можно обратиться на любом этапе</h2></div>
       <div class="v2-grid-3">
         <article class="v2-card"><h3>Проверка конкретного лота</h3><p>Для тех, кто уже нашёл интересующий объект и хочет разобраться до внесения задатка.</p><a class="button button-primary" href="#lot-check-form">Проверить лот</a></article>
-        <article class="v2-card"><h3>Поиск и подбор имущества</h3><p>Для тех, кто знает, что хочет купить, но не хочет самостоятельно просматривать большое количество торгов.</p><a class="button button-primary" href="https://t.me/Dmitry_G_Iv" target="_blank" rel="noopener noreferrer">Подобрать имущество</a></article>
+        <article class="v2-card"><h3>Поиск и подбор имущества</h3><p>Для тех, кто знает, что хочет купить, но не хочет самостоятельно просматривать большое количество торгов.</p><a class="button button-primary" href="#search-brief" data-track="search_brief_cta_click">Подобрать имущество</a></article>
         <article class="v2-card"><h3>Сопровождение участия в торгах</h3><p>Подготовка и прохождение процедуры по выбранному объекту.</p><a class="button button-primary" href="#contacts">Обсудить участие</a></article>
         <article class="v2-card"><h3>Анализ инвестиционной сделки</h3><p>Для покупателей, которым важна не только покупка, но и экономика дальнейшего использования или перепродажи.</p><a class="button button-primary" href="#contacts">Рассчитать сделку</a></article>
         <article class="v2-card"><h3>Работа после приобретения</h3><p>Помощь с дальнейшими действиями по приобретённому активу и, когда это входит в задачу, с его последующей реализацией.</p><a class="button button-primary" href="#contacts">Обсудить задачу</a></article>
@@ -1109,7 +1263,7 @@
       </div>
       <div class="lot-check-actions">
         <a class="button button-primary" href="#lot-check-form">Отправить ссылку на лот</a>
-        <a class="button button-secondary" style="color:var(--ink);border-color:#d6dde5;background:#fff" href="https://t.me/Dmitry_G_Iv" target="_blank" rel="noopener noreferrer">Поставить задачу на поиск</a>
+        <a class="button button-secondary" style="color:var(--ink);border-color:#d6dde5;background:#fff" href="#search-brief" data-track="search_brief_cta_click">Собрать задачу на поиск</a>
       </div>
     </div>
   </section>
@@ -1147,7 +1301,7 @@
         <p>Пришлите ссылку на объект — разберём, что необходимо проверить до принятия решения.</p>
         <div class="final-actions">
           <a class="button button-primary" href="#lot-check-form">Проверить лот</a>
-          <a class="button button-secondary" href="https://t.me/Dmitry_G_Iv" target="_blank" rel="noopener noreferrer">Подобрать имущество</a>
+          <a class="button button-secondary" href="#search-brief" data-track="search_brief_cta_click">Подобрать имущество</a>
         </div>
       </div>
     </div>
@@ -1182,21 +1336,16 @@
 (function () {
   function trackEvent(name, props) {
     var details = props || {};
-
     if (typeof window.gtag === 'function') {
       window.gtag('event', name, details);
     } else {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push(Object.assign({ event: name }, details));
     }
-
     if (typeof window.plausible === 'function') {
       window.plausible(name, { props: details });
     }
-
-    window.dispatchEvent(new CustomEvent('cro:event', {
-      detail: { name: name, props: details }
-    }));
+    window.dispatchEvent(new CustomEvent('cro:event', { detail: { name: name, props: details } }));
   }
 
   window.auctionCROTrack = trackEvent;
@@ -1207,111 +1356,10 @@
     });
   });
 
-  document.querySelectorAll('.method-item').forEach(function (item) {
-    item.addEventListener('toggle', function () {
-      if (item.open) {
-        var title = item.querySelector('.method-title');
-        trackEvent('lot_check_method_expand', {
-          section: title ? title.textContent.trim() : ''
-        });
-      }
-    });
-  });
-
-  var methodSection = document.getElementById('lot-check');
-  var methodViewTarget = methodSection ? methodSection.querySelector('.section-title') : null;
-  if (methodViewTarget && 'IntersectionObserver' in window) {
-    var viewed = false;
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!viewed && entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-          viewed = true;
-          trackEvent('lot_check_method_view');
-          observer.disconnect();
-        }
-      });
-    }, { threshold: [0.5] });
-    observer.observe(methodViewTarget);
-  }
-
-  var formWrap = document.getElementById('lot-check-form');
-  if (formWrap && 'IntersectionObserver' in window) {
-    var formViewed = false;
-    var formObserver = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!formViewed && entry.isIntersecting && entry.intersectionRatio >= 0.35) {
-          formViewed = true;
-          trackEvent('lot_check_form_view');
-          formObserver.disconnect();
-        }
-      });
-    }, { threshold: [0.35] });
-    formObserver.observe(formWrap);
-  }
-
-  var form = document.getElementById('lot-check-form-element');
-  var telegramButton = document.getElementById('send-telegram');
-  var emailButton = document.getElementById('send-email');
-  var status = document.getElementById('form-status');
-  var started = false;
-
-  function assetTypeValue() {
-    var field = document.getElementById('asset-type');
-    return field ? field.value : 'Не указано';
-  }
-
-  function markStarted() {
-    if (!started) {
-      started = true;
-      trackEvent('lot_check_form_start', { asset_type: assetTypeValue() });
-    }
-  }
-
-  if (form) {
-    form.addEventListener('input', markStarted, { once: false });
-    form.addEventListener('change', markStarted, { once: false });
-
-    form.addEventListener('invalid', function (event) {
-      trackEvent('lot_check_form_error', {
-        field: event.target && event.target.name ? event.target.name : 'unknown'
-      });
-    }, true);
-  }
-
-  function validateForm() {
-    if (!form) return false;
-
-    if (!form.checkValidity()) {
-      form.reportValidity();
-      if (status) status.textContent = 'Заполните обязательные поля: ссылку на лот и контакт.';
-      trackEvent('lot_check_form_error', { reason: 'validation' });
-      return false;
-    }
-
-    return true;
-  }
-
-  function buildMessage() {
-    var lotUrl = document.getElementById('lot-url').value.trim();
-    var assetType = assetTypeValue();
-    var contact = document.getElementById('contact').value.trim();
-    var concern = document.getElementById('concern').value.trim();
-
-    return [
-      'Здравствуйте. Хочу передать лот на первичный разбор.',
-      '',
-      'Ссылка: ' + lotUrl,
-      'Тип имущества: ' + assetType,
-      'Контакт: ' + contact,
-      'Что особенно проверить: ' + (concern || 'не указано')
-    ].join('\n');
-  }
-
   function copyText(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       return navigator.clipboard.writeText(text);
     }
-
     var textarea = document.createElement('textarea');
     textarea.value = text;
     textarea.setAttribute('readonly', '');
@@ -1324,60 +1372,319 @@
     return Promise.resolve();
   }
 
-  if (telegramButton) {
-    telegramButton.addEventListener('click', function () {
-      if (!validateForm()) return;
+  function openTelegramWithCopy(message, statusElement) {
+    var win = window.open('https://t.me/Dmitry_G_Iv', '_blank', 'noopener');
+    copyText(message).then(function () {
+      if (statusElement) statusElement.textContent = 'Текст обращения скопирован. Вставьте его в открытый чат Telegram и проверьте перед отправкой.';
+    }).catch(function () {
+      if (statusElement) statusElement.textContent = 'Telegram открыт. Автоматически скопировать текст не удалось — передайте данные вручную.';
+    });
+    if (!win && statusElement) {
+      statusElement.textContent = 'Браузер не открыл новую вкладку. Разрешите всплывающие окна или выберите e-mail / контакты ниже.';
+    }
+  }
 
-      var message = buildMessage();
-      var assetType = assetTypeValue();
+  function openEmail(subject, message, statusElement) {
+    if (statusElement) statusElement.textContent = 'Открываю почтовое приложение с подготовленным письмом.';
+    window.location.href = 'mailto:dmitry.g.iv@yandex.ru?subject=' +
+      encodeURIComponent(subject) + '&body=' + encodeURIComponent(message);
+  }
 
-      var telegramWindow = window.open('https://t.me/Dmitry_G_Iv', '_blank', 'noopener');
-
-      trackEvent('lot_check_handoff', {
-        channel: 'telegram',
-        asset_type: assetType,
-        handoff: true
+  function renderCards(target, groups) {
+    target.innerHTML = '';
+    groups.forEach(function (group) {
+      var card = document.createElement('div');
+      card.className = 'check-card';
+      var h = document.createElement('h4');
+      h.textContent = group.title;
+      var ul = document.createElement('ul');
+      group.items.forEach(function (item) {
+        var li = document.createElement('li');
+        li.textContent = item;
+        ul.appendChild(li);
       });
-
-      copyText(message).then(function () {
-        if (status) {
-          status.textContent = 'Текст обращения скопирован. Вставьте его в открытый чат Telegram и отправьте после проверки.';
-        }
-      }).catch(function () {
-        if (status) {
-          status.textContent = 'Telegram открыт, но текст не удалось скопировать автоматически. Отправьте ссылку на лот вручную.';
-        }
-        trackEvent('lot_check_form_error', { reason: 'clipboard' });
-      });
-
-      if (!telegramWindow && status) {
-        status.textContent = 'Браузер не открыл новую вкладку. Разрешите всплывающие окна или откройте Telegram вручную; текст обращения подготовлен для копирования.';
-      }
+      card.appendChild(h);
+      card.appendChild(ul);
+      target.appendChild(card);
     });
   }
 
-  if (emailButton) {
-    emailButton.addEventListener('click', function () {
-      if (!validateForm()) return;
+  var lotForm = document.getElementById('lot-check-form-element');
+  var lotResult = document.getElementById('lot-check-result');
+  var lotChecks = document.getElementById('lot-result-checks');
+  var lotIntro = document.getElementById('lot-result-intro');
+  var lotStatus = document.getElementById('form-status');
+  var handoffStatus = document.getElementById('handoff-status');
+  var lotGenerated = false;
 
-      var message = buildMessage();
-      var assetType = assetTypeValue();
-      var subject = 'Лот на первичный разбор';
+  function assetSpecificChecks(type) {
+    var map = {
+      'Недвижимость': [
+        'Сопоставить адрес, площадь, назначение и идентификаторы объекта с доступными реестровыми сведениями.',
+        'Проверить зарегистрированные права, ограничения и обременения по доступным официальным данным.',
+        'Отдельно оценить вопросы доступа, фактического состояния, пользования и возможной передачи объекта.'
+      ],
+      'Автомобиль': [
+        'Сопоставить VIN / иные идентификаторы, марку, модель, год и характеристики с документами лота.',
+        'Проверить доступные сведения об ограничениях, залогах, розыске и регистрационных действиях.',
+        'Оценить фактическое состояние, комплектность, место хранения и порядок передачи.'
+      ],
+      'Спецтехника': [
+        'Сопоставить заводские номера, модель, год выпуска и иные идентификаторы техники.',
+        'Проверить регистрационные документы, ограничения и фактическую комплектность.',
+        'Уточнить состояние, место нахождения, возможность осмотра, погрузки и вывоза.'
+      ],
+      'Оборудование': [
+        'Сопоставить состав, маркировку, серийные номера и комплектацию с описанием лота.',
+        'Проверить документы на принадлежность и доступные сведения об ограничениях.',
+        'Оценить демонтаж, погрузку, транспортировку, хранение и возможные расходы после покупки.'
+      ],
+      'Другое имущество': [
+        'Точно идентифицировать предмет продажи и состав имущества.',
+        'Проверить документы, подтверждающие принадлежность и условия распоряжения активом.',
+        'Определить специфические расходы на получение, хранение, перевозку или дальнейшее использование.'
+      ]
+    };
+    return map[type] || map['Другое имущество'];
+  }
 
-      trackEvent('lot_check_handoff', {
-        channel: 'email',
-        asset_type: assetType,
-        handoff: true
-      });
+  function lotGroups(type, concern) {
+    return [
+      { title:'1. Объект', items: assetSpecificChecks(type) },
+      { title:'2. Документы', items:[
+        'Сверить описание лота с опубликованными документами и приложениями.',
+        'Отметить отсутствующие или противоречивые сведения, без которых решение остаётся неопределённым.',
+        'Проверить, какие данные требуют подтверждения из независимого или официального источника.'
+      ]},
+      { title:'3. Процедура торгов', items:[
+        'Проверить сроки, размер и порядок внесения задатка, этап торгов и правила подачи предложения.',
+        'Изучить условия оплаты, заключения договора, передачи имущества и возможные специальные требования.',
+        'Проверить сообщения об изменении условий, отмене, результатах и связанных публикациях.'
+      ]},
+      { title:'4. Риски', items:[
+        'Отделить подтверждённые факты от предположений и рекламного описания.',
+        'Зафиксировать ограничения, споры, фактические препятствия и вопросы, которые нельзя подтвердить дистанционно.',
+        'Отдельный фокус пользователя: ' + concern + '.'
+      ]},
+      { title:'5. Экономика', items:[
+        'Считать не только цену торгов, но и оформление, получение, хранение, ремонт / подготовку и реализацию.',
+        'Сопоставить итоговую себестоимость с доступными рыночными ориентирами.',
+        'До участия определить предельную цену, выше которой сделка перестаёт соответствовать вашей цели.'
+      ]}
+    ];
+  }
 
-      if (status) {
-        status.textContent = 'Открываю почтовое приложение с подготовленным письмом. Проверьте текст перед отправкой.';
+  function buildLotChecklistText() {
+    var url = document.getElementById('lot-url').value.trim();
+    var type = document.getElementById('asset-type').value;
+    var concern = document.getElementById('concern-short').value;
+    var extra = document.getElementById('concern').value.trim();
+    var groups = lotGroups(type, concern);
+    var lines = [
+      'Предварительная карта проверки лота',
+      'Ссылка: ' + url,
+      'Тип имущества: ' + type,
+      'Фокус: ' + concern
+    ];
+    if (extra) lines.push('Дополнительный вопрос: ' + extra);
+    lines.push('');
+    groups.forEach(function (group) {
+      lines.push(group.title);
+      group.items.forEach(function (item) { lines.push('— ' + item); });
+      lines.push('');
+    });
+    lines.push('Важно: это предварительный чек-лист. Содержимое ссылки автоматически не анализировалось.');
+    return lines.join('\n');
+  }
+
+  if (lotForm) {
+    lotForm.addEventListener('input', function () {
+      if (!lotGenerated) trackEvent('lot_check_start');
+    }, { once:true });
+
+    lotForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      if (!lotForm.checkValidity()) {
+        lotForm.reportValidity();
+        if (lotStatus) lotStatus.textContent = 'Укажите корректную ссылку и тип имущества.';
+        trackEvent('lot_check_error', { reason:'validation' });
+        return;
       }
 
-      window.location.href = 'mailto:dmitry.g.iv@yandex.ru?subject=' +
-        encodeURIComponent(subject) + '&body=' + encodeURIComponent(message);
+      var type = document.getElementById('asset-type').value;
+      var concern = document.getElementById('concern-short').value;
+      renderCards(lotChecks, lotGroups(type, concern));
+      lotIntro.textContent = 'Для объекта типа «' + type + '» начните с пяти блоков ниже. Это карта вопросов, а не заключение по конкретному лоту.';
+      lotResult.hidden = false;
+      lotGenerated = true;
+      if (lotStatus) lotStatus.textContent = '';
+      trackEvent('lot_check_complete', { asset_type:type, concern:concern });
+      lotResult.scrollIntoView({ behavior:'smooth', block:'start' });
     });
   }
+
+  var copyLot = document.getElementById('copy-lot-check');
+  if (copyLot) {
+    copyLot.addEventListener('click', function () {
+      copyText(buildLotChecklistText()).then(function () {
+        copyLot.textContent = 'Скопировано';
+        trackEvent('lot_check_copy');
+        setTimeout(function(){ copyLot.textContent = 'Скопировать чек-лист'; }, 1800);
+      });
+    });
+  }
+
+  function buildLotHandoffMessage() {
+    var contact = document.getElementById('contact').value.trim();
+    var message = buildLotChecklistText() +
+      '\n\nХочу передать этот лот на фактический разбор.';
+    if (contact) message += '\nКонтакт для обратной связи: ' + contact;
+    return message;
+  }
+
+  var sendTelegram = document.getElementById('send-telegram');
+  if (sendTelegram) {
+    sendTelegram.addEventListener('click', function () {
+      if (!lotGenerated) {
+        if (lotStatus) lotStatus.textContent = 'Сначала получите предварительную карту проверки.';
+        return;
+      }
+      trackEvent('lead_submit', { source:'lot_check', channel:'telegram' });
+      openTelegramWithCopy(buildLotHandoffMessage(), handoffStatus);
+    });
+  }
+
+  var sendEmail = document.getElementById('send-email');
+  if (sendEmail) {
+    sendEmail.addEventListener('click', function () {
+      if (!lotGenerated) {
+        if (lotStatus) lotStatus.textContent = 'Сначала получите предварительную карту проверки.';
+        return;
+      }
+      trackEvent('lead_submit', { source:'lot_check', channel:'email' });
+      openEmail('Лот на фактический разбор', buildLotHandoffMessage(), handoffStatus);
+    });
+  }
+
+  var searchForm = document.getElementById('search-brief-form');
+  var searchResult = document.getElementById('search-brief-result');
+  var searchSummary = document.getElementById('search-brief-summary');
+  var searchChecks = document.getElementById('search-brief-checks');
+  var searchStatus = document.getElementById('search-status');
+  var searchGenerated = false;
+
+  function buildSearchData() {
+    return {
+      type: document.getElementById('search-asset-type').value,
+      region: document.getElementById('search-region').value.trim(),
+      budget: document.getElementById('search-budget').value.trim(),
+      goal: document.getElementById('search-goal').value
+    };
+  }
+
+  function searchGroups(data) {
+    return [
+      { title:'1. Критерии входа', items:[
+        'Тип имущества: ' + data.type + '.',
+        'Регион: ' + data.region + '.',
+        'Бюджет: ' + data.budget + '.',
+        'Цель: ' + data.goal + '.'
+      ]},
+      { title:'2. Что фиксируем до поиска', items:[
+        'Какие характеристики объекта являются обязательными, а какие можно обсуждать.',
+        'Какой запас бюджета должен остаться на оформление, получение и последующие расходы.',
+        'Какие риски недопустимы независимо от потенциальной скидки.'
+      ]},
+      { title:'3. Как фильтровать лоты', items:[
+        'Не отбирать объект только по проценту скидки или стартовой цене.',
+        'Сразу исключать варианты, по которым невозможно идентифицировать актив или оценить ключевые условия.',
+        'Каждый прошедший фильтр переводить в отдельную проверку документов, рисков и экономики.'
+      ]},
+      { title:'4. Следующий шаг', items:[
+        'Собрать несколько кандидатов по этим критериям.',
+        'Для каждого сравнить полную стоимость входа и доступные рыночные ориентиры.',
+        'Только после проверки конкретного лота принимать решение об участии.'
+      ]}
+    ];
+  }
+
+  function buildSearchText() {
+    var data = buildSearchData();
+    var lines = ['Задача на поиск имущества'];
+    searchGroups(data).forEach(function(group){
+      lines.push('', group.title);
+      group.items.forEach(function(item){ lines.push('— ' + item); });
+    });
+    return lines.join('\n');
+  }
+
+  if (searchForm) {
+    searchForm.addEventListener('input', function () {
+      if (!searchGenerated) trackEvent('search_brief_start');
+    }, { once:true });
+
+    searchForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      if (!searchForm.checkValidity()) {
+        searchForm.reportValidity();
+        return;
+      }
+      var data = buildSearchData();
+      searchSummary.innerHTML = '<strong>' + data.type + '</strong> · ' +
+        data.region + ' · ' + data.budget + ' · ' + data.goal;
+      renderCards(searchChecks, searchGroups(data));
+      searchResult.hidden = false;
+      searchGenerated = true;
+      trackEvent('search_brief_complete', { asset_type:data.type, goal:data.goal });
+      searchResult.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+  }
+
+  var copySearch = document.getElementById('copy-search-brief');
+  if (copySearch) {
+    copySearch.addEventListener('click', function () {
+      copyText(buildSearchText()).then(function () {
+        copySearch.textContent = 'Скопировано';
+        trackEvent('search_brief_copy');
+        setTimeout(function(){ copySearch.textContent = 'Скопировать'; }, 1800);
+      });
+    });
+  }
+
+  var searchTelegram = document.getElementById('search-send-telegram');
+  if (searchTelegram) {
+    searchTelegram.addEventListener('click', function () {
+      if (!searchGenerated) return;
+      trackEvent('lead_submit', { source:'search_brief', channel:'telegram' });
+      openTelegramWithCopy(buildSearchText() + '\n\nХочу обсудить подбор по этой задаче.', searchStatus);
+    });
+  }
+
+  var searchEmail = document.getElementById('search-send-email');
+  if (searchEmail) {
+    searchEmail.addEventListener('click', function () {
+      if (!searchGenerated) return;
+      trackEvent('lead_submit', { source:'search_brief', channel:'email' });
+      openEmail('Задача на подбор имущества с торгов', buildSearchText() + '\n\nХочу обсудить подбор по этой задаче.', searchStatus);
+    });
+  }
+
+  ['lot-check','search-brief'].forEach(function(id){
+    var section = document.getElementById(id);
+    if (section && 'IntersectionObserver' in window) {
+      var seen = false;
+      var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (!seen && entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+            seen = true;
+            trackEvent(id === 'lot-check' ? 'lot_check_view' : 'search_brief_view');
+            observer.disconnect();
+          }
+        });
+      }, { threshold:[0.35] });
+      observer.observe(section);
+    }
+  });
 })();
 </script>
 
