@@ -989,6 +989,18 @@
     @media(max-width:1000px){.work-formats-grid{grid-template-columns:1fr 1fr}.work-format-audience,.work-format-price{min-height:auto}}
     @media(max-width:690px){.work-formats-grid{grid-template-columns:1fr}.work-format-card{padding:22px 20px}.work-format-footnote{padding:16px}.work-format-footnote a{margin:8px 0 0}}
 
+  
+    /* CRO: prepared enquiries based on user-generated lot/search briefs */
+    .handoff-preview{margin-top:19px;padding:22px;border:1px solid #cfdfe9;border-top:4px solid #f4a32e;border-radius:15px;background:#fff;color:#102235;box-shadow:0 10px 30px rgba(8,30,48,.05)}
+    .handoff-preview[hidden]{display:none!important}
+    .handoff-preview label{display:block;margin-bottom:10px;font-weight:800;color:#122c3d}
+    .handoff-preview textarea{display:block;width:100%;max-width:100%;min-height:220px;padding:14px 16px;border:1px solid #cbd5e1;border-radius:10px;background:#f9fbfd;color:#203246;font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;resize:vertical}
+    .handoff-preview textarea:focus-visible{outline:3px solid #ffbd57;outline-offset:2px}
+    .handoff-privacy-note{font-size:13px;line-height:1.5;color:#526678;margin:13px 0!important}
+    .handoff-preview .handoff-actions{margin-top:15px}
+    .handoff-preview .form-status{margin-top:13px}
+    @media(max-width:800px){.handoff-preview{padding:18px 14px}.handoff-preview .button{width:100%;text-align:center}.handoff-preview textarea{min-height:220px}}
+
   </style>
 </head>
 
@@ -1130,12 +1142,27 @@
 
           <div class="lead-after-value">
             <h4>Хотите передать эту задачу мне?</h4>
-            <p>Теперь можно выбрать удобный канал. До этого шага контакт не требовался.</p>
+            <p>Подготовьте обращение для специалиста: критерии поиска уже включены, повторно заполнять их не нужно. Отправка — только по вашему решению.</p>
+            <div class="form-field lead-contact-field">
+              <label for="search-contact">Контакт для обратной связи (необязательно)</label>
+              <input id="search-contact" type="text" autocomplete="email" placeholder="Телефон, Telegram или e-mail — по желанию">
+            </div>
             <div class="handoff-actions">
-              <button class="button button-primary" type="button" id="search-send-telegram">Передать в Telegram</button>
-              <button class="button button-secondary value-secondary" type="button" id="search-send-email">Подготовить e-mail</button>
+              <button class="button button-primary" type="button" id="search-send-telegram">Подготовить обращение</button>
+              <a class="button button-secondary value-secondary" href="#contacts">Контакты и другие способы связи</a>
             </div>
             <div class="form-status" id="search-status" role="status" aria-live="polite"></div>
+            <div class="handoff-preview" id="search-handoff-preview" hidden>
+              <label for="search-handoff-text">Готовый текст обращения — можно отредактировать</label>
+              <textarea id="search-handoff-text" rows="9" spellcheck="true"></textarea>
+              <p class="handoff-privacy-note">Параметры поиска уже включены. Ничего не отправляется автоматически: проверьте текст и выберите способ передачи.</p>
+              <div class="handoff-actions">
+                <button class="button button-primary" type="button" id="search-handoff-email">Создать письмо</button>
+                <button class="button button-secondary value-secondary" type="button" id="search-handoff-telegram">Открыть Telegram и скопировать</button>
+                <button class="button button-secondary value-secondary" type="button" id="search-handoff-copy">Скопировать текст</button>
+              </div>
+              <div class="form-status" id="search-handoff-status" role="status" aria-live="polite"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -1216,17 +1243,27 @@
 
           <div class="lead-after-value">
             <h4>Нужен разбор именно этого лота?</h4>
-            <p>После предварительной карты можно передать ссылку на фактическую проверку. Выберите канал — Telegram не обязателен.</p>
+            <p>После предварительной карты подготовьте обращение: ссылка и ответы уже будут в тексте. Вы сможете проверить сообщение и выбрать e-mail или Telegram.</p>
             <div class="form-field lead-contact-field">
               <label for="contact">Контакт для обратной связи</label>
               <input id="contact" name="contact" type="text" autocomplete="email" placeholder="Необязательно: телефон, Telegram или e-mail">
             </div>
             <div class="handoff-actions">
-              <button class="button button-primary" type="button" id="send-telegram">Передать через Telegram</button>
-              <button class="button button-secondary value-secondary" type="button" id="send-email">Подготовить e-mail</button>
+              <button class="button button-primary" type="button" id="send-telegram">Подготовить обращение по лоту</button>
               <a class="button button-secondary value-secondary" href="#contacts" data-track="lot_contact_options_click">Другие способы связи</a>
             </div>
             <div class="form-status" id="handoff-status" role="status" aria-live="polite"></div>
+            <div class="handoff-preview" id="lot-handoff-preview" hidden>
+              <label for="lot-handoff-text">Готовый текст обращения — можно отредактировать</label>
+              <textarea id="lot-handoff-text" rows="9" spellcheck="true"></textarea>
+              <p class="handoff-privacy-note">Ссылка, тип имущества, ваш вопрос и предварительный чек-лист перенесены в сообщение. Ничего не отправляется автоматически.</p>
+              <div class="handoff-actions">
+                <button class="button button-primary" type="button" id="lot-handoff-email">Создать письмо</button>
+                <button class="button button-secondary value-secondary" type="button" id="lot-handoff-telegram">Открыть Telegram и скопировать</button>
+                <button class="button button-secondary value-secondary" type="button" id="lot-handoff-copy">Скопировать текст</button>
+              </div>
+              <div class="form-status" id="lot-handoff-status" role="status" aria-live="polite"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -1578,9 +1615,9 @@
     textarea.style.opacity = '0';
     document.body.appendChild(textarea);
     textarea.select();
-    document.execCommand('copy');
+    var copied = document.execCommand('copy');
     document.body.removeChild(textarea);
-    return Promise.resolve();
+    return copied ? Promise.resolve() : Promise.reject(new Error('Clipboard unavailable'));
   }
 
   function openTelegramWithCopy(message, statusElement) {
@@ -1734,6 +1771,16 @@
     });
   }
 
+  // Invalidate a generated map when its inputs change.
+  if (lotForm) lotForm.addEventListener('input', function () {
+    if (lotGenerated) {
+      lotGenerated = false;
+      lotResult.hidden = true;
+      document.getElementById('lot-handoff-preview').hidden = true;
+      if (lotStatus) lotStatus.textContent = 'Данные изменены. Сформируйте карту проверки заново.';
+    }
+  });
+
   var copyLot = document.getElementById('copy-lot-check');
   if (copyLot) {
     copyLot.addEventListener('click', function () {
@@ -1747,34 +1794,10 @@
 
   function buildLotHandoffMessage() {
     var contact = document.getElementById('contact').value.trim();
-    var message = buildLotChecklistText() +
-      '\n\nХочу передать этот лот на фактический разбор.';
+    var message = 'Здравствуйте! Хочу согласовать индивидуальную проверку лота: объём, стоимость и следующий шаг до участия.\n\n' +
+      buildLotChecklistText();
     if (contact) message += '\nКонтакт для обратной связи: ' + contact;
     return message;
-  }
-
-  var sendTelegram = document.getElementById('send-telegram');
-  if (sendTelegram) {
-    sendTelegram.addEventListener('click', function () {
-      if (!lotGenerated) {
-        if (lotStatus) lotStatus.textContent = 'Сначала получите предварительную карту проверки.';
-        return;
-      }
-      trackEvent('lead_submit', { source:'lot_check', channel:'telegram' });
-      openTelegramWithCopy(buildLotHandoffMessage(), handoffStatus);
-    });
-  }
-
-  var sendEmail = document.getElementById('send-email');
-  if (sendEmail) {
-    sendEmail.addEventListener('click', function () {
-      if (!lotGenerated) {
-        if (lotStatus) lotStatus.textContent = 'Сначала получите предварительную карту проверки.';
-        return;
-      }
-      trackEvent('lead_submit', { source:'lot_check', channel:'email' });
-      openEmail('Лот на фактический разбор', buildLotHandoffMessage(), handoffStatus);
-    });
   }
 
   var searchForm = document.getElementById('search-brief-form');
@@ -1841,8 +1864,7 @@
         return;
       }
       var data = buildSearchData();
-      searchSummary.innerHTML = '<strong>' + data.type + '</strong> · ' +
-        data.region + ' · ' + data.budget + ' · ' + data.goal;
+      searchSummary.textContent = data.type + ' · ' + data.region + ' · ' + data.budget + ' · ' + data.goal;
       renderCards(searchChecks, searchGroups(data));
       searchResult.hidden = false;
       searchGenerated = true;
@@ -1850,6 +1872,15 @@
       searchResult.scrollIntoView({ behavior:'smooth', block:'start' });
     });
   }
+
+  if (searchForm) searchForm.addEventListener('input', function () {
+    if (searchGenerated) {
+      searchGenerated = false;
+      searchResult.hidden = true;
+      document.getElementById('search-handoff-preview').hidden = true;
+      if (searchStatus) searchStatus.textContent = 'Критерии изменены. Сформируйте карту поиска заново.';
+    }
+  });
 
   var copySearch = document.getElementById('copy-search-brief');
   if (copySearch) {
@@ -1862,23 +1893,74 @@
     });
   }
 
-  var searchTelegram = document.getElementById('search-send-telegram');
-  if (searchTelegram) {
-    searchTelegram.addEventListener('click', function () {
-      if (!searchGenerated) return;
-      trackEvent('lead_submit', { source:'search_brief', channel:'telegram' });
-      openTelegramWithCopy(buildSearchText() + '\n\nХочу обсудить подбор по этой задаче.', searchStatus);
-    });
+  function buildSearchHandoffMessage() {
+    var contact = document.getElementById('search-contact').value.trim();
+    var message = 'Здравствуйте! Хочу согласовать поиск и подбор имущества под мою задачу: объём, стоимость и следующий шаг.\n\n' +
+      buildSearchText();
+    if (contact) message += '\nКонтакт для обратной связи: ' + contact;
+    return message;
   }
 
-  var searchEmail = document.getElementById('search-send-email');
-  if (searchEmail) {
-    searchEmail.addEventListener('click', function () {
-      if (!searchGenerated) return;
-      trackEvent('lead_submit', { source:'search_brief', channel:'email' });
-      openEmail('Задача на подбор имущества с торгов', buildSearchText() + '\n\nХочу обсудить подбор по этой задаче.', searchStatus);
-    });
+  // Only generate drafts locally. Sending happens only after an explicit click.
+  function prepareEnquiry(kind) {
+    var isLot = kind === 'lot';
+    var ready = isLot ? lotGenerated : searchGenerated;
+    var status = isLot ? handoffStatus : searchStatus;
+    if (!ready) {
+      if (status) status.textContent = 'Сначала сформируйте актуальную карту проверки или поиска.';
+      return;
+    }
+    var preview = document.getElementById(kind + '-handoff-preview');
+    var field = document.getElementById(kind + '-handoff-text');
+    field.value = isLot ? buildLotHandoffMessage() : buildSearchHandoffMessage();
+    preview.hidden = false;
+    if (status) status.textContent = '';
+    trackEvent('lead_draft_prepared', { source:isLot?'lot_check':'search_brief' });
+    preview.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    field.focus({ preventScroll:true });
   }
+
+  function sendPreparedEnquiry(kind, channel) {
+    var field = document.getElementById(kind + '-handoff-text');
+    var status = document.getElementById(kind + '-handoff-status');
+    var message = field.value.trim();
+    if (!message) {
+      status.textContent = 'Добавьте текст обращения перед передачей.';
+      field.focus();
+      return;
+    }
+    var source = kind === 'lot' ? 'lot_check' : 'search_brief';
+    if (channel === 'copy') {
+      copyText(message).then(function () {
+        status.textContent = 'Текст скопирован. Выберите удобный канал и отправьте его самостоятельно.';
+        trackEvent('lead_draft_copy', { source:source });
+      }).catch(function () { status.textContent = 'Не удалось скопировать текст. Выделите его и скопируйте вручную.'; });
+      return;
+    }
+    if (channel === 'telegram') {
+      // This opens a chat and copies the prepared message; it does not send it.
+      openTelegramWithCopy(message, status);
+      trackEvent('lead_handoff_opened', { source:source, channel:'telegram' });
+      return;
+    }
+    if (channel === 'email') {
+      var subject = kind === 'lot' ? 'Запрос на проверку лота с торгов' : 'Запрос на подбор имущества с торгов';
+      openEmail(subject, message, status);
+      trackEvent('lead_handoff_opened', { source:source, channel:'email' });
+    }
+  }
+
+  [['lot','send-telegram'],['search','search-send-telegram']].forEach(function (config) {
+    var button = document.getElementById(config[1]);
+    if (button) button.addEventListener('click', function () { prepareEnquiry(config[0]); });
+  });
+
+  ['lot','search'].forEach(function (kind) {
+    ['email','telegram','copy'].forEach(function (channel) {
+      var button = document.getElementById(kind + '-handoff-' + channel);
+      if (button) button.addEventListener('click', function () { sendPreparedEnquiry(kind, channel); });
+    });
+  });
 
   ['lot-check','search-brief'].forEach(function(id){
     var section = document.getElementById(id);
