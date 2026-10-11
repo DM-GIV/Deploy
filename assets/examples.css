@@ -29,3 +29,17 @@
 .research-more-heading p{color:#526477;margin:0}
 .research-case-n{font-variant-numeric:tabular-nums}
 @media(max-width:760px){.research-more-heading{margin:42px 0 18px}}
+
+/* Evidence-type taxonomy: never imply pending cases are published results. */
+.case-taxonomy{margin:0 0 54px}
+.case-taxonomy>h2{font-size:clamp(27px,3vw,37px);margin-bottom:12px}
+.case-taxonomy-lead{max-width:780px;color:#526578;margin-bottom:23px;line-height:1.7}
+.case-taxonomy-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.case-taxonomy-card{display:flex;flex-direction:column;align-items:flex-start;background:#fff;border:1px solid #dce5ec;border-radius:14px;padding:23px;color:#162e41;text-decoration:none}
+.case-taxonomy-card--active{border-top:4px solid #ff9d22;box-shadow:0 12px 30px rgba(13,37,57,.07)}
+.case-taxonomy-card h3{font-size:18px;line-height:1.35;margin:17px 0 10px}
+.case-taxonomy-card p{font-size:14px;color:#566879;line-height:1.65;margin:0}
+.case-taxonomy-status{background:#e5f3eb;color:#246345;font-size:12px;font-weight:800;border-radius:99px;padding:6px 10px}
+.case-taxonomy-status--pending{background:#edf2f6;color:#4f6475}
+.case-taxonomy-cta{display:inline-block;color:#a95604;font-weight:800;font-size:13px;margin-top:auto;padding-top:18px}
+@media(max-width:900px){.case-taxonomy-grid{grid-template-columns:1fr}.case-taxonomy{margin-bottom:38px}.case-taxonomy-card{padding:20px}}
