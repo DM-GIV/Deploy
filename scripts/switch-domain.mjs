@@ -51,6 +51,10 @@ if (!arg('--to') || (args.includes('--from') && !arg('--from'))) {
       'primery-lotov/index.html',
       'formaty-raboty/index.html',
       'blog/kak-proverit-lot-pered-torgami/index.html',
+      'blog/index.html',
+      'blog/kak-proverit-avtomobil-s-torgov/index.html',
+      'blog/kak-proverit-zemelnyi-uchastok-s-torgov/index.html',
+      'privacy/index.html',
       'robots.txt',
       'sitemap.xml'
     ];
