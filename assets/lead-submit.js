@@ -119,7 +119,7 @@
         token = '';
         if (widgetId !== null && window.turnstile) window.turnstile.reset(widgetId);
       } finally {
-        if (!status.textContent.includes('Заявка принята')) submit.disabled = false;
+        if (!status.textContent.includes('Заявка принята')) submit.disabled = !token;
       }
     });
   }
