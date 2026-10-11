@@ -932,7 +932,33 @@
       .seo-material-card{flex-direction:column;align-items:flex-start;padding:22px}
       .seo-material-card .button{width:100%}
     }
-  </style>
+  
+    /* Evidence-based examples from public auction research */
+    .research-case-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+    .research-case-card{overflow:hidden;display:flex;flex-direction:column;border:1px solid #dfe5ec;border-radius:19px;background:#fff;box-shadow:0 15px 34px rgba(10,29,49,.075);transition:transform .2s ease,box-shadow .2s ease}
+    .research-case-card:hover{transform:translateY(-3px);box-shadow:0 20px 42px rgba(10,29,49,.12)}
+    .research-case-top{min-height:82px;padding:20px 24px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;background:linear-gradient(120deg,#0b263b,#174e6c);color:#fff}
+    .research-case-top--auto{background:linear-gradient(120deg,#082c43,#2c6682)}
+    .research-case-top--land{background:linear-gradient(120deg,#143f3a,#28745c)}
+    .research-case-top--home{background:linear-gradient(120deg,#37314d,#625787)}
+    .research-case-top--compound{background:linear-gradient(120deg,#503019,#936139)}
+    .research-case-category{font-weight:750;font-size:15px}
+    .research-case-n{font-size:12px;flex-shrink:0;border:1px solid rgba(255,255,255,.35);border-radius:30px;padding:5px 10px;background:rgba(0,0,0,.12)}
+    .research-case-inner{padding:25px;display:flex;flex-direction:column;flex:1}
+    .research-case-inner h3{font-size:22px;line-height:1.28;letter-spacing:-.4px;margin-bottom:16px}
+    .research-case-price-label{color:#677587;font-size:12px}
+    .research-case-price{color:#101f30;font-size:clamp(25px,3vw,32px);font-weight:850;letter-spacing:-1px;margin:3px 0}
+    .research-case-mode{display:inline-block;color:#a34e00;background:#fff4e4;border-radius:8px;padding:8px 10px;font-size:13px;font-weight:700;margin:12px 0 4px}
+    .research-case-separator{border-top:1px solid #e3e8ed;margin:16px 0 5px}
+    .research-case-inner p:not(.research-case-mode){font-size:14px;color:#4b5968;line-height:1.65;margin-bottom:13px}
+    .research-case-inner p strong{color:#152d41}
+    .research-case-link{display:inline-block;margin-top:auto;padding:10px 0 0;font-size:14px;font-weight:750;color:#c26200;text-decoration:underline;text-underline-offset:3px}
+    .research-case-link:hover{color:#8f4400}
+    .research-case-note{margin-top:24px;padding:17px 21px;background:#edf4f8;border:1px solid #d7e5ed;border-left:4px solid #ff9d19;border-radius:10px;color:#445768;font-size:13px;line-height:1.6}
+    .research-case-actions{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:26px}
+    .research-case-secondary{color:#a44e00;font-size:15px;font-weight:750;text-decoration:underline;text-underline-offset:3px}
+    @media(max-width:800px){.research-case-grid{grid-template-columns:1fr}.research-case-top{padding:18px 20px;min-height:68px}.research-case-inner{padding:20px}.research-case-inner h3{font-size:20px}}
+</style>
 </head>
 
 <body>
@@ -946,7 +972,7 @@
         <a href="#lot-check">Проверка лота</a>
         <a href="#services">Услуги</a>
         <a href="#process">Как работаю</a>
-        <a href="#cases">Кейсы</a>
+        <a href="#cases">Примеры лотов</a>
         <a href="#materials">Материалы</a>
         <a href="#faq">Вопросы</a>
         <a href="#contacts">Контакты</a>
@@ -1270,20 +1296,85 @@
     </div>
   </section>
 
-  <section class="cases v2-section" id="cases">
+  <section class="cases v2-section" id="cases" aria-labelledby="cases-heading">
     <div class="container">
-      <div class="section-title"><div class="section-label">Кейсы</div><h2>Реальные сделки вместо обещаний</h2></div>
-      <div class="case-placeholder">
-        <h3>Публикуем только то, что можно подтвердить</h3>
-        <p>В кейсах будут использоваться фактические данные по завершённым сделкам. Если показатель нельзя подтвердить, он не публикуется.</p>
-        <div class="case-fields">
-          <div class="case-field"><strong>Что покупали</strong><span>Тип и основные характеристики объекта.</span></div>
-          <div class="case-field"><strong>Цена на торгах</strong><span>Фактическая цена приобретения.</span></div>
-          <div class="case-field"><strong>Что проверили</strong><span>Ключевые риски и факторы.</span></div>
-          <div class="case-field"><strong>Почему участвовали</strong><span>Логика решения.</span></div>
-          <div class="case-field"><strong>Что было после покупки</strong><span>Оформление, использование или реализация.</span></div>
-          <div class="case-field"><strong>Фактический результат</strong><span>Только подтверждаемые цифры.</span></div>
-        </div>
+      <div class="section-title">
+        <div class="section-label">Примеры из практики исследования торгов</div>
+        <h2 id="cases-heading">Четыре реальных лота — четыре разные задачи проверки</h2>
+        <p class="v2-lead">Примеры взяты из открытых процедур электронной площадки АТЦ, изученных в рамках исследовательского проекта. Это <strong>разбор публичных объявлений</strong>, а не заявления о выигранных нами торгах, выполненных заказах или прибыли клиентов.</p>
+      </div>
+      <div class="research-case-grid">
+        <article class="research-case-card">
+          <div class="research-case-top research-case-top--auto">
+            <span class="research-case-category">Автомобиль</span>
+            <span class="research-case-n">13145-ОТПП</span>
+          </div>
+          <div class="research-case-inner">
+            <h3>Hyundai ix55, 2012 года</h3>
+            <div class="research-case-price-label">Начальная цена по данным исследования</div>
+            <div class="research-case-price">923 737,50 ₽</div>
+            <p class="research-case-mode">Публичное предложение · 5 периодов</p>
+            <div class="research-case-separator"></div>
+            <p><strong>Что видно из публикации:</strong> В материалах указаны необходимость ремонта и цена, снижающаяся по периодам. Конечная цена пятого периода — 554 242,50 ₽.</p>
+            <p><strong>Что важно проверить:</strong> Проверить состояние, ремонт, VIN, регистрационные ограничения, документы и полную стоимость владения.</p>
+            <a class="research-case-link" href="https://atctrade.ru/trade/view/purchase/general.html?id=105491275" target="_blank" rel="noopener noreferrer">Открыть карточку на площадке АТЦ <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+        <article class="research-case-card">
+          <div class="research-case-top research-case-top--land">
+            <span class="research-case-category">Земельный участок</span>
+            <span class="research-case-n">13144-ОТПП</span>
+          </div>
+          <div class="research-case-inner">
+            <h3>Участок 1 040 м² · Московская область</h3>
+            <div class="research-case-price-label">Начальная цена по данным исследования</div>
+            <div class="research-case-price">554 400 ₽</div>
+            <p class="research-case-mode">Публичное предложение · 7 периодов</p>
+            <div class="research-case-separator"></div>
+            <p><strong>Что видно из публикации:</strong> В исследовании отмечены кадастровый № 50:26:0040106:314, документ об оценке и выписка ЕГРН.</p>
+            <p><strong>Что важно проверить:</strong> Сверить кадастр, категорию и ВРИ, границы, доступ, ограничения, состояние участка и условия передачи.</p>
+            <a class="research-case-link" href="https://atctrade.ru/trade/view/purchase/general.html?id=105490686" target="_blank" rel="noopener noreferrer">Открыть карточку на площадке АТЦ <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+        <article class="research-case-card">
+          <div class="research-case-top research-case-top--home">
+            <span class="research-case-category">Жилая недвижимость</span>
+            <span class="research-case-n">13152-ОАОФ</span>
+          </div>
+          <div class="research-case-inner">
+            <h3>Жилое помещение · открытый аукцион</h3>
+            <div class="research-case-price-label">Начальная цена по данным исследования</div>
+            <div class="research-case-price">4 575 600 ₽</div>
+            <p class="research-case-mode">Открытый аукцион · задаток 457 560 ₽</p>
+            <div class="research-case-separator"></div>
+            <p><strong>Что видно из публикации:</strong> Кадастровый № 24:55:0000000:8289. В отличие от публичного предложения, ступенчатых периодов снижения цены нет.</p>
+            <p><strong>Что важно проверить:</strong> Проверить права и обременения, фактическое пользование, осмотр, документы и возможные расходы после покупки.</p>
+            <a class="research-case-link" href="https://atctrade.ru/trade/view/purchase/general.html?id=105493145" target="_blank" rel="noopener noreferrer">Открыть карточку на площадке АТЦ <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+        <article class="research-case-card">
+          <div class="research-case-top research-case-top--compound">
+            <span class="research-case-category">Составной лот</span>
+            <span class="research-case-n">13151-ОАОФ</span>
+          </div>
+          <div class="research-case-inner">
+            <h3>Жилой дом вместе с земельным участком</h3>
+            <div class="research-case-price-label">Начальная цена по данным исследования</div>
+            <div class="research-case-price">5 237 800 ₽</div>
+            <p class="research-case-mode">Открытый аукцион · два объекта в одном лоте</p>
+            <div class="research-case-separator"></div>
+            <p><strong>Что видно из публикации:</strong> Дом: 08:14:030134:11060. Земля: 08:14:030134:11079. Один лот может включать несколько самостоятельных объектов.</p>
+            <p><strong>Что важно проверить:</strong> Сверить сведения и права по обоим кадастровым номерам, связь объектов, доступ и условия передачи.</p>
+            <a class="research-case-link" href="https://atctrade.ru/trade/view/purchase/general.html?id=105492993" target="_blank" rel="noopener noreferrer">Открыть карточку на площадке АТЦ <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+      </div>
+      <div class="research-case-note">
+        <strong>Источник и дата.</strong> Параметры приведены по исследованию публичных карточек АТЦ, проведённому в сентябре — октябре 2026 года. Цены указаны как <strong>начальные</strong>, а не как актуальные предложения или цены состоявшихся сделок. Статусы, периоды, документы и условия торгов могут измениться. Для проверки используйте ссылки на первоисточник.
+      </div>
+      <div class="research-case-actions">
+        <a class="button button-primary" href="#lot-check-form" data-track="lot_check_cta_click">Разобрать свой лот</a>
+        <a class="research-case-secondary" href="/proverka-lota/">Что входит в проверку лота →</a>
       </div>
     </div>
   </section>
