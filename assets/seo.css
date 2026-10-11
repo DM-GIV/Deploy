@@ -63,3 +63,6 @@ main section{padding:58px 0}.subhead{max-width:740px;margin-bottom:24px}h2{font-
 .method-cta-actions>a:not(.btn){color:#ffd39b;font-size:14px;font-weight:700}
 @media(max-width:930px){.result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.example-grid{grid-template-columns:1fr}.scope-grid{grid-template-columns:1fr}.method-cta{align-items:flex-start;flex-direction:column}}
 @media(max-width:760px){.method-grid,.result-grid{grid-template-columns:1fr}.method-card{padding:21px}.example-row{flex-direction:column;gap:10px}.method-cta{padding:25px 21px}.method-cta-actions,.method-cta-actions .btn{width:100%}.method-cta-actions .btn{text-align:center}}
+
+/* Link from service pages to comparison of available work formats */
+.format-crosslink{margin:17px 0 0;font-size:14px;font-weight:750}.format-crosslink a{color:#ffd38a;text-decoration:underline;text-underline-offset:3px}.format-crosslink a:hover{color:#fff}
