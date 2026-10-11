@@ -34,7 +34,7 @@ node scripts/switch-domain.mjs --to https://example.ru
 node scripts/switch-domain.mjs --to https://example.ru --apply
 ```
 
-Без `--apply` скрипт не меняет файлы. Он проверяет наличие исходного домена во всех 10 файлах и выводит план замен. Он **не** меняет DNS, настройки Vercel, поиск или редиректы.
+Без `--apply` скрипт не меняет файлы. Он проверяет наличие исходного домена во всех соответствующих файлах и выводит план замен. Он **не** меняет DNS, настройки Vercel, поиск или редиректы.
 
 ## Проверка после подключения
 
@@ -55,3 +55,9 @@ node scripts/switch-domain.mjs --to https://example.ru --apply
 - Данные клиентов, документы сделок и события аналитики.
 
 Официальные инструкции: Vercel — https://vercel.com/docs/domains/set-up-custom-domain ; Google — https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes ; Яндекс — https://yandex.ru/support/webmaster/ru/yandex-indexing/moving-site.html
+
+## Модуль заявок после смены домена
+
+В коде уже есть выключенный по умолчанию API прямых обращений. При будущем переходе на постоянный домен проверяйте не только страницы и SEO-теги: если модуль прямой отправки будет разрешён отдельно, нужно обновить `LEAD_ALLOWED_ORIGIN` на новый HTTPS-origin и список разрешённых hostname в Cloudflare Turnstile. Не копируйте секреты в репозиторий и не включайте сбор данных при незавершённой правовой оценке.
+
+Скрипт смены домена охватывает текущие **12 индексируемых HTML-страниц** и `robots.txt`/`sitemap.xml`, но не изменяет настройки Vercel, Turnstile, получателя заявок или политики приватности автоматически.
