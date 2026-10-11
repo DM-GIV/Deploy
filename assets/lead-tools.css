@@ -1,0 +1,55 @@
+/* Client-side preliminary tools on dedicated service pages. Scoped to avoid changing site navigation. */
+.lead-tool{padding:58px 0 66px;background:linear-gradient(180deg,#f3f7fb,#eaf1f6);color:#102235}
+.lead-tool .container{width:min(1100px,calc(100% - 38px));margin:0 auto}
+.lead-tool .section-title{max-width:830px;margin-bottom:22px}
+.lead-tool .section-label{font-size:12px;text-transform:uppercase;letter-spacing:1.7px;font-weight:800;color:#c26705;margin-bottom:8px}
+.lead-tool h2{font-size:clamp(28px,3.5vw,38px);line-height:1.2;margin-bottom:14px}
+.lead-tool .v2-lead{font-size:16px;line-height:1.7;color:#4c5d6c;max-width:850px}
+.lead-tool .value-tool,.lead-tool .lot-check-form-wrap{padding:30px;border:1px solid #dae4eb;border-radius:19px;background:#fff;box-shadow:0 14px 37px rgba(12,38,60,.07)}
+.lead-tool .lot-check-form-wrap{margin-top:0}
+.lead-tool .lot-check-form-wrap>h3{font-size:25px;margin:0 0 8px}
+.lead-tool .lot-check-form-wrap>p{max-width:790px;margin-bottom:24px;color:#536374}
+.lead-tool .value-form,.lead-tool .lot-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:19px}
+.lead-tool .form-field{min-width:0;display:flex;flex-direction:column;gap:7px}
+.lead-tool .form-field-wide{grid-column:1/-1}
+.lead-tool .form-field label{font-weight:700;font-size:14px;color:#233a4b}
+.lead-tool input,.lead-tool select,.lead-tool textarea{display:block;width:100%;min-width:0;border:1px solid #cbd7e2;border-radius:10px;padding:12px 14px;background:#f9fbfd;color:#192e40;font:inherit;font-size:15px;line-height:1.5}
+.lead-tool input:focus,.lead-tool select:focus,.lead-tool textarea:focus{outline:3px solid #ffd495;outline-offset:2px}
+.lead-tool textarea{min-height:100px;resize:vertical}
+.lead-tool .form-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+.lead-tool .button{min-height:47px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;padding:11px 17px;border:1px solid transparent;border-radius:10px;font:inherit;font-size:14px;font-weight:800;cursor:pointer;text-align:center}
+.lead-tool .button-primary{background:linear-gradient(130deg,#ffb330,#fa891b);color:#081e30;box-shadow:0 7px 20px rgba(192,106,15,.15)}
+.lead-tool .button-secondary{background:#fff;border-color:#c7d6e2;color:#19344a}
+.lead-tool .tool-note,.lead-tool .handoff-privacy-note{font-size:13px;color:#647589}
+.lead-tool .value-result{margin-top:24px;border:1px solid #dce5ec;border-radius:16px;background:#f8fafc;padding:23px}
+.lead-tool .value-result[hidden],.lead-tool .handoff-preview[hidden]{display:none!important}
+.lead-tool .value-result-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:14px}
+.lead-tool .value-result-head h3{font-size:24px;margin:0}
+.lead-tool .text-button{background:none;border:0;color:#a45105;text-decoration:underline;font:inherit;font-weight:750;cursor:pointer}
+.lead-tool .result-summary,.lead-tool .result-intro{background:#fff;border:1px solid #e0e8ef;padding:15px 17px;border-radius:11px;margin-bottom:16px}
+.lead-tool .check-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.lead-tool .check-card{background:#fff;border:1px solid #dce4eb;border-radius:12px;padding:19px}
+.lead-tool .check-card h4{font-size:16px;margin:0 0 9px}
+.lead-tool .check-card ul{margin:0;padding-left:20px}
+.lead-tool .check-card li{color:#485b6b;font-size:14px;margin-bottom:5px}
+.lead-tool .result-disclaimer{margin:18px 0;background:#fff5e8;border-left:4px solid #ff9f27;padding:15px;color:#694820;font-size:13px;border-radius:0 10px 10px 0}
+.lead-tool .lead-after-value{margin-top:19px;padding-top:19px;border-top:1px solid #d8e4ed}
+.lead-tool .lead-after-value h4{font-size:21px;margin-bottom:9px}
+.lead-tool .lead-after-value>p{font-size:14px;color:#566779;margin-bottom:17px}
+.lead-tool .lead-contact-field{max-width:630px}
+.lead-tool .handoff-actions{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin:18px 0 0}
+.lead-tool .form-status{font-size:13px;color:#475569;margin-top:10px}
+.lead-tool .handoff-preview{margin-top:18px;padding:22px;border-radius:14px;background:#fff;border:1px solid #d6e1ea;border-top:4px solid #f5a12a}
+.lead-tool .handoff-preview>label{display:block;margin-bottom:10px;font-weight:800}
+.lead-tool .handoff-preview textarea{min-height:220px}
+.lead-tool .handoff-privacy-note{margin-top:12px}
+.lead-tool .lot-check-actions,.lead-tool .decision-grid,.lead-tool .product>.container>.v2-lead,.lead-tool>.container>.section-title{display:none}
+@media(max-width:760px){
+.lead-tool{padding:42px 0}
+.lead-tool .value-tool,.lead-tool .lot-check-form-wrap{padding:21px 16px}
+.lead-tool .value-form,.lead-tool .lot-form,.lead-tool .check-grid{grid-template-columns:1fr}
+.lead-tool .form-field-wide{grid-column:auto}
+.lead-tool .value-result-head{align-items:flex-start;flex-direction:column}
+.lead-tool .handoff-actions .button,.lead-tool .form-actions .button{width:100%}
+.lead-tool .handoff-preview{padding:17px 13px}
+}
