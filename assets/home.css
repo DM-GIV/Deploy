@@ -1,0 +1,57 @@
+/* Compact, conversion-oriented homepage only. Shared hero/background remain in site.css. */
+.home-nav .nav-links{display:flex;align-items:center;gap:21px}
+.home-nav .nav-links a{font-size:13px;white-space:nowrap}
+.home-hero-note{margin-top:22px;padding-left:14px;border-left:3px solid #ffa42d;color:#ccdce8;max-width:650px;font-size:14px}
+.home-hero-note strong{color:#fff}
+.home-paths{background:#fff;padding:74px 0}
+.home-path-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.home-path-card{padding:33px;border:1px solid #dce5ee;border-top:4px solid #fba52e;border-radius:18px;background:#fff;box-shadow:0 16px 34px rgba(8,29,47,.065);display:flex;flex-direction:column}
+.home-path-card--second{border-top-color:#2e7c91}
+.home-path-tag{font-size:12px;text-transform:uppercase;letter-spacing:1.1px;font-weight:800;color:#a45408}
+.home-path-card--second .home-path-tag{color:#216878}
+.home-path-card h3{font-size:clamp(22px,2.8vw,29px);line-height:1.24;margin:12px 0 15px}
+.home-path-card p{font-size:16px;color:#536477}
+.home-path-features{margin:17px 0 25px;list-style:none;padding:0}
+.home-path-features li{margin:0 0 11px;color:#405465;padding-left:25px;position:relative;font-size:14px}
+.home-path-features li::before{content:"✓";position:absolute;left:0;top:0;color:#dd800e;font-weight:900}
+.home-path-card .button{margin-top:auto;text-align:center}
+.home-path-card .home-path-secondary{margin-top:13px;text-align:center;font-size:13px;font-weight:750;color:#a65c09;text-decoration:underline;text-underline-offset:3px}
+.home-steps{background:linear-gradient(145deg,#071d2e,#123853);color:#fff;padding:66px 0}
+.home-steps .section-title h2{color:#fff}
+.home-steps .section-label{color:#ffbc64}
+.home-steps .v2-lead{color:#cbdce8}
+.home-steps-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+.home-step{padding:22px;border:1px solid rgba(255,255,255,.19);border-radius:15px;background:rgba(255,255,255,.07)}
+.home-step-number{font-size:29px;font-weight:850;color:#ffab37;display:block;margin-bottom:16px}
+.home-step h3{font-size:19px;color:#fff;margin-bottom:9px}
+.home-step p{font-size:14px;color:#c8d9e6;margin:0}
+.home-steps-foot{font-size:14px;color:#f5ce91;margin-top:20px}
+.home-services{background:#f4f7fb;padding:74px 0}
+.home-service-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.home-service{display:flex;flex-direction:column;gap:13px;padding:25px 21px;border:1px solid #dde6ee;border-top:4px solid #fca326;border-radius:15px;background:#fff}
+.home-service h3{font-size:20px;line-height:1.26}
+.home-service p{font-size:14px;color:#566879;flex:1}
+.home-service a{color:#a95604;text-decoration:underline;text-underline-offset:3px;font-weight:800;font-size:14px}
+.home-results{background:#fff;padding:65px 0}
+.home-result-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+.home-result{background:#f5f8fb;border:1px solid #e1e8ef;padding:22px;border-radius:13px}
+.home-result-mark{display:inline-block;background:#fff0d5;color:#a0560d;border-radius:8px;padding:4px 10px;margin-bottom:14px;font-size:12px;font-weight:800}
+.home-result h3{font-size:19px;margin-bottom:8px}
+.home-result p{font-size:14px;color:#586879;margin:0}
+.home-evidence{background:#eef4f8;padding:75px 0}
+.home-evidence .research-case-grid{margin:26px 0 22px}
+.home-evidence-note{background:#fff;border-left:4px solid #fca326;padding:16px 19px;font-size:13px;color:#5c6b78;border-radius:9px;margin:20px 0}
+.home-evidence-more{display:inline-flex;align-items:center;color:#9e4c00;font-weight:850;border:1px solid #edc18d;border-radius:10px;padding:12px 18px;text-decoration:none;background:#fff}
+.home-aboutfaq{background:#fff;padding:72px 0}
+.home-about-grid{display:grid;grid-template-columns:1fr 1fr;gap:42px}
+.home-aboutfaq h2{font-size:clamp(27px,3vw,36px);line-height:1.22}
+.home-aboutfaq p{color:#526274}
+.home-faq details{background:#f6f9fc;border:1px solid #dce5ee;border-radius:12px;padding:15px 17px;margin-bottom:12px}
+.home-faq summary{cursor:pointer;color:#19344b;font-weight:750}
+.home-faq details p{font-size:14px;margin:10px 0 0}
+.home-contact{padding:50px 0 70px}
+.home-contact .contact-box{max-width:1100px}
+.home-contact .contact-intro{max-width:770px}
+@media(max-width:1050px){.home-service-grid,.home-steps-grid,.home-result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.home-nav nav{flex-wrap:wrap}.home-nav .nav-links{gap:14px;flex-wrap:wrap}}
+@media(max-width:760px){.home-paths,.home-steps,.home-services,.home-results,.home-evidence,.home-aboutfaq{padding:48px 0}.home-path-grid,.home-about-grid,.home-service-grid,.home-steps-grid,.home-result-grid{grid-template-columns:1fr}.home-path-card{padding:26px 22px}.home-nav .nav-links{display:flex;gap:12px;padding:8px 0 12px;overflow-x:auto;flex-wrap:nowrap}.home-nav .nav-links a{font-size:12px}.home-evidence .research-case-grid{grid-template-columns:1fr}.home-hero-note{font-size:13px}.home-contact{padding:30px 0 55px}}
+@media(prefers-reduced-motion:reduce){.home-path-card,.home-service{transition:none}html{scroll-behavior:auto}}
