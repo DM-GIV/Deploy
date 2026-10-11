@@ -24,3 +24,42 @@ main section{padding:58px 0}.subhead{max-width:740px;margin-bottom:24px}h2{font-
 .contact{background:#0b2439;color:white}.contact p{color:#d8e6f0}.contact a:not(.btn){color:#ffc477}.site-footer{background:#061827;color:#b8ccd8;padding:26px 0;font-size:13px}.site-footer a{color:#d7e5ed}
 .article-copy{max-width:840px}.article-copy h2{margin-top:35px}.article-copy ul{margin-bottom:21px}
 @media(max-width:760px){.header-inner{align-items:flex-start;flex-direction:column;padding:19px 0;gap:15px}.nav{gap:11px}.intro{padding:44px 0 54px}.grid,.steps{grid-template-columns:1fr}main section{padding:40px 0}.card{padding:21px}.ctas .btn{width:100%;text-align:center}}
+
+/* Lot check methodology, outcome statuses and evidence example */
+.method-eyebrow{color:#bd6308;margin-bottom:8px}
+.methodology{background:linear-gradient(180deg,#fff,#fbfcfe)}
+.methodology .subhead,.method-results .subhead,.method-example .subhead{max-width:930px}
+.method-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.method-card{padding:27px;border:1px solid #dee6ee;border-radius:17px;background:#fff;box-shadow:0 10px 25px rgba(9,35,55,.055)}
+.method-number{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;background:#fff1dc;color:#a95a07;font-size:15px;font-weight:850;margin-bottom:17px}
+.method-card h3{font-size:22px;line-height:1.24;margin:0 0 12px}
+.method-card p,.method-card li{font-size:15px}
+.method-card ul{margin:12px 0 13px;padding-left:22px}
+.method-card li{margin:0 0 9px}
+.method-card .method-source{padding-top:13px;margin-top:18px;border-top:1px solid #e1e7ee;color:#5b6877;font-size:13px}
+.result-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.result-card{padding:22px 19px;background:#fff;border:1px solid #dce6ef;border-radius:15px}
+.result-card h3{font-size:19px;line-height:1.23}
+.result-card p{font-size:14px;color:#4e5e6f}
+.result-mark{display:inline-block;font-size:12px;font-weight:800;padding:5px 10px;border-radius:8px;margin-bottom:16px}
+.result-mark--green{background:#e2f4e8;color:#145c35}.result-mark--amber{background:#fff1d9;color:#855007}
+.result-mark--blue{background:#e2edfd;color:#204e8b}.result-mark--navy{background:#dfebf0;color:#174052}
+.method-example{background:#fff}
+.example-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.example-row{padding:22px 23px;border:1px solid #dfe7ee;border-radius:14px;display:flex;align-items:flex-start;gap:17px;background:#f9fbfd}
+.example-row h3{font-size:19px;margin:0 0 8px}
+.example-row p{font-size:14px;line-height:1.55;color:#495a6b}
+.example-state{display:inline-flex;flex-shrink:0;font-size:11px;line-height:1.2;font-weight:800;padding:7px 10px;border-radius:8px;margin-top:2px;max-width:110px}
+.state-verified{background:#dcf4e7;color:#185c36}.state-question{background:#fff0d8;color:#875009}.state-check{background:#e1ecfc;color:#224d83}.state-next{background:#e3eaf0;color:#173d55}
+.example-source{font-size:13px;color:#556677;margin-top:22px}
+.example-source a{color:#a95a07}
+.method-scope{background:#f4f7fa}
+.scope-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.scope-card{padding:24px;background:#fff;border:1px solid #dde5ee;border-top:3px solid #ff9d19;border-radius:14px}
+.scope-card h3{font-size:18px}.scope-card p{font-size:14px;color:#485b6b}
+.method-cta{display:flex;justify-content:space-between;align-items:center;gap:25px;padding:29px 32px;margin-top:30px;border-radius:16px;background:#092539;color:#fff}
+.method-cta h3{font-size:23px}.method-cta p{color:#d4e2ed;margin-bottom:0}
+.method-cta-actions{display:flex;flex-direction:column;gap:12px;align-items:flex-start;flex-shrink:0}
+.method-cta-actions>a:not(.btn){color:#ffd39b;font-size:14px;font-weight:700}
+@media(max-width:930px){.result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.example-grid{grid-template-columns:1fr}.scope-grid{grid-template-columns:1fr}.method-cta{align-items:flex-start;flex-direction:column}}
+@media(max-width:760px){.method-grid,.result-grid{grid-template-columns:1fr}.method-card{padding:21px}.example-row{flex-direction:column;gap:10px}.method-cta{padding:25px 21px}.method-cta-actions,.method-cta-actions .btn{width:100%}.method-cta-actions .btn{text-align:center}}
