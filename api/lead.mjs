@@ -1,4 +1,5 @@
 import { configured, headers } from './lead-config.mjs';
+import { randomUUID } from 'node:crypto';
 
 function json(status, data) {
   return new Response(JSON.stringify(data), { status, headers });
@@ -90,7 +91,7 @@ export async function POST(request) {
   // only after confirming a lawful, owner-controlled recipient/location.
   // Never return success if the receiver has not explicitly accepted the lead.
   try {
-    const receipt = crypto.randomUUID();
+    const receipt = randomUUID();
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 9000);
     let result;
