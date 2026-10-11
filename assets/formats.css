@@ -26,3 +26,12 @@
     @media(max-width:690px){.work-formats-grid{grid-template-columns:1fr}.work-format-card{padding:22px 20px}.work-format-footnote{padding:16px}.work-format-footnote a{margin:8px 0 0}}
 /* Dedicated format comparison page */
 .format-page{background:#f2f6fa;padding:60px 0}.format-page .work-formats-grid{margin-top:22px}.format-page .work-format-card{display:flex;flex-direction:column}.format-page .work-format-top{margin-bottom:20px}.format-page .work-format-card h3{font-size:24px}.format-page .work-format-card p{line-height:1.5}.format-page .work-format-bottom a.btn{width:100%;display:inline-flex;align-items:center;justify-content:center;min-height:52px}.format-page .work-format-chip{color:#3d5568}.format-page .work-format-card--featured{border:2px solid #f6a331}
+
+.format-page .section-title{max-width:780px;margin-bottom:24px}
+.format-page .section-title h2{font-size:clamp(28px,3vw,37px);margin-bottom:10px}
+.format-page .section-title .section-label{color:#bc650a;font-size:12px;text-transform:uppercase;font-weight:800;letter-spacing:1.2px}
+.format-page .section-title .v2-lead{font-size:16px;color:#526879}
+.format-page .work-format-card .button{display:flex;align-items:center;justify-content:center;width:100%;text-decoration:none;border-radius:11px;min-height:51px;padding:11px 16px;background:linear-gradient(130deg,#ffb737,#ff8c22);color:#081a2b;font-weight:800;font-size:14px;text-align:center}
+.format-page .work-format-footnote{background:#fff;border-left:4px solid #ffab37;border-radius:0 12px 12px 0;padding:18px 20px;margin-top:23px;font-size:14px;color:#526475;line-height:1.65}
+.format-page .work-format-footnote a{display:inline-block;color:#a45604;font-weight:800}
+@media(max-width:760px){.format-page .work-formats-grid{grid-template-columns:1fr}}
