@@ -324,6 +324,10 @@
     trackEvent('lead_draft_prepared', { source:isLot?'lot_check':'search_brief' });
     preview.scrollIntoView({ behavior:'smooth', block:'nearest' });
     field.focus({ preventScroll:true });
+    // Optional direct-send integration is lazy; no network request on initial load.
+    if (typeof window.CustomEvent === 'function') {
+      window.dispatchEvent(new CustomEvent('lead:draft-ready', { detail:{ kind:kind } }));
+    }
   }
 
   function sendPreparedEnquiry(kind, channel) {
