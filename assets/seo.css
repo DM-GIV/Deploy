@@ -1,0 +1,26 @@
+:root{--ink:#102235;--navy:#071c2e;--navy2:#0e314e;--orange:#ff9a21;--paper:#f5f8fb;--line:#dce5ed;--muted:#526579}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+a{color:#135981;text-underline-offset:3px}a:focus-visible,summary:focus-visible{outline:3px solid #fa9318;outline-offset:3px}
+.wrap{width:min(1100px,calc(100% - 38px));margin:auto}
+.site-header{background:#071c2e;color:#fff;position:relative}.header-inner{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:26px}
+.brand{color:#fff;text-decoration:none;font-weight:800;font-size:19px;line-height:1.25}.brand small{display:block;font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:#ffc06c}
+.nav{display:flex;align-items:center;flex-wrap:wrap;gap:17px}.nav a{color:#d9e6ef;text-decoration:none;font-size:14px}.nav a:hover{color:#ffb24a}
+.intro{position:relative;isolation:isolate;overflow:hidden;padding:66px 0 74px;color:#fff;background:linear-gradient(118deg,#061827 8%,#12334c 65%,#25516a)}
+.intro::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 90% 25%,rgba(255,156,33,.28),transparent 28%),radial-gradient(circle at 70% 85%,rgba(29,118,164,.27),transparent 40%)}
+.eyebrow{color:#ffc176;text-transform:uppercase;letter-spacing:1.7px;font-size:12px;font-weight:800}
+.crumbs{margin:0 0 30px;font-size:13px;color:#d3e2ed}.crumbs a{color:#d3e2ed}
+h1{font-size:clamp(36px,5.5vw,59px);line-height:1.1;letter-spacing:-1.7px;max-width:870px;margin:14px 0 20px}
+.lead{font-size:clamp(17px,2.1vw,21px);max-width:780px;color:#dce8f1;margin:0 0 30px}
+.pill{display:inline-block;padding:6px 12px;border:1px solid #b07632;border-radius:100px;color:#ffe1b4;font-size:13px;margin:0 7px 8px 0}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:27px}.btn{display:inline-block;padding:13px 22px;border:1px solid #f7a635;border-radius:10px;background:linear-gradient(135deg,#ffb636,#ff881b);text-decoration:none;color:#071827;font-weight:750}
+.btn.outline{background:transparent;border-color:#88a1b3;color:#fff}.btn:hover{filter:brightness(1.08)}
+main section{padding:58px 0}.subhead{max-width:740px;margin-bottom:24px}h2{font-size:clamp(26px,3vw,38px);line-height:1.18;letter-spacing:-.6px;margin:0 0 18px}h3{font-size:20px;line-height:1.3;margin:0 0 9px}p{margin:0 0 13px}ul,ol{padding-left:22px;margin:8px 0 20px}li{margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.card{background:#fff;border:1px solid var(--line);border-top:3px solid var(--orange);border-radius:15px;padding:25px;box-shadow:0 9px 25px rgba(9,35,55,.05)}.card p:last-child{margin-bottom:0}
+.muted{background:#eaf0f5}.statement{margin-top:24px;padding:20px 24px;border-left:4px solid #ff9d23;background:#fff8ed;border-radius:0 10px 10px 0}
+.steps{counter-reset:step;list-style:none;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.steps li{background:#fff;border:1px solid var(--line);padding:22px;border-radius:13px;counter-increment:step}.steps li::before{content:counter(step,decimal-leading-zero);display:inline-block;font-weight:800;color:#c66305;margin-bottom:9px}
+.faq details{padding:17px 20px;border:1px solid var(--line);border-radius:12px;background:#fff;margin:0 0 12px}.faq summary{font-weight:750;cursor:pointer}.faq details p{margin:12px 0 0;color:#46596c}
+.related{display:flex;flex-wrap:wrap;gap:12px}.related a{padding:10px 15px;border:1px solid #bad0df;border-radius:10px;background:#fff;text-decoration:none}
+.contact{background:#0b2439;color:white}.contact p{color:#d8e6f0}.contact a:not(.btn){color:#ffc477}.site-footer{background:#061827;color:#b8ccd8;padding:26px 0;font-size:13px}.site-footer a{color:#d7e5ed}
+.article-copy{max-width:840px}.article-copy h2{margin-top:35px}.article-copy ul{margin-bottom:21px}
+@media(max-width:760px){.header-inner{align-items:flex-start;flex-direction:column;padding:19px 0;gap:15px}.nav{gap:11px}.intro{padding:44px 0 54px}.grid,.steps{grid-template-columns:1fr}main section{padding:40px 0}.card{padding:21px}.ctas .btn{width:100%;text-align:center}}
