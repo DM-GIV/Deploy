@@ -1,26 +1,14 @@
 
 (function () {
   function trackEvent(name, props) {
-    var details = props || {};
-    if (typeof window.gtag === 'function') {
-      window.gtag('event', name, details);
-    } else {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push(Object.assign({ event: name }, details));
+    if (typeof window.auctionCROTrack === 'function' && window.auctionCROTrack !== trackEvent) {
+      window.auctionCROTrack(name, props || {});
+      return;
     }
-    if (typeof window.plausible === 'function') {
-      window.plausible(name, { props: details });
-    }
-    window.dispatchEvent(new CustomEvent('cro:event', { detail: { name: name, props: details } }));
+    // Preserve local events if shared funnel script is unavailable.
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(Object.assign({ event:name }, props || {}));
   }
-
-  window.auctionCROTrack = trackEvent;
-
-  document.querySelectorAll('[data-track]').forEach(function (element) {
-    element.addEventListener('click', function () {
-      trackEvent(element.getAttribute('data-track'));
-    });
-  });
 
   function copyText(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
