@@ -960,7 +960,36 @@
     @media(max-width:800px){.research-case-grid{grid-template-columns:1fr}.research-case-top{padding:18px 20px;min-height:68px}.research-case-inner{padding:20px}.research-case-inner h3{font-size:20px}}
     .seo-method-link{display:inline-flex;align-items:center;max-width:550px;color:#ffd59e;font-weight:750;font-size:14px;text-decoration:underline;text-underline-offset:3px;line-height:1.45}
     .seo-method-link:hover{color:#fff}
-</style>
+
+    /* Comparison of three work formats */
+    .work-formats{background:linear-gradient(180deg,#f2f6fa,#eaf1f7);color:#12283a}
+    .work-formats .section-label{color:#af5800}
+    .work-formats .v2-lead{color:#526477}
+    .work-formats-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+    .work-format-card{display:flex;flex-direction:column;padding:24px 22px 22px;border:1px solid #d9e3eb;border-radius:18px;background:#fff;box-shadow:0 10px 30px rgba(8,32,52,.055)}
+    .work-format-card--featured{border:2px solid #f6a331;box-shadow:0 18px 38px rgba(112,67,12,.12)}
+    .work-format-top{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:21px}
+    .work-format-step{font-size:22px;font-weight:850;line-height:1;color:#c36d0b}
+    .work-format-chip{display:inline-block;border-radius:30px;padding:7px 10px;font-size:11px;font-weight:800;background:#eaf1f6;color:#28526b}
+    .work-format-card--featured .work-format-chip{background:#fff0d4;color:#99520b}
+    .work-format-card h3{font-size:clamp(20px,2vw,24px);line-height:1.22;letter-spacing:-.4px;margin:0 0 11px}
+    .work-format-audience{font-size:14px;color:#5b6978;line-height:1.56;min-height:67px}
+    .work-format-result{background:#f2f7fa;border:1px solid #e2eaf0;border-radius:12px;padding:16px;margin:13px 0 17px}
+    .work-format-result strong{display:block;margin-bottom:7px;font-size:14px;color:#102e44}
+    .work-format-result p{font-size:14px;line-height:1.55;color:#526172;margin:0}
+    .work-format-label{margin:6px 0 7px;font-size:12px;font-weight:850;text-transform:uppercase;letter-spacing:.8px;color:#865115}
+    .work-format-card ul{padding-left:19px;margin:0 0 14px}
+    .work-format-card li{font-size:14px;color:#435468;line-height:1.55;margin-bottom:8px}
+    .work-format-limitation{font-size:13px;color:#5c6572;line-height:1.55;margin:0 0 20px}
+    .work-format-bottom{margin-top:auto;padding-top:18px;border-top:1px solid #e4ebf0}
+    .work-format-price{min-height:42px;font-size:13px;font-weight:800;color:#193e59;margin:0 0 14px}
+    .work-format-bottom .button{display:flex;justify-content:center;padding:11px 12px;min-height:53px;text-align:center;font-size:14px;line-height:1.3}
+    .work-format-footnote{padding:18px 22px;margin-top:21px;background:#fff;border-left:4px solid #f6a331;border-radius:0 12px 12px 0;color:#455669;font-size:14px;line-height:1.68}
+    .work-format-footnote a{display:inline-block;margin-left:8px;font-weight:800;color:#a45200;text-decoration:underline;text-underline-offset:3px}
+    @media(max-width:1000px){.work-formats-grid{grid-template-columns:1fr 1fr}.work-format-audience,.work-format-price{min-height:auto}}
+    @media(max-width:690px){.work-formats-grid{grid-template-columns:1fr}.work-format-card{padding:22px 20px}.work-format-footnote{padding:16px}.work-format-footnote a{margin:8px 0 0}}
+
+  </style>
 </head>
 
 <body>
@@ -972,6 +1001,7 @@
 
       <div class="nav-links">
         <a href="#lot-check">Проверка лота</a>
+        <a href="#formats">Форматы</a>
         <a href="#services">Услуги</a>
         <a href="#process">Как работаю</a>
         <a href="#cases">Примеры лотов</a>
@@ -1199,6 +1229,56 @@
             <div class="form-status" id="handoff-status" role="status" aria-live="polite"></div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="work-formats v2-section" id="formats" aria-labelledby="work-formats-title">
+    <div class="container">
+      <div class="section-title">
+        <div class="section-label">Как можно работать</div>
+        <h2 id="work-formats-title">Выберите необходимый уровень помощи</h2>
+        <p class="v2-lead">Не каждому покупателю сразу нужно полное сопровождение. Можно начать с самостоятельного чек-листа, затем заказать разбор конкретного лота или обсудить помощь на этапе участия в торгах.</p>
+      </div>
+      <div class="work-formats-grid">
+        <article class="work-format-card" aria-labelledby="format-self-title">
+          <div class="work-format-top"><span class="work-format-step">01</span><span class="work-format-chip">Самостоятельно</span></div>
+          <h3 id="format-self-title">Предварительная карта проверки</h3>
+          <p class="work-format-audience">Если хотите понять, какие вопросы задать по найденному лоту.</p>
+          <div class="work-format-result"><strong>Что получите</strong><p>Персонализированный список проверок по типу имущества и выбранной задаче, который можно скопировать.</p></div>
+          <p class="work-format-label">Как работает</p>
+          <ul><li>Вводите ссылку и тип имущества.</li><li>Получаете чек-лист сразу на сайте.</li><li>Контактные данные не требуются.</li></ul>
+          <p class="work-format-label">Чего здесь нет</p>
+          <p class="work-format-limitation">Сайт не открывает указанную ссылку и не анализирует документы автоматически. Это не заключение о безопасности сделки.</p>
+          <div class="work-format-bottom"><p class="work-format-price">Без оплаты на сайте</p><a class="button button-primary" href="#lot-check-form" data-track="format_self_cta_click">Получить карту проверки</a></div>
+        </article>
+        <article class="work-format-card work-format-card--featured" aria-labelledby="format-check-title">
+          <div class="work-format-top"><span class="work-format-step">02</span><span class="work-format-chip">Разбор специалистом</span></div>
+          <h3 id="format-check-title">Индивидуальная проверка лота</h3>
+          <p class="work-format-audience">Если нужно принять решение об участии на основе конкретных данных.</p>
+          <div class="work-format-result"><strong>Что получите</strong><p>Разбор доступных источников, документов, рисков и расходов в рамках согласованной задачи, с выделением того, что не удалось подтвердить.</p></div>
+          <p class="work-format-label">Как работает</p>
+          <ul><li>Передаёте ссылку на торги и цель покупки.</li><li>Согласуем вопросы, источники и объём проверки.</li><li>Обсуждаем выводы и дальнейшие действия.</li></ul>
+          <p class="work-format-label">Чего здесь нет</p>
+          <p class="work-format-limitation">Выезд, диагностика, независимая оценка, юридическое представительство и участие в торгах — только если включены в согласованный объём.</p>
+          <div class="work-format-bottom"><p class="work-format-price">Стоимость согласовывается до начала работ</p><a class="button button-primary" href="/proverka-lota/" data-track="format_check_cta_click">Узнать о проверке лота</a></div>
+        </article>
+        <article class="work-format-card" aria-labelledby="format-support-title">
+          <div class="work-format-top"><span class="work-format-step">03</span><span class="work-format-chip">Сопровождение</span></div>
+          <h3 id="format-support-title">Помощь с участием в торгах</h3>
+          <p class="work-format-audience">Если объект выбран и предстоит пройти процедуру на электронной площадке.</p>
+          <div class="work-format-result"><strong>Что получите</strong><p>Помощь по согласованным этапам: правила площадки, документы, заявка, задаток, ключевые сроки и действия после результата торгов.</p></div>
+          <p class="work-format-label">Как работает</p>
+          <ul><li>Проверяем регламент и сроки конкретной процедуры.</li><li>Определяем необходимые действия и зоны ответственности.</li><li>Согласуем сопровождение отдельных этапов или всей процедуры.</li></ul>
+          <p class="work-format-label">Чего здесь нет</p>
+          <p class="work-format-limitation">Победа, допуск заявки, сохранность цены и передача объекта не гарантируются. Проверка самого имущества согласовывается отдельно.</p>
+          <div class="work-format-bottom"><p class="work-format-price">Стоимость зависит от процедуры и объёма участия</p><a class="button button-primary" href="/soprovozhdenie-torgov/" data-track="format_support_cta_click">Узнать о сопровождении</a></div>
+        </article>
+      </div>
+      <div class="work-format-footnote">
+        <strong>Как определяется стоимость:</strong> сначала обсуждаем объект и задачу, затем фиксируем перечень проверок или этапов сопровождения и согласовываем цену до начала платной работы. Публичных фиксированных тарифов пока нет — они не заменяются вымышленными цифрами.
+        <a href="#contacts">Обсудить конкретную задачу →</a>
       </div>
     </div>
   </section>
