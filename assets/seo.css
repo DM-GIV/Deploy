@@ -66,3 +66,7 @@ main section{padding:58px 0}.subhead{max-width:740px;margin-bottom:24px}h2{font-
 
 /* Link from service pages to comparison of available work formats */
 .format-crosslink{margin:17px 0 0;font-size:14px;font-weight:750}.format-crosslink a{color:#ffd38a;text-decoration:underline;text-underline-offset:3px}.format-crosslink a:hover{color:#fff}
+
+/* Small contextual educational links beneath service tools, without new heavy blocks. */
+.service-guide-links{max-width:1050px;margin:18px auto;padding:14px 20px;border-left:3px solid #f5a22e;border-radius:0 9px 9px 0;background:#fff7eb;color:#435666;font-size:14px;line-height:1.7}
+.service-guide-links a,.case-guide-links a{color:#92500c;text-decoration:underline;text-underline-offset:3px;font-weight:700}
