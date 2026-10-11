@@ -23,3 +23,9 @@
     .research-case-secondary{color:#a44e00;font-size:15px;font-weight:750;text-decoration:underline;text-underline-offset:3px}
     @media(max-width:800px){.research-case-grid{grid-template-columns:1fr}.research-case-top{padding:18px 20px;min-height:68px}.research-case-inner{padding:20px}.research-case-inner h3{font-size:20px}}
 .examples-list{padding:60px 0}.examples-list .research-case-grid{margin-top:25px}.examples-notice{background:#eff5f9;border:1px solid #d4e4eb;border-left:4px solid #ffa52f;border-radius:12px;padding:18px 22px;margin-bottom:25px;font-size:14px;color:#44596a}.examples-cta{padding:45px 0 55px;background:#0d2c43;color:#fff}.examples-cta p{color:#d8e5ed}.examples-cta .btn{margin-top:15px}
+/* Separation of existing examples and new project-research cases */
+.research-more-heading{margin:54px 0 23px;max-width:760px}
+.research-more-heading h2{font-size:clamp(25px,3vw,34px);line-height:1.2;margin-bottom:12px}
+.research-more-heading p{color:#526477;margin:0}
+.research-case-n{font-variant-numeric:tabular-nums}
+@media(max-width:760px){.research-more-heading{margin:42px 0 18px}}
