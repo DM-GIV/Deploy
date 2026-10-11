@@ -50,7 +50,7 @@
       '<h4>Отправить заявку напрямую</h4>' +
       '<p>После подтверждения заявка поступит обработчику. Отправка только по нажатию кнопки.</p>' +
       '<form class="direct-lead-form">' +
-      '<label>Контакт для ответа *<input name="contact" type="text" minlength="5" maxlength="180" required autocomplete="email" placeholder="Телефон, Telegram или e-mail"></label>' +
+      '<label>Контакт для ответа *<input name="contact" type="text" minlength="5" maxlength="180" required autocomplete="email" placeholder="Телефон, ТГ, MAX или e-mail"></label>' +
       '<div class="direct-lead-trap" aria-hidden="true"><label>Ваш сайт<input name="website" tabindex="-1" autocomplete="off"></label></div>' +
       '<label class="direct-lead-consent"><input type="checkbox" name="consent" required> Согласен на обработку контактных данных и текста заявки для получения ответа. <a href="/privacy/" target="_blank" rel="noopener">Информация об обработке данных</a></label>' +
       '<div class="direct-lead-challenge" aria-label="Проверка защиты от спама"></div>' +
@@ -73,10 +73,10 @@
         sitekey:config.siteKey,
         callback:function (value) { token = value; submit.disabled = false; status.textContent = ''; },
         'expired-callback':function () { token = ''; submit.disabled = true; status.textContent = 'Пройдите проверку от спама повторно.'; },
-        'error-callback':function () { token = ''; submit.disabled = true; status.textContent = 'Проверка от спама недоступна. Можно отправить обращение по e-mail или через Telegram.'; }
+        'error-callback':function () { token = ''; submit.disabled = true; status.textContent = 'Проверка от спама недоступна. Можно отправить обращение по e-mail или через ТГ.'; }
       });
     }).catch(function () {
-      status.textContent = 'Прямая отправка пока недоступна: не загрузилась проверка от спама. Сохраните обращение через Telegram или e-mail.';
+      status.textContent = 'Прямая отправка пока недоступна: не загрузилась проверка от спама. Сохраните обращение через ТГ или e-mail.';
       submit.disabled = true;
     });
 
@@ -112,7 +112,7 @@
           window.auctionCROTrack('lead_direct_accepted', {source:kind === 'lot' ? 'lot_check' : 'search_brief'});
         }
       } catch (_) {
-        status.textContent = 'Не удалось подтвердить приём заявки. Ваш текст сохранён на странице; используйте e-mail или Telegram, либо повторите попытку.';
+        status.textContent = 'Не удалось подтвердить приём заявки. Ваш текст сохранён на странице; используйте e-mail или ТГ, либо повторите попытку.';
         if (typeof window.auctionCROTrack === 'function') {
           window.auctionCROTrack('lead_direct_unconfirmed', {source:kind === 'lot' ? 'lot_check' : 'search_brief'});
         }

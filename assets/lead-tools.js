@@ -29,9 +29,9 @@
   function openTelegramWithCopy(message, statusElement) {
     var win = window.open('https://t.me/Dmitry_G_Iv', '_blank', 'noopener');
     copyText(message).then(function () {
-      if (statusElement) statusElement.textContent = 'Текст обращения скопирован. Вставьте его в открытый чат Telegram и проверьте перед отправкой.';
+      if (statusElement) statusElement.textContent = 'Текст обращения скопирован. Вставьте его в открытый чат ТГ и проверьте перед отправкой.';
     }).catch(function () {
-      if (statusElement) statusElement.textContent = 'Telegram открыт. Автоматически скопировать текст не удалось — передайте данные вручную.';
+      if (statusElement) statusElement.textContent = 'ТГ открыт. Автоматически скопировать текст не удалось — передайте данные вручную.';
     });
     if (!win && statusElement) {
       statusElement.textContent = 'Браузер не открыл новую вкладку. Разрешите всплывающие окна или выберите e-mail / контакты ниже.';
