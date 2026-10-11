@@ -53,3 +53,16 @@
 .lead-tool .handoff-actions .button,.lead-tool .form-actions .button{width:100%}
 .lead-tool .handoff-preview{padding:17px 13px}
 }
+/* Direct-send enhancement is not shown before a successful server capability check. */
+.lead-tool .direct-lead{margin-top:24px;padding:23px;border:1px solid #cbdfe8;border-left:4px solid #287c88;border-radius:12px;background:#f3f8fa}
+.lead-tool .direct-lead h4{margin:0 0 9px;font-size:21px;color:#173949}
+.lead-tool .direct-lead>p{font-size:14px;color:#526675;margin-bottom:18px}
+.lead-tool .direct-lead-form{display:flex;flex-direction:column;align-items:flex-start;gap:15px}
+.lead-tool .direct-lead-form>label{display:flex;flex-direction:column;width:100%;max-width:620px;gap:8px;font-weight:700}
+.lead-tool .direct-lead-form .direct-lead-consent{display:block;max-width:700px;font-size:13px;font-weight:500;line-height:1.65}
+.lead-tool .direct-lead-consent input{display:inline-block;width:auto;margin-right:8px;vertical-align:middle}
+.lead-tool .direct-lead-consent a{color:#9e5207;text-decoration:underline}
+.lead-tool .direct-lead-form button[disabled]{opacity:.55;cursor:not-allowed;box-shadow:none}
+.lead-tool .direct-lead-trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;pointer-events:none}
+.lead-tool .direct-lead .form-status{max-width:680px;line-height:1.5}
+@media(max-width:760px){.lead-tool .direct-lead{padding:17px 13px}.lead-tool .direct-lead .button{width:100%}}
