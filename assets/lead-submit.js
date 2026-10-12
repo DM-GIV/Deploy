@@ -18,7 +18,7 @@
         return response.json();
       }).then(function (config) {
         return config && config.enabled === true &&
-          /^[A-Za-z0-9_-]{10,60}$/.test(config.siteKey || '')
+          /^[A-Za-z0-9_-]{10,160}$/.test(config.siteKey || '')
           ? config : {enabled:false};
       }).catch(function () { return {enabled:false}; });
     }
@@ -26,15 +26,20 @@
   }
 
   function loadCaptcha() {
-    if (window.turnstile) return Promise.resolve();
+    if (window.smartCaptcha) return Promise.resolve();
     if (!scriptRequest) {
       scriptRequest = new Promise(function (resolve, reject) {
-        var s = document.createElement('script');
-        s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-        s.async = true;
-        s.onload = resolve;
-        s.onerror = reject;
-        document.head.appendChild(s);
+        var callbackName = 'torgatlasSmartCaptchaReady';
+        var script = document.createElement('script');
+        window[callbackName] = function () { resolve(); };
+        script.src = 'https://smartcaptcha.cloud.yandex.ru/captcha.js?render=onload&onload=' + callbackName;
+        script.async = true;
+        script.onload = function () {
+          if (window.smartCaptcha) resolve();
+          else reject(new Error('SmartCaptcha API unavailable'));
+        };
+        script.onerror = function () { reject(new Error('SmartCaptcha script unavailable')); };
+        document.head.appendChild(script);
       });
     }
     return scriptRequest;
@@ -66,14 +71,21 @@
     var submit = form.querySelector('[type="submit"]');
     var token = '';
     var widgetId = null;
+    var requestId = '';
     active[kind] = true;
     loadCaptcha().then(function () {
-      if (!window.turnstile) throw new Error('captcha unavailable');
-      widgetId = window.turnstile.render(block.querySelector('.direct-lead-challenge'), {
-        sitekey:config.siteKey,
-        callback:function (value) { token = value; submit.disabled = false; status.textContent = ''; },
-        'expired-callback':function () { token = ''; submit.disabled = true; status.textContent = 'Пройдите проверку от спама повторно.'; },
-        'error-callback':function () { token = ''; submit.disabled = true; status.textContent = 'Проверка от спама недоступна. Можно отправить обращение по e-mail или через ТГ.'; }
+      if (!window.smartCaptcha || typeof window.smartCaptcha.subscribe !== 'function') throw new Error('captcha unavailable');
+      widgetId = window.smartCaptcha.render(block.querySelector('.direct-lead-challenge'), {
+        sitekey: config.siteKey,
+        callback: function (value) { token = value; submit.disabled = !value; status.textContent = ''; }
+      });
+      window.smartCaptcha.subscribe(widgetId, 'token-expired', function () {
+        token = ''; submit.disabled = true;
+        status.textContent = '\u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043e\u0442 \u0441\u043f\u0430\u043c\u0430 \u0438\u0441\u0442\u0435\u043a\u043b\u0430. \u041f\u0440\u043e\u0439\u0434\u0438\u0442\u0435 \u0435\u0451 \u043f\u043e\u0432\u0442\u043e\u0440\u043d\u043e.';
+      });
+      window.smartCaptcha.subscribe(widgetId, 'network-error', function () {
+        token = ''; submit.disabled = true;
+        status.textContent = '\u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043e\u0442 \u0441\u043f\u0430\u043c\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u0430. \u0418\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0439\u0442\u0435 \u0422\u0413, MAX \u0438\u043b\u0438 e-mail.';
       });
     }).catch(function () {
       status.textContent = 'Прямая отправка пока недоступна: не загрузилась проверка от спама. Сохраните обращение через ТГ или e-mail.';
@@ -88,6 +100,13 @@
         status.textContent = 'Длина сообщения должна быть от 40 до 6000 символов. При необходимости сократите текст.';
         return;
       }
+      if (!requestId) {
+        if (!window.crypto || typeof window.crypto.randomUUID !== 'function') {
+          status.textContent = '\u0411\u0435\u0437\u043e\u043f\u0430\u0441\u043d\u0430\u044f \u043e\u0442\u043f\u0440\u0430\u0432\u043a\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u0430. \u0418\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0439\u0442\u0435 \u0422\u0413, MAX \u0438\u043b\u0438 e-mail.';
+          return;
+        }
+        requestId = window.crypto.randomUUID();
+      }
       submit.disabled = true;
       status.textContent = 'Передаю заявку. Не закрывайте эту страницу до результата.';
       try {
@@ -96,14 +115,15 @@
           headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
           credentials:'same-origin', cache:'no-store',
           body:JSON.stringify({
-            kind:kind, contact:contact.value.trim(), message:message,
+            id:requestId, kind:kind, contact:contact.value.trim(), message:message,
             consent:true, privacyVersion:'2026-10-11',
             website:form.elements.namedItem('website').value,
-            turnstileToken:token
+            captchaToken:token
           })
         });
         var body = await response.json().catch(function () { return null; });
-        if (!response.ok || !body || body.ok !== true || body.code !== 'ACCEPTED') {
+        if (!response.ok || !body || body.ok !== true || body.code !== 'ACCEPTED' ||
+            body.accepted !== true || body.id !== requestId || body.receipt !== requestId) {
           throw new Error('delivery not confirmed');
         }
         status.textContent = 'Заявка принята обработчиком. Номер подтверждения: ' + body.receipt + '. Сохраните его.';
@@ -117,7 +137,7 @@
           window.auctionCROTrack('lead_direct_unconfirmed', {source:kind === 'lot' ? 'lot_check' : 'search_brief'});
         }
         token = '';
-        if (widgetId !== null && window.turnstile) window.turnstile.reset(widgetId);
+        if (widgetId !== null && window.smartCaptcha) window.smartCaptcha.reset(widgetId);
       } finally {
         if (!status.textContent.includes('Заявка принята')) submit.disabled = !token;
       }
