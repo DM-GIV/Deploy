@@ -44,7 +44,7 @@ Default DB path is the production one; override with `--db`. Never paste `list/s
 Fill all of `SMTP_HOST, SMTP_PORT(465|587), SMTP_USER, SMTP_PASSWORD, SMTP_FROM, LEAD_EMAIL_TO` to enable; otherwise `notification_status=not_configured`. Sent after commit only; `sending` rows are never retried (ambiguous result → owner checks the mailbox).
 
 ## Backups / migrations
-On first start with an older DB the service copies it (SQLite backup API) to `data/pre-migration-backups/leads-v<N>-<UTC>.sqlite3` (0600, never overwritten) before `ALTER TABLE`; real rows are never deleted. Regular backups of `data/leads.sqlite3` need a separately approved ops package. `retention.py` is dry-run only and MUST NOT be scheduled until a retention period is legally approved.
+On first start with an older DB the service copies it (SQLite backup API) to `data/pre-migration-backups/leads-v<N>-<UTC>.sqlite3` (0600, never overwritten) before `ALTER TABLE`; real rows are never deleted. Regular backups of `data/leads.sqlite3` need a separately approved ops package. Retention (art. 5/21 152-FZ): data is kept while the enquiry is being answered; the owner closes it with `leadctl.py close <id>` (reading/`ack` is NOT purpose reached). Contract/other lawful basis: `leadctl.py hold <id> --reason …` (excluded from destruction), `release-hold`. Closed, unheld leads must be destroyed within 30 days: `python3 services/lead-intake/retention.py` (dry-run) then `--execute` with `LEAD_RETENTION_LEGAL_APPROVED=true`; `leadctl.py stats` shows `overdue_destruction`. No age-based deletion, no cron.
 
 ## Rollback (site-only; accepted leads are never deleted)
 1. Restore the previous `nginx/torgatlas.d` snapshot (stubs → `{"enabled":false}` / POST 503), `nginx -t`, reload.
@@ -57,3 +57,8 @@ docker run --rm --ipc=host --user 1000:1000 -e HOME=/tmp -e PYTHONDONTWRITEBYTEC
   -v <dir with unpacked playwright 1.48 python wheels>:/pwlib:ro -v "$PWD":/work:ro \
   mcr.microsoft.com/playwright/python:v1.48.0-jammy python3 /work/tests/browser_e2e.py
 ```
+
+## Notes (review)
+- Start the service once after an upgrade before using `leadctl`/`retention` (the service migrates the schema; the CLIs do not).
+- `data/pre-migration-backups/` holds full copies of lead data: when a lead is destroyed under art. 21, purge it from these backups too (nothing does it automatically).
+- Withdrawal of consent: owner runs `leadctl.py close <id>` then `retention.py --execute` within 30 days; no timer, `stats` shows `overdue_destruction`.

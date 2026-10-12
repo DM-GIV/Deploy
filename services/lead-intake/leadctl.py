@@ -4,6 +4,9 @@
   python3 leadctl.py [--db PATH] list [--all]     new (unreviewed) leads; shows contacts, terminal only
   python3 leadctl.py [--db PATH] show ID          one full lead, terminal only
   python3 leadctl.py [--db PATH] ack ID           mark a lead as reviewed (nothing is deleted)
+  python3 leadctl.py [--db PATH] close ID         purpose reached / interaction finished: starts the 30-day destruction clock
+  python3 leadctl.py [--db PATH] hold ID --reason TEXT      other lawful basis (e.g. contract) -> excluded from destruction
+  python3 leadctl.py [--db PATH] release-hold ID  remove the hold
   python3 leadctl.py [--db PATH] cleanup-test ID [--execute]
                                                   delete ONE synthetic test lead (contact must be *@example.invalid
                                                   and message must start with TEST_E2E_); dry-run by default
@@ -34,6 +37,10 @@ def stats(db):
     out = {}
     out["total"] = db.execute("SELECT COUNT(*) FROM leads").fetchone()[0]
     out["new_unreviewed"] = db.execute("SELECT COUNT(*) FROM leads WHERE reviewed_at IS NULL AND status='accepted'").fetchone()[0]
+    out["closed"] = db.execute("SELECT COUNT(*) FROM leads WHERE closed_at IS NOT NULL").fetchone()[0]
+    out["held"] = db.execute("SELECT COUNT(*) FROM leads WHERE legal_hold=1").fetchone()[0]
+    cutoff = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=30)).isoformat()
+    out["overdue_destruction"] = db.execute("SELECT COUNT(*) FROM leads WHERE closed_at IS NOT NULL AND legal_hold=0 AND closed_at<?", (cutoff,)).fetchone()[0]
     for row in db.execute("SELECT status, COUNT(*) FROM leads GROUP BY status ORDER BY status"):
         out["status:" + row[0]] = row[1]
     for row in db.execute("SELECT notification_status, COUNT(*) FROM leads GROUP BY notification_status ORDER BY 1"):
@@ -49,8 +56,11 @@ def main(argv=None):
     ls = sub.add_parser("list")
     ls.add_argument("--all", action="store_true")
     ls.add_argument("--limit", type=int, default=50)
-    for name in ("show", "ack"):
+    for name in ("show", "ack", "close", "release-hold"):
         sub.add_parser(name).add_argument("id")
+    hd = sub.add_parser("hold")
+    hd.add_argument("id")
+    hd.add_argument("--reason", required=True)
     ct = sub.add_parser("cleanup-test")
     ct.add_argument("id")
     ct.add_argument("--execute", action="store_true")
@@ -83,6 +93,19 @@ def main(argv=None):
             n = db.execute("UPDATE leads SET reviewed_at=? WHERE id=? AND reviewed_at IS NULL",
                            (dt.datetime.now(dt.timezone.utc).isoformat(), a.id)).rowcount
         print("acknowledged=%d" % n)
+    elif a.cmd in ("close", "hold", "release-hold"):
+        db = open_db(a.db, write=True)
+        now = dt.datetime.now(dt.timezone.utc).isoformat()
+        with db:
+            if a.cmd == "close":
+                n = db.execute("UPDATE leads SET closed_at=?, reviewed_at=COALESCE(reviewed_at,?) WHERE id=? AND closed_at IS NULL", (now, now, a.id)).rowcount
+            elif a.cmd == "hold":
+                n = db.execute("UPDATE leads SET legal_hold=1, hold_reason=? WHERE id=?", (a.reason[:300], a.id)).rowcount
+            else:
+                n = db.execute("UPDATE leads SET legal_hold=0, hold_reason=NULL WHERE id=?", (a.id,)).rowcount
+        print("%s=%d" % (a.cmd, n))
+        if n == 0:
+            sys.exit("NOT_FOUND_OR_NO_CHANGE")
     elif a.cmd == "cleanup-test":
         db = open_db(a.db, write=True)
         r = db.execute("SELECT contact,message FROM leads WHERE id=?", (a.id,)).fetchone()

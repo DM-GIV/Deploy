@@ -76,14 +76,24 @@ class CliTests(unittest.TestCase):
         self.assertIn("deleted=1", self.run_cli("cleanup-test", TEST_ID, "--execute"))
         self.assertEqual(self.count(), 1)
 
-    def test_retention_dry_run_only_counts_reviewed_and_never_deletes_without_approval(self):
-        env = {"DATA_DB_PATH": self.db, "LEAD_RETENTION_DAYS": "30"}
-        self.assertEqual(retention.run(env)["candidates"], 0)  # nothing reviewed yet
-        self.run_cli("ack", REAL_ID)
-        self.assertEqual(retention.run(env)["candidates"], 1)
+    def test_close_hold_and_retention_workflow(self):
+        env = {"DATA_DB_PATH": self.db}
+        self.run_cli("ack", REAL_ID)  # merely reading is NOT purpose reached
+        self.assertEqual(retention.run(env)["candidates"], 0)
+        self.run_cli("close", TEST_ID)
+        self.run_cli("close", REAL_ID)
+        self.run_cli("hold", REAL_ID, "--reason", "contract")
+        with self.assertRaises(SystemExit):
+            self.run_cli("hold", "no-such-id", "--reason", "x")
+        self.assertEqual(retention.run(env)["candidates"], 0)  # inside the 1-day recovery window
+        self.assertEqual(retention.run(env, grace_days=0)["candidates"], 1)  # held lead excluded
         self.assertEqual(retention.run(env, execute=True), {"ok": False, "code": "LEGAL_APPROVAL_REQUIRED"})
         self.assertEqual(self.count(), 2)
-        self.assertEqual(retention.run({"DATA_DB_PATH": self.db}), {"ok": False, "code": "RETENTION_NOT_CONFIGURED"})
+        self.assertEqual(retention.run(dict(env, LEAD_RETENTION_LEGAL_APPROVED="true"), execute=True, grace_days=0)["deleted"], 1)
+        self.assertEqual(self.count(), 1)  # only the closed, unheld lead was destroyed
+        self.run_cli("release-hold", REAL_ID)
+        self.assertEqual(retention.run(env, grace_days=0)["candidates"], 1)
+        self.assertEqual(retention.run({}), {"ok": False, "code": "RETENTION_NOT_CONFIGURED"})
 
 
 if __name__ == "__main__":
