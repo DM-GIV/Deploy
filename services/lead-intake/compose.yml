@@ -1,12 +1,14 @@
 # Standalone website-only service. No Cloud/Core Compose integration.
+# Runs as the deploy uid so the owner CLI can read the 0600 database; export LEAD_UID=$(id -u) LEAD_GID=$(id -g).
 services:
   torgatlas-lead-intake:
     build:
-      context: ../..
-      dockerfile: services/lead-intake/Dockerfile
+      context: .
+      dockerfile: Dockerfile
+    image: torgatlas-lead-intake:local
     container_name: torgatlas-lead-intake
     restart: unless-stopped
-    user: "10001:10001"
+    user: "${LEAD_UID:?export LEAD_UID=$(id -u)}:${LEAD_GID:?export LEAD_GID=$(id -g)}"
     env_file:
       - ${LEAD_ENV_FILE:?Set absolute path to restricted lead service env}
     ports:
@@ -23,3 +25,8 @@ services:
     pids_limit: 64
     mem_limit: 128m
     cpus: 0.5
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8081/health', timeout=3).status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
