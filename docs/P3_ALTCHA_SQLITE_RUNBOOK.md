@@ -57,3 +57,8 @@ docker run --rm --ipc=host --user 1000:1000 -e HOME=/tmp -e PYTHONDONTWRITEBYTEC
   -v <dir with unpacked playwright 1.48 python wheels>:/pwlib:ro -v "$PWD":/work:ro \
   mcr.microsoft.com/playwright/python:v1.48.0-jammy python3 /work/tests/browser_e2e.py
 ```
+
+## Notes (review)
+- Start the service once after an upgrade before using `leadctl`/`retention` (the service migrates the schema; the CLIs do not).
+- `data/pre-migration-backups/` holds full copies of lead data: when a lead is destroyed under art. 21, purge it from these backups too (nothing does it automatically).
+- Withdrawal of consent: owner runs `leadctl.py close <id>` then `retention.py --execute` within 30 days; no timer, `stats` shows `overdue_destruction`.

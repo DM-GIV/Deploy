@@ -83,13 +83,16 @@ class CliTests(unittest.TestCase):
         self.run_cli("close", TEST_ID)
         self.run_cli("close", REAL_ID)
         self.run_cli("hold", REAL_ID, "--reason", "contract")
-        self.assertEqual(retention.run(env)["candidates"], 1)  # held lead excluded
+        with self.assertRaises(SystemExit):
+            self.run_cli("hold", "no-such-id", "--reason", "x")
+        self.assertEqual(retention.run(env)["candidates"], 0)  # inside the 1-day recovery window
+        self.assertEqual(retention.run(env, grace_days=0)["candidates"], 1)  # held lead excluded
         self.assertEqual(retention.run(env, execute=True), {"ok": False, "code": "LEGAL_APPROVAL_REQUIRED"})
         self.assertEqual(self.count(), 2)
-        self.assertEqual(retention.run(dict(env, LEAD_RETENTION_LEGAL_APPROVED="true"), execute=True)["deleted"], 1)
+        self.assertEqual(retention.run(dict(env, LEAD_RETENTION_LEGAL_APPROVED="true"), execute=True, grace_days=0)["deleted"], 1)
         self.assertEqual(self.count(), 1)  # only the closed, unheld lead was destroyed
         self.run_cli("release-hold", REAL_ID)
-        self.assertEqual(retention.run(env)["candidates"], 1)
+        self.assertEqual(retention.run(env, grace_days=0)["candidates"], 1)
         self.assertEqual(retention.run({}), {"ok": False, "code": "RETENTION_NOT_CONFIGURED"})
 
 

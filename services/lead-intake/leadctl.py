@@ -104,6 +104,8 @@ def main(argv=None):
             else:
                 n = db.execute("UPDATE leads SET legal_hold=0, hold_reason=NULL WHERE id=?", (a.id,)).rowcount
         print("%s=%d" % (a.cmd, n))
+        if n == 0:
+            sys.exit("NOT_FOUND_OR_NO_CHANGE")
     elif a.cmd == "cleanup-test":
         db = open_db(a.db, write=True)
         r = db.execute("SELECT contact,message FROM leads WHERE id=?", (a.id,)).fetchone()

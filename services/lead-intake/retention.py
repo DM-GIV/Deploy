@@ -13,7 +13,7 @@ import sqlite3
 from pathlib import Path
 
 DEFAULT_DB = "/home/deploy/torgatlas-ops/isolated/lead-intake/data/leads.sqlite3"
-GRACE_DAYS = 0          # closing already starts the clock; the statutory ceiling is 30 days after closing
+GRACE_DAYS = 1          # one-day recovery window after closing; statutory ceiling is 30 days after closing
 
 
 def run(env=None, execute=False, grace_days=GRACE_DAYS):
