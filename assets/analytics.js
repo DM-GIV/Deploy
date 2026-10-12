@@ -16,6 +16,9 @@
     lead_handoff_opened: true,
     funnel_contact_open: true
   };
+  // Only the contact channel may travel with an event, and only from this closed list (no URLs, numbers, addresses or text).
+  var CHANNEL_EVENTS = { funnel_contact_open: true, lead_handoff_opened: true };
+  var ALLOWED_CHANNELS = { email: true, telegram: true, phone: true };
   var queue = [];
   var loaded = false;
   var loading = false;
@@ -48,7 +51,11 @@
     if (!payload || privacySignalEnabled() || readConsent() !== 'accepted') return null;
     if (type !== 'event') return null; // no identify / performance payloads
     if (payload.name !== undefined && payload.name !== null && !isAllowedEvent(payload.name)) return null;
+    var channel = payload.data && payload.data.channel;
     delete payload.data;
+    if (payload.name && CHANNEL_EVENTS[payload.name] === true && typeof channel === 'string' && ALLOWED_CHANNELS[channel] === true) {
+      payload.data = { channel: channel };
+    }
     payload.title = '';
     try {
       payload.url = new URL(payload.url, window.location.href).pathname;
@@ -59,13 +66,20 @@
     return payload;
   };
 
-  function track(name) {
+  function safeChannel(name, channel) {
+    return CHANNEL_EVENTS[name] === true && typeof channel === 'string' && ALLOWED_CHANNELS[channel] === true ? channel : null;
+  }
+
+  function track(name, channel) {
     if (!WEBSITE_ID || !loaded || privacySignalEnabled() || !isAllowedEvent(name)) return;
-    if (window.umami && typeof window.umami.track === 'function') window.umami.track(name);
+    if (!window.umami || typeof window.umami.track !== 'function') return;
+    var safe = safeChannel(name, channel);
+    if (safe) window.umami.track(name, { channel: safe });
+    else window.umami.track(name);
   }
 
   function flushQueue() {
-    queue.splice(0).forEach(track);
+    queue.splice(0).forEach(function (item) { track(item.name, item.channel); });
   }
 
   function loadUmami() {
@@ -96,8 +110,9 @@
     if (!WEBSITE_ID || privacySignalEnabled()) return;
     var name = event && event.detail && event.detail.event;
     if (!isAllowedEvent(name)) return;
-    if (loaded) track(name);
-    else if (readConsent() === 'accepted' && queue.length < 30) queue.push(name);
+    var channel = event.detail.channel;
+    if (loaded) track(name, channel);
+    else if (readConsent() === 'accepted' && queue.length < 30) queue.push({ name: name, channel: channel });
   }
 
   function renderConsentBanner() {

@@ -37,7 +37,7 @@ function harness({websiteId=SITE_ID, consent=null, gpc=false, dnt='0', directLea
     },
     addEventListener(type, fn){ listeners.set('document:'+type, fn); }
   };
-  const tracked = [];
+  const tracked = []; const trackedData = [];
   const window = {
     doNotTrack: dnt,
     location: { origin: 'https://torgatlas.ru', href: 'https://torgatlas.ru/proverka-lota/?q=secret#x' },
@@ -46,14 +46,14 @@ function harness({websiteId=SITE_ID, consent=null, gpc=false, dnt='0', directLea
       setItem(k,v){ storageSets++; storage.set(k,String(v)); }
     },
     addEventListener(type, fn){ listeners.set(type, fn); },
-    umami: { track(name){ tracked.push(name); } }
+    umami: { track(name, data){ tracked.push(name); trackedData.push(data); } }
   };
   const navigator = { globalPrivacyControl:gpc, doNotTrack:dnt };
   let code = original.replace(/var WEBSITE_ID = '[^']*';/, "var WEBSITE_ID = '"+websiteId+"';");
   if (directLeads) code = code.replace('DIRECT_LEADS_ENABLED = false', 'DIRECT_LEADS_ENABLED = true');
   vm.runInNewContext(code, {window, document, navigator, URL, Date, console, setTimeout, clearTimeout});
   const fireLoad = () => scripts[0]._handlers.load();
-  return {window, document, listeners, scripts, storage, tracked, fireLoad, get storageGets(){return storageGets;}, get storageSets(){return storageSets;}};
+  return {window, document, listeners, scripts, storage, tracked, trackedData, fireLoad, get storageGets(){return storageGets;}, get storageSets(){return storageSets;}};
 }
 
 test('disabled website id performs no analytics work', () => {
@@ -132,4 +132,31 @@ test('before-send sanitises pageview and blocks bad payloads', () => {
 test('before-send blocks everything without consent', () => {
   const h = harness({consent:'declined'});
   assert.equal(h.window.taUmamiBeforeSend('event', {url:'/'}), null);
+});
+
+test('contact channel travels only from the closed list and only for contact events', () => {
+  const h = harness({consent:'accepted'});
+  h.fireLoad();
+  const fire = d => h.listeners.get('auction:funnel')({detail:d});
+  fire({event:'funnel_contact_open', channel:'telegram', contact:'+79990000000'});
+  fire({event:'funnel_contact_open', channel:'+79990000000'});
+  fire({event:'lead_handoff_opened', channel:'email', source:'lot_check'});
+  fire({event:'lot_check_complete', channel:'email'});
+  assert.deepEqual(h.tracked, ['funnel_contact_open','funnel_contact_open','lead_handoff_opened','lot_check_complete']);
+  assert.equal(JSON.stringify(h.trackedData), JSON.stringify([{channel:'telegram'}, null, {channel:'email'}, null]));
+});
+
+test('queued contact events keep the safe channel after tracker load', () => {
+  const h = harness({consent:'accepted'});
+  h.listeners.get('auction:funnel')({detail:{event:'funnel_contact_open', channel:'phone'}});
+  h.fireLoad();
+  assert.equal(JSON.stringify(h.trackedData), JSON.stringify([{channel:'phone'}]));
+});
+
+test('before-send keeps only a safe channel in data', () => {
+  const h = harness({consent:'accepted'});
+  const bs = h.window.taUmamiBeforeSend;
+  assert.equal(JSON.stringify(bs('event', {name:'funnel_contact_open', url:'/', data:{channel:'email', contact:'a@b.ru'}}).data), '{"channel":"email"}');
+  assert.equal(bs('event', {name:'funnel_contact_open', url:'/', data:{channel:'a@b.ru'}}).data, undefined);
+  assert.equal(bs('event', {name:'lot_check_complete', url:'/', data:{channel:'email'}}).data, undefined);
 });
