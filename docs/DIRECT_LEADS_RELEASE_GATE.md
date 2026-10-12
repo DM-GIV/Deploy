@@ -1,58 +1,50 @@
-# Прямой приём заявок — подготовленная интеграция (выключена)
+# AUC-204/P3 — TorgAtlas direct-lead release gate
 
-Дата: 11 октября 2026 г. Проект: `DM-GIV/Deploy` (сайт на Vercel).
-Статус: `IMPLEMENTED / TESTED / DEPLOYED_DISABLED / PRIVACY_RELEASE_HOLD`.
+Status: IMPLEMENTATION IN DEVELOPMENT. NOT DEPLOYED; PERSONAL-DATA COLLECTION DISABLED.
+Repository: DM-GIV/Deploy. Source branch starts at verified origin/main 6eff42605bd1a65ac39c0835710e75d839c9c422; accepted production site remains 7de37359697c990f42cd8e3bc372af09ed95a622.
 
-## Принцип
+## Architecture
 
-Действующая воронка **не меняется**: главная → карта лота или поиска без контакта → редактируемое обращение. Текущие Telegram, e-mail, копирование текста сохраняются.
+A self-contained Python 3.12 website-only service at services/lead-intake/lead_intake.py with standard-library dependencies, isolated SQLite file and SMTP sender. No connection to Auction Analytics Cloud/Core/PostgreSQL/Redis/Scanner. Standalone Compose sample binds ONLY 127.0.0.1:18081 on the host; container is non-root, limited resource, read-only FS, private separately approved host data dir. Website fallback links (TG, MAX, email, copy) are unaffected.
 
-Новый модуль позволяет после подготовки обращения отправить его прямо через сайт **только после отдельного разрешения владельца и юридической настройки**. До включения модуль скрыт и не выполняет запросов на проверку CAPTCHA или к получателю заявок.
+Do not run production Compose or modify nginx in this Git-only package. Current public HTTP contract continues: GET /api/lead-config -> 200 {"enabled":false}; POST /api/lead -> 503 NOT_CONFIGURED.
 
-## Контракт и реализация
+## Default safe settings
 
-- `GET /api/lead-config`: всегда возвращает JSON `{"enabled":false}`, если хотя бы одна обязательная настройка отсутствует. Не раскрывает токены. Если всё настроено, возвращает `enabled:true` и публичный `siteKey`.
-- `POST /api/lead`: пока функция не разрешена, HTTP 503 без чтения тела и пересылки заявки.
-- При разрешённом приёме: строгая проверка `Origin`, только JSON, объём до 12 КБ, длина контакта и сообщения, явное согласие и версия документа, honeypot, обязательная серверная проверка Cloudflare Turnstile (включая hostname).
-- Запрос к получателю передаёт `id`, тип заявки, контакт, сообщение, версию согласия и время. В коде не предусмотрены БД, cookies и сохранение сообщения в приложении; однако хостинг и получатель могут обрабатывать технические сведения и содержимое.
-- Принятой считается заявка **только** после HTTP 2xx + JSON `{"accepted":true,"id":"<тот же UUID>"}` от получателя. Во всех прочих случаях пользователь получает сообщение, что получение не подтверждено, и может выбрать Telegram/e-mail.
-- Отдельный JS `assets/lead-submit.js` подключён только на страницах инструментов. Он запрашивает конфигурацию после генерации обращения, а не при первой загрузке страницы. CAPTCHA загружается только при реальной доступности прямой отправки.
+Both DIRECT_LEADS_ENABLED and DIRECT_LEADS_LEGAL_APPROVED default to false. Even when both are true, configuration requires SMARTCAPTCHA_SITE_KEY, SMARTCAPTCHA_SECRET, LEAD_ALLOWED_ORIGIN=https://torgatlas.ru, SMTP_HOST, SMTP_PORT (465 or 587), SMTP_USER, SMTP_PASSWORD, SMTP_FROM, LEAD_EMAIL_TO, DATA_DB_PATH (absolute path), LEAD_HASH_SALT (>=32 characters). No real credentials, recipient or private keys in Git. env.example is deliberately disabled and blank. The service performs no DB access or network call when disabled.
 
-### Обязательные серверные переменные (секреты не добавлять в GitHub)
+## API contract
 
-```env
-DIRECT_LEADS_ENABLED=false
-DIRECT_LEADS_LEGAL_APPROVED=false
-LEAD_DELIVERY_URL=https://approved-recipient.example.org/inbox
-LEAD_DELIVERY_SECRET=<secret>
-LEAD_RECIPIENT_ID=<approved-recipient-identifier>
-LEAD_ALLOWED_ORIGIN=https://deploy-pi-blond-52.vercel.app
-LEAD_TURNSTILE_SITE_KEY=<public-key>
-LEAD_TURNSTILE_SECRET=<private-secret>
-```
+GET /api/lead-config returns enabled:false until all gates pass, then enabled:true and ONLY public siteKey.
+POST /api/lead requires JSON up to 12,288 bytes; strict Origin matching https://torgatlas.ru; kind lot|search, contact 5–180 characters, message 40–6000, consent=true, privacyVersion, empty website honeypot, one-time captchaToken, UUID-v4 id. Old Turnstile tokens are rejected. No unauthenticated writes.
+Captcha verification: POST form-urlencoded secret/token/ip (optional trusted original IP) to https://smartcaptcha.cloud.yandex.ru/validate, require HTTP 200, status ok AND host torgatlas.ru; invalid/expired/timeout/unknown host fail closed. Source: https://yandex.cloud/ru/docs/smartcaptcha/operations/validate-captcha
+After validation, SQLite reserves UUID with pending_delivery, then SMTP over TLS with explicit acknowledgement. Only after confirmed SMTP send and accepted SQLite status, response includes BOTH {ok:true, code:"ACCEPTED", receipt:id} and {accepted:true, id:id}. SMTP fail or timeout -> delivery_unknown, do not claim acceptance; no automatic replay for ambiguous delivery. Repeated identical accepted UUID returns same response without second message, changed payload with same UUID returns 409. No files accepted; logs exclude contact/message/IP/token and there is no raw IP stored. In-process rate cap 20/min per HMAC-IP; deployment additionally requires site-owned nginx limit_req and trustworthy X-Real-IP forwarding.
 
-Здесь `approved-recipient.example.org` — **пример**, не действующая служба приёма. На момент разработки **НЕ создавать** эти переменные с вымышленными значениями.
+## Disabled production deployment is a SEPARATE approved package
 
-### Требования к принимающему сервису
+1. Verify data-operator identity, legal processing purpose in Roskomnadzor notification, final policy/consent, exact retention, Russian storage and mail/captcha processors. Current RKN issue: previously registered purpose only HR/accounting; no claim of legal compliance from this PR.
+2. Owner-supplied SmartCaptcha keys (real torgatlas.ru site key + server secret), approved sender/SMTP credentials and verified recipient, secure host data dir and hash salt. Never invent credentials or mailbox.
+3. Disposable test DB + mocked and then live authorized SmartCaptcha and SMTP delivery acceptance. Security review: captcha errors, concurrency, SQLite restart, rate-limits, origin and body bounds, no sensitive logs.
+4. Disabled-only isolated Compose deployment to localhost, health check enabled:false and zero PII, then separately reviewed site-only nginx routing from current stub to service with rollback; do not touch shared Cloud Core/proxy config without production preflight.
+5. Enable DIRECT_LEADS_ENABLED and DIRECT_LEADS_LEGAL_APPROVED only after explicit operator/legal acceptance. Update /privacy/ in that separate activation release and test browser flow. Disabled release is not an operational lead funnel.
 
-1. HTTPS; секретный токен, сравниваемый в постоянном времени; минимальные права и ограничение исходящих соединений.
-2. Подтверждение `accepted:true` только после фактической записи в согласованный канал/CRM; если уведомление через почту, получение письма исполнителем контролируется отдельно.
-3. Защита от повторных запросов по `id` (idempotency), ограничения по частоте и ограничения на вложения; система не принимает и не хранит файлы из пользовательской формы.
-4. Журнал без контактных данных, срок хранения, доступы, процедура удаления по применимому праву; мониторинг ошибок доставки.
-5. Не использовать иностранное хранение данных граждан РФ без предварительной оценки требований 152-ФЗ, в частности статьи 18(5). По умолчанию Vercel Functions работают в `iad1` (США), если настройки размещения не изменены; регион самой функции ещё не делает получателя и весь поток законным.
-6. Подтвердить действительное лицо, выступающее оператором ПД, предоставить политику и оформить необходимую юридическую документацию до включения.
+## Retention and backups
 
-## Фактическая приёмка
+retention.py dry-runs only by default. Requires LEAD_RETENTION_DAYS between 30 and 3650, LEAD_RETENTION_LEGAL_APPROVED=true, and explicit --execute before any deletion of accepted records. No timer/scheduler, no production cleanup authorized, no backup handling implemented. Ambiguous/pending delivery not auto-deleted. The proposed 12 months is LEGAL_PENDING, not approved.
 
-- Локально на Node запущено `node --test tests/direct-lead.test.mjs`: 6 PASS / 0 FAIL.
-- На опубликованном учебном сайте `GET /api/lead-config` → HTTP 200 + `{"enabled":false}`; `POST /api/lead` → HTTP 503.
-- По умолчанию пользователь не видит прямую кнопку приёма и не отправляет данные серверу.
-- Нет фактического интеграционного теста с согласованным получателем, реальной CAPTCHA, доставкой уведомлений и удалением персональных данных. Все эти этапы остаются RELEASE HOLD.
+## Tests
 
-## Перед включением
+Run:
+python3 -m unittest discover -s tests -p lead_intake_test.py -v
+node --test tests/lead-browser.test.mjs
+node --test tests/direct-lead.test.mjs
+node --test tests/analytics.test.mjs
+node scripts/check-performance.mjs
+node --check assets/lead-submit.js
+git diff --check
 
-Получить подтверждённый юридический статус и реквизиты оператора, утверждённую модель обработки/локализации, выбранный канал доставки, ключи антиспама, обновлённый текст /privacy/, необходимые согласия и порядок хранения. Затем провести **отдельную** приемку (реальная доставка, повтор, отказ получателя, CAPTCHA expiry, мобильный браузер, сетевые ошибки).
+Tests are offline synthetic fixtures; passing does not prove real captcha/SMTP, live delivery or legal acceptance. Vercel API files remain legacy compatibility tests and are not server runtime.
 
-Пока этого нет, `DIRECT_LEADS_ENABLED` и `DIRECT_LEADS_LEGAL_APPROVED` должны оставаться `false` или отсутствовать.
+## Rollback
 
-Источники: https://vercel.com/docs/functions/runtimes/node-js ; https://developers.cloudflare.com/turnstile/get-started/server-side-validation/ ; https://mintrud.gov.ru/docs/laws/130
+This PR only changes Git, not production. Revert branch/merge if rejected. A later isolated disabled deployment must snapshot site-owned nginx include and container image/config, and stop only its own container on rollback. Restore previous 200 enabled:false / POST 503 contract and Cloud 308/200/200/404 health. Never reset/clean other worktrees.

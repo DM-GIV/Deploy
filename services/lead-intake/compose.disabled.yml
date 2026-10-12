@@ -1,0 +1,25 @@
+# Standalone website-only service. No Cloud/Core Compose integration.
+services:
+  torgatlas-lead-intake:
+    build:
+      context: ../..
+      dockerfile: services/lead-intake/Dockerfile
+    container_name: torgatlas-lead-intake
+    restart: unless-stopped
+    user: "10001:10001"
+    env_file:
+      - ${LEAD_ENV_FILE:?Set absolute path to restricted lead service env}
+    ports:
+      - "127.0.0.1:18081:8081"
+    volumes:
+      - ${LEAD_DATA_HOST_DIR:?Set absolute path to approved private data directory}:/data
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=8m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 64
+    mem_limit: 128m
+    cpus: 0.5
