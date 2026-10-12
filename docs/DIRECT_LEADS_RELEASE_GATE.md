@@ -1,50 +1,28 @@
-# AUC-204/P3 — TorgAtlas direct-lead release gate
+# Direct leads — release gate and contract (ALTCHA + SQLite first)
 
-Status: IMPLEMENTATION IN DEVELOPMENT. NOT DEPLOYED; PERSONAL-DATA COLLECTION DISABLED.
-Repository: DM-GIV/Deploy. Source branch starts at verified origin/main 6eff42605bd1a65ac39c0835710e75d839c9c422; accepted production site remains 7de37359697c990f42cd8e3bc372af09ed95a622.
+Supersedes the earlier SmartCaptcha/SMTP-first contract. Runbook: `docs/P3_ALTCHA_SQLITE_RUNBOOK.md`. Third-party notice: `docs/ALTCHA_VENDOR_NOTICE.md`.
 
-## Architecture
+## Acceptance means one thing
+HTTP 200 `{ok:true,code:"ACCEPTED",accepted:true,receipt,id}` is returned only after a durable SQLite COMMIT (`synchronous=FULL`) that wrote the lead **and** consumed the ALTCHA challenge in the same `BEGIN IMMEDIATE` transaction. Any SQLite/commit/disk/permission error returns 503 `UNAVAILABLE` and nothing is accepted. SMTP is optional, best-effort and strictly after the commit; its outcome (`not_configured|pending|sending|sent|failed`) never changes acceptance and is never retried automatically after an ambiguous attempt.
 
-A self-contained Python 3.12 website-only service at services/lead-intake/lead_intake.py with standard-library dependencies, isolated SQLite file and SMTP sender. No connection to Auction Analytics Cloud/Core/PostgreSQL/Redis/Scanner. Standalone Compose sample binds ONLY 127.0.0.1:18081 on the host; container is non-root, limited resource, read-only FS, private separately approved host data dir. Website fallback links (TG, MAX, email, copy) are unaffected.
+## Activation gate (all must hold, else `GET /api/lead-config` stays `{"enabled":false}` and POST → 503 before reading the body)
+`DIRECT_LEADS_ENABLED=true`, `DIRECT_LEADS_LEGAL_APPROVED=true` (owner's confirmation of the legal prerequisite — never set by engineers on assumption), `LEAD_ALLOWED_ORIGIN=https://torgatlas.ru`, `LEAD_CONSENT_VERSION` in the accepted set (`2026-10-12.2`), absolute `DATA_DB_PATH`, distinct strong local secrets `LEAD_HASH_SALT` and `ALTCHA_HMAC_KEY` (≥32 chars), and a runtime-ready database (private 0700/0600, migrated, `synchronous=FULL`). `SMTP_*`, SmartCaptcha and any external network are irrelevant to the gate.
 
-Do not run production Compose or modify nginx in this Git-only package. Current public HTTP contract continues: GET /api/lead-config -> 200 {"enabled":false}; POST /api/lead -> 503 NOT_CONFIGURED.
+## Contract
+- `GET /api/altcha-challenge` → 200 ALTCHA v1 JSON `{algorithm:"SHA-256",challenge,maxnumber:300000,salt(?expires=now+600&),signature}`, `Cache-Control: no-store`, 30/min per HMAC-IP in app + nginx 10/min burst 6.
+- `POST /api/lead` JSON ≤12288 B, `Origin: https://torgatlas.ru`, `Content-Type: application/json`, fields `id`(UUID v4) `kind`(lot|search) `contact`(5–180) `message`(40–6000) `consent:true` `privacyVersion` `website:""` `altcha`(base64 payload ≤2048). Errors: 403 ORIGIN_DENIED/CAPTCHA_FAILED/CAPTCHA_REPLAY, 409 ID_CONFLICT, 411/413/415/422/429/503.
+- Idempotency: same UUID + identical normalized payload → the original receipt, no insert, no mail; same UUID + other data → 409. A challenge is single-use across restarts (`altcha_used` primary key) and for concurrent requests (SQLite write lock).
+- No contact, message, CAPTCHA payload, IP or full receipt in logs, Umami or Linear. IP is stored only as an HMAC.
 
-## Default safe settings
-
-Both DIRECT_LEADS_ENABLED and DIRECT_LEADS_LEGAL_APPROVED default to false. Even when both are true, configuration requires SMARTCAPTCHA_SITE_KEY, SMARTCAPTCHA_SECRET, LEAD_ALLOWED_ORIGIN=https://torgatlas.ru, LEAD_CONSENT_VERSION matching the deployed signed-off privacy revision, SMTP_HOST, SMTP_PORT (465 or 587), SMTP_USER, SMTP_PASSWORD, SMTP_FROM, LEAD_EMAIL_TO, DATA_DB_PATH (absolute path), LEAD_HASH_SALT (>=32 characters). No real credentials, recipient or private keys in Git. env.example is deliberately disabled and blank. The service performs no DB access or network call when disabled.
-
-## API contract
-
-GET /api/lead-config returns enabled:false until all gates pass, then enabled:true and ONLY public siteKey.
-POST /api/lead requires JSON up to 12,288 bytes; strict Origin matching https://torgatlas.ru; kind lot|search, contact 5–180 characters, message 40–6000, consent=true, privacyVersion, empty website honeypot, one-time captchaToken, UUID-v4 id. Old Turnstile tokens are rejected. No unauthenticated writes.
-Captcha verification: POST form-urlencoded secret/token/ip (optional trusted original IP) to https://smartcaptcha.cloud.yandex.ru/validate, require HTTP 200, status ok AND host torgatlas.ru; invalid/expired/timeout/unknown host fail closed. Source: https://yandex.cloud/ru/docs/smartcaptcha/operations/validate-captcha
-After validation, SQLite reserves UUID with pending_delivery, then SMTP over TLS with explicit acknowledgement. Only after confirmed SMTP send and accepted SQLite status, response includes BOTH {ok:true, code:"ACCEPTED", receipt:id} and {accepted:true, id:id}. SMTP fail or timeout -> delivery_unknown, do not claim acceptance; no automatic replay for ambiguous delivery. Repeated identical accepted UUID returns same response without second message, changed payload with same UUID returns 409. No files accepted; logs exclude contact/message/IP/token and there is no raw IP stored. In-process rate cap 20/min per HMAC-IP; deployment additionally requires site-owned nginx limit_req and trustworthy X-Real-IP forwarding.
-
-## Disabled production deployment is a SEPARATE approved package
-
-1. Verify data-operator identity, legal processing purpose in Roskomnadzor notification, final policy/consent, exact retention, Russian storage and mail/captcha processors. Current RKN issue: previously registered purpose only HR/accounting; no claim of legal compliance from this PR.
-2. Owner-supplied SmartCaptcha keys (real torgatlas.ru site key + server secret), approved sender/SMTP credentials and verified recipient, secure host data dir and hash salt. Never invent credentials or mailbox.
-3. Disposable test DB + mocked and then live authorized SmartCaptcha and SMTP delivery acceptance. Security review: captcha errors, concurrency, SQLite restart, rate-limits, origin and body bounds, no sensitive logs.
-4. Disabled-only isolated Compose deployment to localhost, health check enabled:false and zero PII, then separately reviewed site-only nginx routing from current stub to service with rollback; do not touch shared Cloud Core/proxy config without production preflight.
-5. Enable DIRECT_LEADS_ENABLED and DIRECT_LEADS_LEGAL_APPROVED only after explicit operator/legal acceptance. Update /privacy/ in that separate activation release and test browser flow. Disabled release is not an operational lead funnel.
-
-## Retention and backups
-
-retention.py dry-runs only by default. Requires LEAD_RETENTION_DAYS between 30 and 3650, LEAD_RETENTION_LEGAL_APPROVED=true, and explicit --execute before any deletion of accepted records. No timer/scheduler, no production cleanup authorized, no backup handling implemented. Ambiguous/pending delivery not auto-deleted. The proposed 12 months is LEGAL_PENDING, not approved.
+## Still outside engineering control (activation blocker)
+Written owner confirmation that the Roskomnadzor operator-registry entry covers client-enquiry processing (policy of 12.10.2026 says the notification was sent via ESIA; registry confirmation is absent) and acceptance of the final policy/consent text and a retention period. Until then keep `DIRECT_LEADS_LEGAL_APPROVED=false`.
 
 ## Tests
-
-Run:
-python3 -m unittest discover -s tests -p lead_intake_test.py -v
-node --test tests/lead-browser.test.mjs
-node --test tests/direct-lead.test.mjs
-node --test tests/analytics.test.mjs
-node scripts/check-performance.mjs
-node --check assets/lead-submit.js
-git diff --check
-
-Tests are offline synthetic fixtures; passing does not prove real captcha/SMTP, live delivery or legal acceptance. Vercel API files remain legacy compatibility tests and are not server runtime.
-
-## Rollback
-
-This PR only changes Git, not production. Revert branch/merge if rejected. A later isolated disabled deployment must snapshot site-owned nginx include and container image/config, and stop only its own container on rollback. Restore previous 200 enabled:false / POST 503 contract and Cloud 308/200/200/404 health. Never reset/clean other worktrees.
+```
+python3 -m unittest tests.lead_intake_test tests.leadctl_test
+python3 tests/umami_static_test.py
+node --test tests/lead-browser.test.mjs tests/analytics.test.mjs tests/site-release.test.mjs
+node scripts/check-performance.mjs; node --check assets/lead-submit.js; git diff --check
+python3 tests/browser_e2e.py     # real Chromium, see runbook for the throwaway container command
+```
+Tests use disposable DBs and TEST_ONLY fixtures; they do not prove production behaviour.

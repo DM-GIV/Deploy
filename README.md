@@ -22,7 +22,7 @@
 - `assets/home-bundle.css` — **единственный подключённый CSS главной**: облегчённый набор используемых правил и стили главной. `assets/site.css` и `assets/home.css` сохранены как прежние исходники для отката, но не загружаются посетителями.
 - `assets/seo.css` — оформление внутренних страниц
 - `assets/lead-tools.css`, `assets/lead-tools.js` — формы карты проверки и поиска на профильных страницах
-- `assets/lead-submit.js`, `api/lead-config.mjs`, `api/lead.mjs` — подготовленная, закрытая по умолчанию прямая отправка заявок; см. `docs/DIRECT_LEADS_RELEASE_GATE.md`
+- `assets/lead-submit.js`, `services/lead-intake/` — прямая отправка заявок: локальная ALTCHA (MIT, `assets/vendor/altcha/`) + долговечная SQLite, SMTP необязателен; закрыта по умолчанию, см. `docs/DIRECT_LEADS_RELEASE_GATE.md` и `docs/P3_ALTCHA_SQLITE_RUNBOOK.md`
 - `assets/examples.css`, `assets/formats.css`, `assets/guide.css` — специализированное оформление
 - `robots.txt`, `sitemap.xml` — техническая индексация
 
@@ -118,7 +118,7 @@
 
 ## Прямой приём заявок (пока выключен)
 
-В `docs/DIRECT_LEADS_RELEASE_GATE.md` зафиксированы контракт, список серверных переменных, требования к получателю и правовой gate. Шесть автоматических Node-тестов находятся в `tests/direct-lead.test.mjs`. Публичный `GET /api/lead-config` сейчас сообщает `enabled:false`, а POST `/api/lead` возвращает 503. Старые e-mail/Telegram/копирование сохраняются. Прямая отправка не должна быть включена без отдельной приемки оператора данных и законной схемы размещения.
+В `docs/DIRECT_LEADS_RELEASE_GATE.md` зафиксированы контракт, переменные, условия включения и правовой gate; эксплуатация, откат и чтение заявок владельцем — в `docs/P3_ALTCHA_SQLITE_RUNBOOK.md`. Яндекс SmartCaptcha, внешняя CAPTCHA и SMTP-зависимость не используются. Публичный `GET /api/lead-config` отвечает `enabled:false`, пока владелец не подтвердит правовую предпосылку и не включит сервис; тогда POST `/api/lead` принимает заявку только после долговечного COMMIT в SQLite. Старые e-mail/Telegram/копирование сохраняются.
 
 ## Бренд «ТоргАтлас»
 

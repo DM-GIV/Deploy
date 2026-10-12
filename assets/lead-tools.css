@@ -66,3 +66,7 @@
 .lead-tool .direct-lead-trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;pointer-events:none}
 .lead-tool .direct-lead .form-status{max-width:680px;line-height:1.5}
 @media(max-width:760px){.lead-tool .direct-lead{padding:17px 13px}.lead-tool .direct-lead .button{width:100%}}
+.lead-tool .direct-lead-challenge{width:100%;max-width:420px;--altcha-max-width:420px;--altcha-border-radius:8px}
+.lead-tool .direct-lead-done{padding:6px 0}
+.lead-tool .direct-lead-done h4{margin:0 0 9px;color:#1c6b3a}
+.lead-tool .direct-lead-receipt{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;font-weight:700;word-break:break-all;user-select:all}

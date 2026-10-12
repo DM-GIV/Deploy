@@ -1,11 +1,15 @@
 /* Direct-lead UI: progressive enhancement. Completely hidden unless the
- * server confirms that recipient, consent and anti-spam are configured.
- * Nothing is sent from this script without explicit form submission.
+ * server confirms a working backend (local ALTCHA + durable SQLite) and the
+ * same consent version as this script. Nothing is sent without an explicit
+ * form submission. The anti-spam widget is self-hosted under /assets/vendor/altcha
+ * (ALTCHA 2.3.0, MIT); there are no third-party CAPTCHA, CDN or API requests.
  */
 (function () {
   'use strict';
+  var CONSENT_VERSION = '2026-10-12.2';
+  var WIDGET_VERSION = '2.3.0';
   var configRequest = null;
-  var scriptRequest = null;
+  var widgetRequest = null;
   var active = Object.create(null);
 
   function getConfiguration() {
@@ -17,44 +21,76 @@
         if (!response.ok) return {enabled:false};
         return response.json();
       }).then(function (config) {
-        return config && config.enabled === true &&
-          /^[A-Za-z0-9_-]{10,160}$/.test(config.siteKey || '')
+        return config && config.enabled === true && config.consentVersion === CONSENT_VERSION &&
+          config.altcha && config.altcha.challengeUrl === '/api/altcha-challenge'
           ? config : {enabled:false};
       }).catch(function () { return {enabled:false}; });
     }
     return configRequest;
   }
 
-  function loadCaptcha() {
-    if (window.smartCaptcha) return Promise.resolve();
-    if (!scriptRequest) {
-      scriptRequest = new Promise(function (resolve, reject) {
-        var callbackName = 'torgatlasSmartCaptchaReady';
+  function loadWidget() {
+    if (window.customElements && window.customElements.get('altcha-widget')) return Promise.resolve();
+    if (!widgetRequest) {
+      widgetRequest = new Promise(function (resolve, reject) {
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/assets/vendor/altcha/altcha.css?v=' + WIDGET_VERSION;
+        document.head.appendChild(link);
         var script = document.createElement('script');
-        window[callbackName] = function () { resolve(); };
-        script.src = 'https://smartcaptcha.cloud.yandex.ru/captcha.js?render=onload&onload=' + callbackName;
+        script.src = '/assets/vendor/altcha/altcha.js?v=' + WIDGET_VERSION;
+        script.type = 'module';
         script.async = true;
         script.onload = function () {
-          if (window.smartCaptcha) resolve();
-          else reject(new Error('SmartCaptcha API unavailable'));
+          if (window.customElements && window.customElements.get('altcha-widget')) resolve();
+          else reject(new Error('ALTCHA widget unavailable'));
         };
-        script.onerror = function () { reject(new Error('SmartCaptcha script unavailable')); };
+        script.onerror = function () { reject(new Error('ALTCHA script unavailable')); };
         document.head.appendChild(script);
       });
     }
-    return scriptRequest;
+    return widgetRequest;
+  }
+
+  var STRINGS = JSON.stringify({
+    label: 'Я не робот (локальная проверка)',
+    verifying: 'Проверка…',
+    verified: 'Проверка пройдена',
+    error: 'Проверка не удалась. Нажмите ещё раз.',
+    expired: 'Проверка устарела. Нажмите ещё раз.',
+    waitAlert: 'Идёт проверка, подождите.',
+    footer: 'Проверка выполняется на сайте, без внешних сервисов.',
+    loading: 'Загрузка…',
+    reload: 'Обновить',
+    verify: 'Проверить',
+    enterCode: 'Введите код',
+    enterCodeAria: 'Введите код',
+    getAudioChallenge: 'Аудио-проверка',
+    ariaLinkLabel: 'ALTCHA'
+  });
+
+  function el(tag, props, children) {
+    var node = document.createElement(tag);
+    Object.keys(props || {}).forEach(function (key) {
+      if (key === 'text') node.textContent = props[key];
+      else node.setAttribute(key, props[key]);
+    });
+    (children || []).forEach(function (child) { node.appendChild(child); });
+    return node;
   }
 
   function showDirectForm(kind, config) {
     var preview = document.getElementById(kind + '-handoff-preview');
     var textarea = document.getElementById(kind + '-handoff-text');
     if (!preview || !textarea || !config.enabled || active[kind]) return;
+    active[kind] = true;
+    var source = kind === 'lot' ? 'lot_check' : 'search_brief';
     var block = document.createElement('div');
     block.className = 'direct-lead';
     block.innerHTML =
       '<h4>Отправить заявку напрямую</h4>' +
-      '<p>После подтверждения заявка поступит обработчику. Отправка только по нажатию кнопки.</p>' +
-      '<form class="direct-lead-form">' +
+      '<p>Заявка сохраняется на сервере ТоргАтлас после нажатия кнопки. Если прямая отправка не сработает, воспользуйтесь e-mail, Telegram или телефоном выше.</p>' +
+      '<form class="direct-lead-form" novalidate>' +
       '<label>Контакт для ответа *<input name="contact" type="text" minlength="5" maxlength="180" required autocomplete="email" placeholder="Телефон, ТГ, MAX или e-mail"></label>' +
       '<div class="direct-lead-trap" aria-hidden="true"><label>Ваш сайт<input name="website" tabindex="-1" autocomplete="off"></label></div>' +
       '<label class="direct-lead-consent"><input type="checkbox" name="consent" required> Согласен на обработку контактных данных и текста заявки для получения ответа. <a href="/privacy/consent/" target="_blank" rel="noopener">Текст отдельного согласия</a> · <a href="/privacy/" target="_blank" rel="noopener">Политика</a></label>' +
@@ -65,50 +101,74 @@
     preview.appendChild(block);
     var form = block.querySelector('form');
     var contact = form.elements.namedItem('contact');
+    var consent = form.elements.namedItem('consent');
     var prevContact = document.getElementById(kind === 'lot' ? 'contact' : 'search-contact');
-    if (prevContact && prevContact.value.trim()) contact.value = prevContact.value.trim().slice(0,180);
+    if (prevContact && prevContact.value.trim()) contact.value = prevContact.value.trim().slice(0, 180);
     var status = block.querySelector('.direct-lead-status');
     var submit = form.querySelector('[type="submit"]');
+    var challenge = block.querySelector('.direct-lead-challenge');
     var token = '';
-    var widgetId = null;
+    var widget = null;
     var requestId = '';
-    active[kind] = true;
-    loadCaptcha().then(function () {
-      if (!window.smartCaptcha || typeof window.smartCaptcha.subscribe !== 'function') throw new Error('captcha unavailable');
-      widgetId = window.smartCaptcha.render(block.querySelector('.direct-lead-challenge'), {
-        sitekey: config.siteKey,
-        callback: function (value) { token = value; submit.disabled = !value; status.textContent = ''; }
+    var snapshot = '';
+    var busy = false;
+
+    function sync() { submit.disabled = busy || !token || !consent.checked; }
+    function say(text) { status.textContent = text; }
+    function resetCaptcha() {
+      token = '';
+      if (widget && typeof widget.reset === 'function') widget.reset();
+      sync();
+    }
+    consent.addEventListener('change', sync);
+
+    loadWidget().then(function () {
+      widget = document.createElement('altcha-widget');
+      widget.setAttribute('challengeurl', config.altcha.challengeUrl);
+      widget.setAttribute('workerurl', '/assets/vendor/altcha/worker.js?v=' + WIDGET_VERSION);
+      widget.setAttribute('auto', 'off');
+      widget.setAttribute('name', 'altcha');
+      widget.setAttribute('expire', '540000');
+      widget.setAttribute('hidelogo', '');
+      widget.setAttribute('strings', STRINGS);
+      widget.setAttribute('credentials', 'omit');
+      widget.addEventListener('statechange', function (event) {
+        var detail = event.detail || {};
+        token = detail.state === 'verified' && typeof detail.payload === 'string' ? detail.payload : '';
+        if (detail.state === 'error' || detail.state === 'expired') {
+          say('Проверка от спама не пройдена или устарела. Нажмите на отметку проверки ещё раз либо используйте e-mail или ТГ.');
+        } else if (detail.state === 'verified') {
+          say('');
+        }
+        sync();
       });
-      window.smartCaptcha.subscribe(widgetId, 'token-expired', function () {
-        token = ''; submit.disabled = true;
-        status.textContent = '\u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043e\u0442 \u0441\u043f\u0430\u043c\u0430 \u0438\u0441\u0442\u0435\u043a\u043b\u0430. \u041f\u0440\u043e\u0439\u0434\u0438\u0442\u0435 \u0435\u0451 \u043f\u043e\u0432\u0442\u043e\u0440\u043d\u043e.';
-      });
-      window.smartCaptcha.subscribe(widgetId, 'network-error', function () {
-        token = ''; submit.disabled = true;
-        status.textContent = '\u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043e\u0442 \u0441\u043f\u0430\u043c\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u0430. \u0418\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0439\u0442\u0435 \u0422\u0413, MAX \u0438\u043b\u0438 e-mail.';
-      });
+      challenge.appendChild(widget);
     }).catch(function () {
-      status.textContent = 'Прямая отправка пока недоступна: не загрузилась проверка от спама. Сохраните обращение через ТГ или e-mail.';
+      say('Прямая отправка пока недоступна: не загрузилась проверка от спама. Используйте e-mail, ТГ или телефон.');
       submit.disabled = true;
     });
 
     form.addEventListener('submit', async function (event) {
       event.preventDefault();
-      if (!token || !form.reportValidity()) return;
+      if (busy || !token || !consent.checked || !form.reportValidity()) return;
       var message = textarea.value.trim();
       if (message.length < 40 || message.length > 6000) {
-        status.textContent = 'Длина сообщения должна быть от 40 до 6000 символов. При необходимости сократите текст.';
+        say('Длина сообщения должна быть от 40 до 6000 символов. При необходимости сократите текст.');
         return;
       }
-      if (!requestId) {
+      var now = kind + '\u0000' + contact.value.trim() + '\u0000' + message;
+      if (!requestId || snapshot !== now) {
         if (!window.crypto || typeof window.crypto.randomUUID !== 'function') {
-          status.textContent = '\u0411\u0435\u0437\u043e\u043f\u0430\u0441\u043d\u0430\u044f \u043e\u0442\u043f\u0440\u0430\u0432\u043a\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u0430. \u0418\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0439\u0442\u0435 \u0422\u0413, MAX \u0438\u043b\u0438 e-mail.';
+          say('Безопасная отправка недоступна в этом браузере. Используйте e-mail или ТГ.');
           return;
         }
         requestId = window.crypto.randomUUID();
+        snapshot = now;
       }
-      submit.disabled = true;
-      status.textContent = 'Передаю заявку. Не закрывайте эту страницу до результата.';
+      busy = true;
+      sync();
+      say('Передаю заявку. Не закрывайте эту страницу до результата.');
+      var failure = '';
       try {
         var response = await fetch('/api/lead', {
           method:'POST',
@@ -116,32 +176,57 @@
           credentials:'same-origin', cache:'no-store',
           body:JSON.stringify({
             id:requestId, kind:kind, contact:contact.value.trim(), message:message,
-            consent:true, privacyVersion:'2026-10-12',
+            consent:true, privacyVersion:CONSENT_VERSION,
             website:form.elements.namedItem('website').value,
-            captchaToken:token
+            altcha:token
           })
         });
         var body = await response.json().catch(function () { return null; });
-        if (!response.ok || !body || body.ok !== true || body.code !== 'ACCEPTED' ||
-            body.accepted !== true || body.id !== requestId || body.receipt !== requestId) {
-          throw new Error('delivery not confirmed');
+        if (response.status === 200 && body && body.ok === true && body.code === 'ACCEPTED' &&
+            body.accepted === true && body.id === requestId && body.receipt === requestId) {
+          showSuccess(body.receipt);
+          return;
         }
-        status.textContent = 'Заявка принята обработчиком. Номер подтверждения: ' + body.receipt + '. Сохраните его.';
-        form.querySelectorAll('input').forEach(function (el) { el.disabled = true; });
-        if (typeof window.auctionCROTrack === 'function') {
-          window.auctionCROTrack('lead_direct_accepted', {source:kind === 'lot' ? 'lot_check' : 'search_brief'});
+        var code = body && body.code;
+        if (code === 'CAPTCHA_FAILED' || code === 'CAPTCHA_REPLAY') {
+          failure = 'Проверка от спама не принята или устарела. Пройдите её ещё раз и повторите отправку.';
+          resetCaptcha();
+        } else if (code === 'ID_CONFLICT') {
+          requestId = '';
+          failure = 'Данные заявки изменились. Нажмите «Отправить заявку» ещё раз.';
+        } else if (code === 'INVALID_INPUT') {
+          failure = 'Проверьте контакт, текст и отметку согласия: данные не приняты.';
+        } else if (code === 'RATE_LIMITED') {
+          failure = 'Слишком много попыток. Подождите минуту и повторите либо используйте e-mail или ТГ.';
+        } else if (code === 'NOT_CONFIGURED') {
+          failure = 'Прямая отправка сейчас отключена. Используйте e-mail, ТГ или телефон.';
+        } else {
+          failure = 'Не удалось подтвердить приём заявки. Ваш текст сохранён на странице: повторите попытку или используйте e-mail, ТГ или телефон.';
         }
       } catch (_) {
-        status.textContent = 'Не удалось подтвердить приём заявки. Ваш текст сохранён на странице; используйте e-mail или ТГ, либо повторите попытку.';
-        if (typeof window.auctionCROTrack === 'function') {
-          window.auctionCROTrack('lead_direct_unconfirmed', {source:kind === 'lot' ? 'lot_check' : 'search_brief'});
-        }
-        token = '';
-        if (widgetId !== null && window.smartCaptcha) window.smartCaptcha.reset(widgetId);
+        failure = 'Нет связи с сервером: приём заявки не подтверждён. Повторите попытку (повтор безопасен) или используйте e-mail, ТГ или телефон.';
       } finally {
-        if (!status.textContent.includes('Заявка принята')) submit.disabled = !token;
+        busy = false;
+        sync();
+      }
+      say(failure);
+      if (typeof window.auctionCROTrack === 'function') {
+        window.auctionCROTrack('lead_direct_unconfirmed', {source:source});
       }
     });
+
+    function showSuccess(receipt) {
+      var done = el('div', {'class':'direct-lead-done', role:'status'}, [
+        el('h4', {text:'Заявка принята и сохранена'}),
+        el('p', {text:'Номер подтверждения (сохраните его):'}),
+        el('p', {'class':'direct-lead-receipt', text:receipt}),
+        el('p', {text:'Ответим по указанному контакту. Для срочных вопросов можно написать на e-mail или в Telegram.'})
+      ]);
+      block.replaceChild(done, form);
+      if (typeof window.auctionCROTrack === 'function') {
+        window.auctionCROTrack('lead_direct_accepted', {source:source});
+      }
+    }
   }
 
   window.addEventListener('lead:draft-ready', function (event) {
