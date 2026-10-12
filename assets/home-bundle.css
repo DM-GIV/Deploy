@@ -3,3 +3,8 @@
 @media(max-width:800px){.hero::before{background-image:url("/assets/hero-1100.webp")}}
 
 .contact-copy{font:inherit;color:inherit;text-align:left;cursor:pointer;min-height:44px}.contact-copy:focus-visible{outline:2px solid #f5b942;outline-offset:2px}
+
+/* Evidence-first weekly auction showcase: no unsupported market-discount badges. */
+.examples-notice { margin: 16px 0; padding: 14px 16px; background: #fff7e8; border-left: 4px solid #ca8d2e; border-radius: 7px; line-height: 1.55; color: #352b20; }
+#weekly-lots-note { margin-top: 12px; font-size: .88rem; }
+#weekly-lot-showcase .research-case-grid { margin-top: 18px; }

@@ -1,0 +1,10 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
+const {cases,weeklySelection}=require('../assets/weekly-lots.js');
+test('seven distinct verified case URLs; never claim market-discount',()=>{assert.equal(cases.length,7);assert.equal(new Set(cases.map(x=>x.url)).size,7);assert(cases.every(x=>x.url.startsWith('https://')));assert(cases.every(x=>!('marketDiscount' in x)));});
+test('weekly rotation is deterministic and changes',()=>{assert.deepEqual(weeklySelection(new Date('2026-10-12T00:00:00Z')),weeklySelection(new Date('2026-10-13T00:00:00Z')));assert.notDeepEqual(weeklySelection(new Date('2026-10-12T00:00:00Z')),weeklySelection(new Date('2026-10-19T00:00:00Z')));});
+test('legal public pages and consent version exist without false activation claim',()=>{let p=fs.readFileSync('privacy/index.html','utf8');assert(p.includes('Редакция от 12 октября 2026 года'));assert(p.includes('остаются выключенными'));assert(fs.readFileSync('privacy/consent/index.html','utf8').includes('не распространяется на рекламную рассылку'));assert(fs.readFileSync('assets/lead-submit.js','utf8').includes("privacyVersion:'2026-10-12'"));});
+test('canonical production host and weekly showcase',()=>{const h=fs.readFileSync('index.html','utf8');assert(h.includes('weekly-lot-showcase'));assert(h.includes('/assets/weekly-lots.js'));assert(fs.readFileSync('primery-lotov/index.html','utf8').includes('снижение цены по периодам'));});
