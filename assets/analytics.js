@@ -122,9 +122,11 @@
     box.setAttribute('role', 'dialog');
     box.setAttribute('aria-label', 'Статистика посещений');
     box.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;max-width:560px;margin:0 auto;background:#071c2e;color:#fff;padding:14px 16px;border-radius:12px;font:14px/1.45 system-ui,sans-serif;box-shadow:0 8px 30px rgba(0,0,0,.3)';
-    box.innerHTML = '<p style="margin:0 0 10px">Мы ведём собственную статистику посещений (Umami на нашем сервере, без cookie и без передачи третьим лицам): какие страницы открывали и какие шаги выполняли. Тексты обращений и контакты в статистику не попадают. <a href="/privacy/" style="color:#9fd0ff">Подробнее</a></p>' +
+    box.innerHTML = '<p style="margin:0 0 10px">С вашего согласия собираем статистику посещений через Umami на нашем сервере, без cookie и передачи третьим лицам. Контакты и тексты заявок не передаём. <a href="/privacy/" style="color:#9fd0ff">Подробнее</a></p>' +
       '<button type="button" data-analytics-accept style="min-height:44px;padding:0 18px;border:0;border-radius:8px;background:#f5b942;color:#071c2e;font-weight:700;cursor:pointer">Принять</button> ' +
       '<button type="button" data-analytics-decline style="min-height:44px;padding:0 18px;border:1px solid #6b7f92;border-radius:8px;background:transparent;color:#fff;cursor:pointer">Отказаться</button>';
+
+    if (window.matchMedia && window.matchMedia('(max-width: 600px)').matches) { box.style.cssText += ';padding:10px 12px;font-size:12px;line-height:1.4;bottom:8px;left:8px;right:8px'; }
 
     box.querySelector('[data-analytics-accept]').addEventListener('click', function () {
       writeConsent('accepted');
