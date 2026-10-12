@@ -9,7 +9,7 @@
   var WEBSITE_ID = 'cf28be6b-9c2d-42de-ba95-8c4818e19435';
   var ENDPOINT_BASE = '/ta';
   var CONSENT_KEY = 'ta_analytics_consent';
-  var DIRECT_LEADS_ENABLED = false; // flip together with the P3 direct-lead release
+  var DIRECT_LEADS_ENABLED = true; // flip together with the P3 direct-lead release
   var ALLOWED_EVENTS = {
     lot_check_complete: true,
     search_brief_complete: true,
