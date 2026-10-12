@@ -11,7 +11,7 @@ Do not run production Compose or modify nginx in this Git-only package. Current 
 
 ## Default safe settings
 
-Both DIRECT_LEADS_ENABLED and DIRECT_LEADS_LEGAL_APPROVED default to false. Even when both are true, configuration requires SMARTCAPTCHA_SITE_KEY, SMARTCAPTCHA_SECRET, LEAD_ALLOWED_ORIGIN=https://torgatlas.ru, SMTP_HOST, SMTP_PORT (465 or 587), SMTP_USER, SMTP_PASSWORD, SMTP_FROM, LEAD_EMAIL_TO, DATA_DB_PATH (absolute path), LEAD_HASH_SALT (>=32 characters). No real credentials, recipient or private keys in Git. env.example is deliberately disabled and blank. The service performs no DB access or network call when disabled.
+Both DIRECT_LEADS_ENABLED and DIRECT_LEADS_LEGAL_APPROVED default to false. Even when both are true, configuration requires SMARTCAPTCHA_SITE_KEY, SMARTCAPTCHA_SECRET, LEAD_ALLOWED_ORIGIN=https://torgatlas.ru, LEAD_CONSENT_VERSION matching the deployed signed-off privacy revision, SMTP_HOST, SMTP_PORT (465 or 587), SMTP_USER, SMTP_PASSWORD, SMTP_FROM, LEAD_EMAIL_TO, DATA_DB_PATH (absolute path), LEAD_HASH_SALT (>=32 characters). No real credentials, recipient or private keys in Git. env.example is deliberately disabled and blank. The service performs no DB access or network call when disabled.
 
 ## API contract
 

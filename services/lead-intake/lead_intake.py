@@ -37,7 +37,7 @@ class App:
         e = self.env
         required = ("SMARTCAPTCHA_SITE_KEY", "SMARTCAPTCHA_SECRET", "SMTP_HOST", "SMTP_PORT",
                     "SMTP_USER", "SMTP_PASSWORD", "SMTP_FROM", "LEAD_EMAIL_TO",
-                    "LEAD_ALLOWED_ORIGIN", "DATA_DB_PATH", "LEAD_HASH_SALT")
+                    "LEAD_ALLOWED_ORIGIN", "DATA_DB_PATH", "LEAD_HASH_SALT", "LEAD_CONSENT_VERSION")
         return (e.get("DIRECT_LEADS_ENABLED") == "true"
                 and e.get("DIRECT_LEADS_LEGAL_APPROVED") == "true"
                 and all(isinstance(e.get(k), str) and e[k].strip() for k in required)
@@ -53,6 +53,12 @@ class App:
         key = self.hash(ip)
         now = self.clock()
         with self.lock:
+            if key not in self.hits and len(self.hits) >= 8192:
+                for old in list(self.hits):
+                    if not self.hits[old] or self.hits[old][-1] < now - 60:
+                        del self.hits[old]
+                if len(self.hits) >= 8192:
+                    return False
             q = self.hits[key]
             while q and q[0] <= now - 60:
                 q.popleft()
@@ -154,7 +160,7 @@ class App:
             return 503, {"ok": False, "code": "NOT_CONFIGURED"}
         if headers.get("origin") != self.env["LEAD_ALLOWED_ORIGIN"]:
             return 403, {"ok": False, "code": "ORIGIN_DENIED"}
-        if not headers.get("content-type", "").lower().startswith("application/json"):
+        if headers.get("content-type", "").split(";", 1)[0].strip().lower() != "application/json":
             return 415, {"ok": False, "code": "UNSUPPORTED_MEDIA"}
         if raw is None or len(raw) > MAX_BODY:
             return (413 if raw is not None else 400), {"ok": False, "code": "INVALID_BODY"}
@@ -181,7 +187,7 @@ class App:
             assert 5 <= len(contact) <= 180 and "\n" not in contact and "\r" not in contact
             assert 40 <= len(message) <= 6000
             assert item["consent"] is True and item.get("website", "") == ""
-            assert isinstance(version, str) and 1 <= len(version) <= 40 and version.replace("-", "").isalnum()
+            assert isinstance(version, str) and version == self.env["LEAD_CONSENT_VERSION"]
             assert isinstance(token, str) and 10 <= len(token) <= 4096
         except (KeyError, TypeError, ValueError, AttributeError, AssertionError):
             return 422, {"ok": False, "code": "INVALID_INPUT"}
