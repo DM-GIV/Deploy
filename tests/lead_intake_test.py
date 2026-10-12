@@ -520,5 +520,74 @@ class HttpTests(Base):
         self.assertEqual(c.getresponse().status, 411)
 
 
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class InputValidationTests(Base):
+    """Fail-closed validation must not depend on `assert` (stripped by `python -O`)."""
+
+    def invalid_cases(self):
+        good = str(uuid.uuid4())
+        return [
+            ("id-not-uuid", {"id": "not-a-uuid"}), ("id-uuid1", {"id": str(uuid.uuid1())}),
+            ("id-uppercase", {"id": good.upper()}), ("id-int", {"id": 5}), ("id-none", {"id": None}),
+            ("kind-bad", {"kind": "other"}), ("kind-int", {"kind": 1}), ("kind-list", {"kind": ["lot"]}),
+            ("contact-short", {"contact": "a@b"}), ("contact-long", {"contact": "x" * 181}),
+            ("contact-newline", {"contact": "valid@example.invalid\nBcc: x@y.z"}),
+            ("contact-cr", {"contact": "valid@example.invalid\rBcc"}),
+            ("contact-int", {"contact": 123456}), ("contact-none", {"contact": None}),
+            ("message-short", {"message": "short"}), ("message-long", {"message": "m" * 6001}),
+            ("message-list", {"message": ["x" * 50]}),
+            ("version-wrong", {"privacyVersion": "1999"}), ("version-int", {"privacyVersion": 1}),
+            ("consent-false", {"consent": False}), ("consent-string", {"consent": "true"}),
+            ("consent-one", {"consent": 1}), ("consent-none", {"consent": None}),
+            ("honeypot-filled", {"website": "http://spam.invalid"}), ("honeypot-int", {"website": 1}),
+            ("altcha-int", {"altcha": 5}), ("altcha-none", {"altcha": None}),
+        ]
+
+    def test_invalid_inputs_create_no_rows(self):
+        n = [0]
+        tok = self.token()  # never consumed: every case below is rejected before CAPTCHA use
+
+        def build(**over):
+            item = {"id": str(uuid.uuid4()), "kind": "lot", "contact": CONTACT, "message": MESSAGE,
+                    "privacyVersion": "2026-10-12.2", "consent": True, "website": "", "altcha": tok}
+            item.update(over)
+            return item
+
+        def post(item):  # distinct client IPs: the rate limiter is not under test here
+            n[0] += 1
+            return self.post(item, ip="198.51.100.%d" % n[0])
+        for label, over in self.invalid_cases():
+            code, body = post(build(**over))
+            self.assertEqual((code, body["code"]), (422, "INVALID_INPUT"), label)
+        for key in ("id", "kind", "contact", "message", "privacyVersion", "consent", "altcha"):
+            item = build()
+            del item[key]
+            self.assertEqual(post(item)[0], 422, "missing " + key)
+        self.assertEqual(self.rows(), [])
+        self.assertEqual(self.rows("SELECT * FROM altcha_used"), [])
+        self.assertEqual(post(build())[0], 200)  # control: valid input is still accepted
+        self.assertEqual(len(self.rows()), 1)
+
+    def test_no_assert_statements_in_service_code(self):
+        import ast
+        src = (ROOT / "services" / "lead-intake" / "lead_intake.py").read_text(encoding="utf-8")
+        self.assertEqual([n.lineno for n in ast.walk(ast.parse(src)) if isinstance(n, ast.Assert)], [])
+
+    def test_same_validation_under_python_O(self):
+        if sys.flags.optimize:
+            self.assertGreaterEqual(sys.flags.optimize, 1)
+            return
+        import subprocess
+        env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
+        r = subprocess.run([sys.executable, "-O", "-m", "unittest",
+                            "tests.lead_intake_test.InputValidationTests.test_invalid_inputs_create_no_rows",
+                            "tests.lead_intake_test.InputValidationTests.test_same_validation_under_python_O"],
+                           cwd=str(ROOT), env=env, capture_output=True, text=True, timeout=120)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("Ran 2 tests", r.stderr)
+
+
 if __name__ == "__main__":
     unittest.main()

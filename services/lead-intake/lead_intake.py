@@ -336,20 +336,30 @@ class App:
             return 422, {"ok": False, "code": "INVALID_INPUT"}
         try:
             ident = item["id"]
-            obj = uuid.UUID(ident)
-            assert str(obj) == ident and obj.version == 4
             kind = item["kind"]
-            contact = item["contact"].strip()
-            message = item["message"].strip()
+            contact = item["contact"]
+            message = item["message"]
             version = item["privacyVersion"]
             token = item["altcha"]
-            assert kind in ("lot", "search")
-            assert 5 <= len(contact) <= 180 and "\n" not in contact and "\r" not in contact
-            assert 40 <= len(message) <= 6000
-            assert item["consent"] is True and item.get("website", "") == ""
-            assert isinstance(version, str) and version == self.env["LEAD_CONSENT_VERSION"]
-            assert isinstance(token, str)
-        except (KeyError, TypeError, ValueError, AttributeError, AssertionError):
+            consent = item["consent"]
+            if not all(isinstance(v, str) for v in (ident, kind, contact, message, version, token)):
+                raise ValueError("type")
+            obj = uuid.UUID(ident)
+            contact, message = contact.strip(), message.strip()
+            # Explicit checks (never `assert`): they must hold under `python -O` too.
+            if str(obj) != ident or obj.version != 4:
+                raise ValueError("id")
+            if kind not in ("lot", "search"):
+                raise ValueError("kind")
+            if not (5 <= len(contact) <= 180) or "\n" in contact or "\r" in contact:
+                raise ValueError("contact")
+            if not (40 <= len(message) <= 6000):
+                raise ValueError("message")
+            if consent is not True or item.get("website", "") != "":
+                raise ValueError("consent")
+            if version != self.env["LEAD_CONSENT_VERSION"]:
+                raise ValueError("version")
+        except (KeyError, TypeError, ValueError, AttributeError):
             return 422, {"ok": False, "code": "INVALID_INPUT"}
         payload_hash = self.hash(json.dumps([ident, kind, contact, message, version],
                                              ensure_ascii=False, separators=(",", ":")))

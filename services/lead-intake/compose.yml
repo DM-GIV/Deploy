@@ -3,8 +3,8 @@
 services:
   torgatlas-lead-intake:
     build:
-      context: ../..
-      dockerfile: services/lead-intake/Dockerfile
+      context: .
+      dockerfile: Dockerfile
     image: torgatlas-lead-intake:local
     container_name: torgatlas-lead-intake
     restart: unless-stopped
