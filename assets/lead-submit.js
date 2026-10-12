@@ -57,7 +57,7 @@
       '<form class="direct-lead-form">' +
       '<label>Контакт для ответа *<input name="contact" type="text" minlength="5" maxlength="180" required autocomplete="email" placeholder="Телефон, ТГ, MAX или e-mail"></label>' +
       '<div class="direct-lead-trap" aria-hidden="true"><label>Ваш сайт<input name="website" tabindex="-1" autocomplete="off"></label></div>' +
-      '<label class="direct-lead-consent"><input type="checkbox" name="consent" required> Согласен на обработку контактных данных и текста заявки для получения ответа. <a href="/privacy/" target="_blank" rel="noopener">Информация об обработке данных</a></label>' +
+      '<label class="direct-lead-consent"><input type="checkbox" name="consent" required> Согласен на обработку контактных данных и текста заявки для получения ответа. <a href="/privacy/consent/" target="_blank" rel="noopener">Текст отдельного согласия</a> · <a href="/privacy/" target="_blank" rel="noopener">Политика</a></label>' +
       '<div class="direct-lead-challenge" aria-label="Проверка защиты от спама"></div>' +
       '<button class="button button-primary" type="submit" disabled>Отправить заявку</button>' +
       '<div class="form-status direct-lead-status" role="status" aria-live="polite"></div>' +
@@ -116,7 +116,7 @@
           credentials:'same-origin', cache:'no-store',
           body:JSON.stringify({
             id:requestId, kind:kind, contact:contact.value.trim(), message:message,
-            consent:true, privacyVersion:'2026-10-11',
+            consent:true, privacyVersion:'2026-10-12',
             website:form.elements.namedItem('website').value,
             captchaToken:token
           })
