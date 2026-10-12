@@ -39,6 +39,13 @@ class UmamiStatic(unittest.TestCase):
         locs = re.findall(r"location\s+(?:=|\^~)\s+(\S+)", inc)
         self.assertEqual(locs, ["/ta/s.js", "/ta/api/send", "/ta/"])
 
+    def test_owner_tools_have_no_secrets_and_no_public_dashboard(self):
+        ps1 = (ROOT / "owner" / "Open-TorgAtlasStats.ps1").read_text(encoding="utf-8")
+        self.assertIn("127.0.0.1:${LocalPort}:127.0.0.1:19120", ps1)
+        self.assertNotRegex(ps1.lower(), r"password\s*=|-pw |sshpass|BEGIN .*PRIVATE")
+        rep = (ROOT / "ops" / "leads_report.py").read_text(encoding="utf-8")
+        self.assertIn('FIELDS = ["date", "channel", "source", "status"]', rep)
+
 
 if __name__ == "__main__":
     unittest.main()
