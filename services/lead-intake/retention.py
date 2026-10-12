@@ -1,7 +1,10 @@
-"""Manual bounded retention tool: dry-run by default, no cron or automatic deletion.
+"""Manual bounded destruction tool (art. 21 152-FZ): dry-run by default, never scheduled, never age-based.
 
-Deletion needs an approved retention period AND LEAD_RETENTION_LEGAL_APPROVED=true AND --execute.
-No retention period is approved today (LEGAL_PENDING); this tool must not be scheduled.
+Only leads that the owner explicitly CLOSED (purpose reached) at least GRACE_DAYS ago and that carry no legal hold
+are candidates. Unclosed, merely read, held (contract / other lawful basis) leads are never touched.
+Deletion needs --execute and LEAD_RETENTION_LEGAL_APPROVED=true (owner-approved process). Run:
+  python3 retention.py [--db PATH]            # dry-run count
+  python3 retention.py --db PATH --execute
 """
 import argparse
 import datetime as dt
@@ -9,21 +12,19 @@ import os
 import sqlite3
 from pathlib import Path
 
+DEFAULT_DB = "/home/deploy/torgatlas-ops/isolated/lead-intake/data/leads.sqlite3"
+GRACE_DAYS = 0          # closing already starts the clock; the statutory ceiling is 30 days after closing
 
-def run(env=None, execute=False):
+
+def run(env=None, execute=False, grace_days=GRACE_DAYS):
     e = dict(os.environ if env is None else env)
     path = Path(e.get("DATA_DB_PATH", ""))
-    days = e.get("LEAD_RETENTION_DAYS", "")
-    if not path.is_absolute() or not path.is_file() or not days.isdigit():
+    if not path.is_absolute() or not path.is_file():
         return {"ok": False, "code": "RETENTION_NOT_CONFIGURED"}
-    limit = int(days)
-    if not 30 <= limit <= 3650:
-        return {"ok": False, "code": "RETENTION_INVALID"}
-    cutoff = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=limit)).isoformat()
+    cutoff = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=grace_days)).isoformat()
     db = sqlite3.connect(str(path), timeout=5)
     try:
-        # only reviewed, accepted leads are ever candidates; unreviewed ones are never auto-deleted
-        where = "status='accepted' AND reviewed_at IS NOT NULL AND created_at<?"
+        where = "closed_at IS NOT NULL AND legal_hold=0 AND closed_at<=?"
         count = db.execute("SELECT COUNT(*) FROM leads WHERE " + where, (cutoff,)).fetchone()[0]
         if not execute:
             return {"ok": True, "mode": "DRY_RUN", "candidates": count}
@@ -39,5 +40,7 @@ def run(env=None, execute=False):
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
+    p.add_argument("--db", default=os.environ.get("DATA_DB_PATH", DEFAULT_DB))
     p.add_argument("--execute", action="store_true")
-    print(run(execute=p.parse_args().execute))
+    a = p.parse_args()
+    print(run(dict(os.environ, DATA_DB_PATH=a.db), execute=a.execute))

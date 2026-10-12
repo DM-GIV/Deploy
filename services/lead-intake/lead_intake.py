@@ -39,7 +39,7 @@ ALTCHA_TTL_SECONDS = 600
 ALTCHA_SALT_BYTES = 16
 ALTCHA_PAYLOAD_MAX = 2048
 ACCEPTED_CONSENT_VERSIONS = frozenset({"2026-10-12.2"})
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 SMTP_KEYS = ("SMTP_HOST", "SMTP_PORT", "SMTP_USER", "SMTP_PASSWORD", "SMTP_FROM", "LEAD_EMAIL_TO")
 HEX64 = frozenset("0123456789abcdef")
 
@@ -188,7 +188,10 @@ class App:
             cols = {row[1] for row in db.execute("PRAGMA table_info(leads)")}
             for name, ddl in (("notification_status", "TEXT NOT NULL DEFAULT 'not_configured'"),
                               ("notification_at", "TEXT"),
-                              ("reviewed_at", "TEXT")):
+                              ("reviewed_at", "TEXT"),
+                              ("closed_at", "TEXT"),              # purpose reached / interaction finished (owner action)
+                              ("legal_hold", "INTEGER NOT NULL DEFAULT 0"),  # other lawful basis, e.g. contract
+                              ("hold_reason", "TEXT")):
                 if name not in cols:
                     db.execute("ALTER TABLE leads ADD COLUMN %s %s" % (name, ddl))
             db.execute("""CREATE TABLE IF NOT EXISTS altcha_used (
