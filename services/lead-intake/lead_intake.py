@@ -273,7 +273,7 @@ class App:
                 raise RuntimeError("RECIPIENT_REFUSED")
 
     def notify(self, ident, kind, contact, message, version):
-        """Exactly-once claim: only the claim winner sends; an ambiguous result is never retried."""
+        """At-most-once claim: only the claim winner sends; an ambiguous result is never retried."""
         def set_state(expected, new):
             try:
                 db = self.connect()
@@ -408,11 +408,16 @@ class App:
         except (sqlite3.Error, OSError):
             return 503, {"ok": False, "code": "UNAVAILABLE"}
         if smtp_state == "pending":
-            self.spawn(lambda: self.notify(ident, kind, contact, message, version))
+            try:
+                self.spawn(lambda: self.notify(ident, kind, contact, message, version))
+            except Exception:
+                pass  # notification is best-effort; the lead is already durably accepted
         return self.accepted(ident)
 
 
 class Handler(http.server.BaseHTTPRequestHandler):
+    timeout = 10  # slow/stalled clients must not pin worker threads
+
     def serve(self):
         app = self.server.app
         path = urllib.parse.urlsplit(self.path).path
@@ -421,7 +426,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         # Disabled/not-ready: never consume the PII body. Always close keep-alive after the response.
         if method == "POST" and path == "/api/lead" and app.ready():
             length = self.headers.get("Content-Length", "")
-            if "transfer-encoding" in headers or not length.isdigit():
+            if "transfer-encoding" in headers or not (length.isascii() and length.isdigit()):
                 code, result = 411, {"ok": False, "code": "LENGTH_REQUIRED"}
             elif int(length) > MAX_BODY:
                 code, result = 413, {"ok": False, "code": "INVALID_BODY"}

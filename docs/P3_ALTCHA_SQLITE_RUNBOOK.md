@@ -18,6 +18,12 @@ Production layout (server `auction-core-v01`, user `deploy`; Cloud/Core, `/opt/a
 4. Nginx: add `30-torgatlas-lead-zone.conf`, replace the two disabled stubs in `torgatlas-locations.inc` by `include …/torgatlas-lead.inc`, run `nginx -t` in the proxy container, then `nginx -s reload` only if it passes.
 5. Verify (before/after): `/`, `/privacy/`, `/api/lead-config`, `/ta/s.js`, Cloud health.
 
+## Mandatory checks at step 3
+- `data/` must be mode 0700 and owned by deploy, otherwise the service stays not-ready (`enabled:false`, fail-closed).
+- Set `LEAD_TRUSTED_PROXIES` in `lead.env` to the peer address the container really sees (Docker bridge gateway, e.g. `172.17.0.1`; check with `docker network inspect bridge`), then verify that two different `X-Real-IP` values get separate rate-limit buckets; otherwise all visitors share one limit.
+- Never publish container port 8081 beyond `127.0.0.1`.
+- Notification is at-most-once/best-effort: `leadctl.py stats` shows `notification:pending|sending|failed` counts so lost notifications are visible.
+
 ## Activation (owner decision)
 Set `DIRECT_LEADS_LEGAL_APPROVED=true` in `lead.env`, `docker compose up -d`; run the production E2E below; only afterwards flip `DIRECT_LEADS_ENABLED = true` in `assets/analytics.js` (event `lead_direct_accepted`, no contact/message/URL) and update the last sentence of `/privacy/` ("Серверный приём заявок … выключенным") in a follow-up release.
 
