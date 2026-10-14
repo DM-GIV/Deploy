@@ -1,0 +1,32 @@
+slot,scheduled_date,topic,intent,cluster,target_url,primary_cta,priority,state,owner_approval
+1,2026-10-18,Задаток: сумма сроки реквизиты и возврат,informational,deposit,/blog/zadatok-na-torgah-po-bankrotstvu/,/proverka-lota/#lot-check-form,P1,DRAFT_REVIEW_REQUIRED,REQUIRED
+2,2026-10-21,Публичное предложение: периоды цена и момент заявки,informational,public_offer,/blog/publichnoe-predlozhenie-bankrotstvo/,/proverka-lota/#lot-check-form,P1,DRAFT_REVIEW_REQUIRED,REQUIRED
+3,2026-10-24,Государственные и муниципальные торги: маршрут проверки,informational,public_property,/blog/gosudarstvennye-i-municipalnye-torgi/,/poisk-imushchestva/#search-brief-form,P1,DRAFT_REVIEW_REQUIRED,REQUIRED
+4,2026-10-27,Квартира с торгов: права пользование и осмотр,commercial,apartment_due_diligence,/blog/kvartira-s-torgov-proverka/,/proverka-lota/#lot-check-form,P1,RESEARCH_REQUIRED,REQUIRED
+5,2026-10-30,Доля в недвижимости: границы права и риски,informational,share_due_diligence,/blog/dolya-v-kvartire-s-torgov-riski/,/proverka-lota/#lot-check-form,P2,RESEARCH_REQUIRED,REQUIRED
+6,2026-11-02,Оборудование: комплектность демонтаж и вывоз,informational,equipment_due_diligence,/blog/oborudovanie-s-torgov-proverka/,/proverka-lota/#lot-check-form,P1,RESEARCH_REQUIRED,REQUIRED
+7,2026-11-05,Спецтехника: идентификаторы состояние и регистрация,informational,machinery_due_diligence,/blog/spectehnika-s-torgov-proverka/,/proverka-lota/#lot-check-form,P1,RESEARCH_REQUIRED,REQUIRED
+8,2026-11-08,Арестованное имущество: не путать процедуры,informational,seized_property,/blog/arestovannoe-imushchestvo-torgi/,/poisk-imushchestva/#search-brief-form,P1,RESEARCH_REQUIRED,REQUIRED
+9,2026-11-11,Муниципальная земля: извещение ВРИ и договор,informational,municipal_land,/blog/municipalnaya-zemlya-torgi/,/proverka-lota/#lot-check-form,P2,RESEARCH_REQUIRED,REQUIRED
+10,2026-11-14,Документы заявки: контрольный список без универсального шаблона,informational,application_documents,/blog/dokumenty-dlya-zayavki-na-torgi/,/soprovozhdenie-torgov/,P1,RESEARCH_REQUIRED,REQUIRED
+11,2026-11-17,Электронная подпись и готовность рабочего места,informational,e_signature,/blog/elektronnaya-podpis-dlya-torgov/,/soprovozhdenie-torgov/,P2,RESEARCH_REQUIRED,REQUIRED
+12,2026-11-20,Осмотр имущества: вопросы организатору и фиксация,informational,inspection,/blog/osmotr-imushchestva-pered-torgami/,/proverka-lota/#lot-check-form,P1,RESEARCH_REQUIRED,REQUIRED
+13,2026-11-23,Обременения недвижимости: что можно подтвердить,informational,encumbrances,/blog/obremeneniya-nedvizhimosti-s-torgov/,/proverka-lota/#lot-check-form,P1,RESEARCH_REQUIRED,REQUIRED
+14,2026-11-26,Залоговое имущество: документы и открытые вопросы,informational,pledged_property,/blog/zalogovoe-imushchestvo-s-torgov/,/proverka-lota/#lot-check-form,P1,RESEARCH_REQUIRED,REQUIRED
+15,2026-11-29,Полная стоимость покупки: расходы кроме цены,informational,total_cost,/blog/rashody-pri-pokupke-s-torgov/,/pokupka-imushchestva/,P1,RESEARCH_REQUIRED,REQUIRED
+16,2026-12-02,Предельная цена участия: сценарный расчёт,informational,max_bid,/blog/predelnaya-cena-na-torgah/,/proverka-lota/#lot-check-form,P1,RESEARCH_REQUIRED,REQUIRED
+17,2026-12-05,Сроки заявки и часовой пояс площадки,informational,deadlines,/blog/sroki-zayavki-na-torgi/,/soprovozhdenie-torgov/,P1,RESEARCH_REQUIRED,REQUIRED
+18,2026-12-08,Договор после торгов: что читать заранее,informational,contract,/blog/dogovor-posle-torgov/,/soprovozhdenie-torgov/,P2,RESEARCH_REQUIRED,REQUIRED
+19,2026-12-11,Передача имущества: документы доступ и состояние,informational,handover,/blog/peredacha-imushchestva-posle-torgov/,/pokupka-imushchestva/,P2,RESEARCH_REQUIRED,REQUIRED
+20,2026-12-14,Реализация после покупки: факты расходы и ограничения,informational,resale,/blog/realizaciya-imushchestva-posle-torgov/,/pokupka-imushchestva/,P2,RESEARCH_REQUIRED,REQUIRED
+21,2026-12-17,Как читать сообщение ЕФРСБ о торгах,informational,source_literacy,/blog/kak-chitat-soobshchenie-efrsb/,/proverka-lota/#lot-check-form,P1,RESEARCH_REQUIRED,REQUIRED
+22,2026-12-20,Как проверить организатора и площадку,informational,organizer_check,/blog/kak-proverit-organizatora-torgov/,/proverka-lota/#lot-check-form,P2,RESEARCH_REQUIRED,REQUIRED
+23,2026-12-23,Протокол результатов: что он подтверждает,informational,results_protocol,/blog/protokol-rezultatov-torgov/,/soprovozhdenie-torgov/,P2,RESEARCH_REQUIRED,REQUIRED
+24,2026-12-26,Вопросы новичка о торгах по банкротству,informational,beginner_faq,/blog/torgi-po-bankrotstvu-voprosy/,/poisk-imushchestva/#search-brief-form,P2,RESEARCH_REQUIRED,REQUIRED
+25,2026-12-29,Разбор реального производственного комплекса,case_research,case_research,/blog/razbor-proizvodstvennogo-kompleksa-s-torgov/,/proverka-lota/#lot-check-form,P1,RESEARCH_REQUIRED,REQUIRED
+26,2027-01-01,Разбор участка с ограничением по статье 56 ЗК,case_research,case_research,/blog/razbor-uchastka-s-ogranicheniem/,/proverka-lota/#lot-check-form,P1,RESEARCH_REQUIRED,REQUIRED
+27,2027-01-04,Проверка автомобиля: обновление вопросов и источников,refresh,vehicle_due_diligence,/blog/kak-proverit-avtomobil-s-torgov/,/proverka-lota/#lot-check-form,P1,REFRESH_REVIEW_REQUIRED,REQUIRED
+28,2027-01-07,Проверка земли: обновление официальных маршрутов,refresh,land_due_diligence,/blog/kak-proverit-zemelnyi-uchastok-s-torgov/,/proverka-lota/#lot-check-form,P1,REFRESH_REVIEW_REQUIRED,REQUIRED
+29,2027-01-10,Проверка лота: обновление общего чек-листа,refresh,lot_due_diligence,/blog/kak-proverit-lot-pered-torgami/,/proverka-lota/#lot-check-form,P1,REFRESH_REVIEW_REQUIRED,REQUIRED
+30,2027-01-13,Как выбрать формат помощи на торгах,comparative,service_choice,/formaty-raboty/,/formaty-raboty/,P1,REFRESH_REVIEW_REQUIRED,REQUIRED
+

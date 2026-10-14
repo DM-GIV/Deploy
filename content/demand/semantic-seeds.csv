@@ -1,0 +1,36 @@
+query,intent,cluster,assigned_url,priority,status,frequency,frequency_unit,region,source,observed_on,notes
+проверка лота перед торгами,informational,lot_due_diligence,/blog/kak-proverit-lot-pered-torgami/,P0,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Existing guide; do not create duplicate
+проверка лота торги по банкротству,commercial,lot_due_diligence,/proverka-lota/,P0,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Service landing
+как проверить автомобиль с торгов,informational,vehicle_due_diligence,/blog/kak-proverit-avtomobil-s-torgov/,P0,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Existing guide
+проверка земельного участка с торгов,informational,land_due_diligence,/blog/kak-proverit-zemelnyi-uchastok-s-torgov/,P0,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Existing guide
+поиск имущества на торгах,commercial,asset_search,/poisk-imushchestva/,P0,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Service landing
+сопровождение торгов по банкротству,commercial,auction_support,/soprovozhdenie-torgov/,P0,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Service landing
+покупка имущества с торгов по банкротству,commercial,asset_purchase,/pokupka-imushchestva/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Service landing
+задаток на торгах по банкротству,informational,deposit,/blog/zadatok-na-torgah-po-bankrotstvu/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Noindex draft; owner review required
+возврат задатка на торгах по банкротству,informational,deposit,/blog/zadatok-na-torgah-po-bankrotstvu/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,editorial_seed,2026-10-15,Same page to avoid cannibalization
+публичное предложение при банкротстве,informational,public_offer,/blog/publichnoe-predlozhenie-bankrotstvo/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Noindex draft; owner review required
+этапы снижения цены публичное предложение,informational,public_offer,/blog/publichnoe-predlozhenie-bankrotstvo/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,editorial_seed,2026-10-15,Same page to avoid cannibalization
+государственные и муниципальные торги имущество,informational,public_property,/blog/gosudarstvennye-i-municipalnye-torgi/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Noindex draft; owner review required
+купить квартиру с торгов по банкротству,commercial,apartment_due_diligence,/blog/kvartira-s-torgov-proverka/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Future page spec
+покупка доли квартиры с торгов риски,informational,share_due_diligence,/blog/dolya-v-kvartire-s-torgov-riski/,P2,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,High legal review
+оборудование с торгов по банкротству проверка,informational,equipment_due_diligence,/blog/oborudovanie-s-torgov-proverka/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Future page spec
+спецтехника с торгов проверка,informational,machinery_due_diligence,/blog/spectehnika-s-torgov-proverka/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Future page spec
+арестованное имущество торги как купить,informational,seized_property,/blog/arestovannoe-imushchestvo-torgi/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Do not merge bankruptcy and enforcement rules
+муниципальная земля торги как участвовать,informational,municipal_land,/blog/municipalnaya-zemlya-torgi/,P2,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,High legal review
+документы для участия в торгах по банкротству,informational,application_documents,/blog/dokumenty-dlya-zayavki-na-torgi/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Platform-specific caveat required
+электронная подпись для торгов по банкротству,informational,e_signature,/blog/elektronnaya-podpis-dlya-torgov/,P2,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Official platform sources
+как осмотреть имущество перед торгами,informational,inspection,/blog/osmotr-imushchestva-pered-torgami/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Future page spec
+обременения недвижимости с торгов,informational,encumbrances,/blog/obremeneniya-nedvizhimosti-s-torgov/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,High legal review
+залоговое имущество на торгах банкротство,informational,pledged_property,/blog/zalogovoe-imushchestvo-s-torgov/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,High legal review
+расходы при покупке имущества с торгов,informational,total_cost,/blog/rashody-pri-pokupke-s-torgov/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,No unsupported market discount
+как определить максимальную цену на торгах,informational,max_bid,/blog/predelnaya-cena-na-torgah/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Method not investment advice
+срок подачи заявки на торги по банкротству,informational,deadlines,/blog/sroki-zayavki-na-torgi/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,High procedural review
+договор купли продажи после торгов,informational,contract,/blog/dogovor-posle-torgov/,P2,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,High legal review
+передача имущества после торгов,informational,handover,/blog/peredacha-imushchestva-posle-torgov/,P2,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Future page spec
+продажа имущества купленного с торгов,informational,resale,/blog/realizaciya-imushchestva-posle-torgov/,P2,HYPOTHESIS_UNVERIFIED,,,Россия,content_matrix,2026-10-15,Tax/legal review required
+как читать сообщение ефрсб о торгах,informational,source_literacy,/blog/kak-chitat-soobshchenie-efrsb/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,editorial_seed,2026-10-15,Official source workflow
+как проверить организатора торгов,informational,organizer_check,/blog/kak-proverit-organizatora-torgov/,P2,HYPOTHESIS_UNVERIFIED,,,Россия,editorial_seed,2026-10-15,Do not imply certification
+ошибки в заявке на торги по банкротству,informational,application_documents,/blog/dokumenty-dlya-zayavki-na-torgi/,P1,HYPOTHESIS_UNVERIFIED,,,Россия,editorial_seed,2026-10-15,Merge with documents page
+протокол результатов торгов что проверить,informational,results_protocol,/blog/protokol-rezultatov-torgov/,P2,HYPOTHESIS_UNVERIFIED,,,Россия,editorial_seed,2026-10-15,Official procedure documents
+торги по банкротству вопросы новичка,informational,beginner_faq,/blog/torgi-po-bankrotstvu-voprosy/,P2,HYPOTHESIS_UNVERIFIED,,,Россия,user_questions,2026-10-15,Hub FAQ; link to specialist guides
+

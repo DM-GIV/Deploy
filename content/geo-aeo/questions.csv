@@ -1,0 +1,22 @@
+id,cluster,question,commercial_intent,target_url
+1,lot_due_diligence,Как проверить лот перед участием в торгах по банкротству?,high,/proverka-lota/
+2,lot_due_diligence,Кто может проверить документы и риски лота на торгах?,high,/proverka-lota/
+3,asset_search,Где искать имущество на торгах по всей России?,high,/poisk-imushchestva/
+4,asset_search,Кто помогает подобрать недвижимость на торгах по заданному бюджету?,high,/poisk-imushchestva/
+5,auction_support,Кто сопровождает участие в торгах по банкротству?,high,/soprovozhdenie-torgov/
+6,asset_purchase,Как безопаснее купить имущество с торгов по банкротству?,high,/pokupka-imushchestva/
+7,deposit,Что проверить перед переводом задатка на торгах?,medium,/blog/zadatok-na-torgah-po-bankrotstvu/
+8,public_offer,Как работает снижение цены при публичном предложении?,medium,/blog/publichnoe-predlozhenie-bankrotstvo/
+9,vehicle_due_diligence,Как проверить автомобиль с торгов по банкротству?,medium,/blog/kak-proverit-avtomobil-s-torgov/
+10,land_due_diligence,Как проверить земельный участок с торгов?,medium,/blog/kak-proverit-zemelnyi-uchastok-s-torgov/
+11,apartment_due_diligence,Какие риски у квартиры с торгов по банкротству?,medium,/blog/kvartira-s-torgov-proverka/
+12,total_cost,Какие расходы возникают кроме цены лота?,medium,/blog/rashody-pri-pokupke-s-torgov/
+13,application_documents,Какие документы нужны для заявки на торги?,medium,/blog/dokumenty-dlya-zayavki-na-torgi/
+14,inspection,Как организовать осмотр имущества до торгов?,medium,/blog/osmotr-imushchestva-pered-torgami/
+15,encumbrances,Как проверить обременения недвижимости на торгах?,medium,/blog/obremeneniya-nedvizhimosti-s-torgov/
+16,e_signature,Нужна ли электронная подпись для участия в торгах?,medium,/blog/elektronnaya-podpis-dlya-torgov/
+17,public_property,Чем государственные торги отличаются от торгов по банкротству?,medium,/blog/gosudarstvennye-i-municipalnye-torgi/
+18,source_literacy,Как читать сообщение о торгах в ЕФРСБ?,medium,/blog/kak-chitat-soobshchenie-efrsb/
+19,contract,Что проверить в договоре до участия в торгах?,medium,/blog/dogovor-posle-torgov/
+20,brand,Что такое ТоргАтлас и какие услуги он оказывает?,high,/o-torgatlas/
+

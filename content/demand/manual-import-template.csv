@@ -1,0 +1,3 @@
+query,metric,value,region,period_start,period_end,source,source_url,exported_at
+пример запроса,monthly_frequency,123,Россия,2026-09-01,2026-09-30,wordstat_csv,OWNER_EXPORT,2026-10-15T00:00:00+03:00
+

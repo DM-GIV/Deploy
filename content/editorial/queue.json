@@ -1,0 +1,46 @@
+{
+  "schema": "torgatlas-editorial-queue-v1",
+  "mode": "OWNER_APPROVED_ONLY",
+  "timezone": "Europe/Moscow",
+  "cadence_days": 3,
+  "last_published_at": null,
+  "items": [
+    {
+      "id": "deposit-guide-v1",
+      "scheduled_date": "2026-10-18",
+      "route": "/blog/zadatok-na-torgah-po-bankrotstvu/",
+      "source_path": "blog/zadatok-na-torgah-po-bankrotstvu/index.html",
+      "status": "DRAFT_REVIEW_REQUIRED",
+      "content_sha256": "e3795905975c8b420195e75b1f8c50d193cddb0ed64c396d66d794fda6c511d1",
+      "sources": ["https://bankrot.fedresurs.ru/"],
+      "gates": {"demand": false, "official_sources": false, "editorial": false, "legal": false, "originality": false, "metadata": false, "interlinking": false, "tests": false},
+      "owner_approved_by": null,
+      "owner_approved_at": null
+    },
+    {
+      "id": "public-offer-guide-v1",
+      "scheduled_date": "2026-10-21",
+      "route": "/blog/publichnoe-predlozhenie-bankrotstvo/",
+      "source_path": "blog/publichnoe-predlozhenie-bankrotstvo/index.html",
+      "status": "DRAFT_REVIEW_REQUIRED",
+      "content_sha256": "f6f5d41252f9b8f9997f9b017df86ffffb3e2aec3c664877d552222428ef48f0",
+      "sources": ["https://bankrot.fedresurs.ru/"],
+      "gates": {"demand": false, "official_sources": false, "editorial": false, "legal": false, "originality": false, "metadata": false, "interlinking": false, "tests": false},
+      "owner_approved_by": null,
+      "owner_approved_at": null
+    },
+    {
+      "id": "public-property-guide-v1",
+      "scheduled_date": "2026-10-24",
+      "route": "/blog/gosudarstvennye-i-municipalnye-torgi/",
+      "source_path": "blog/gosudarstvennye-i-municipalnye-torgi/index.html",
+      "status": "DRAFT_REVIEW_REQUIRED",
+      "content_sha256": "f9c37957396bdb7fbca679b701b44a8aa955b53b212e0e6ce324c16a97197074",
+      "sources": ["https://torgi.gov.ru/"],
+      "gates": {"demand": false, "official_sources": false, "editorial": false, "legal": false, "originality": false, "metadata": false, "interlinking": false, "tests": false},
+      "owner_approved_by": null,
+      "owner_approved_at": null
+    }
+  ]
+}
+
