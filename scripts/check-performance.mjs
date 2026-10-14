@@ -21,7 +21,7 @@ const preloads = [...html.matchAll(/<link\s+rel="preload"\s+as="image"[^>]*>/g)]
 const images = [...css.matchAll(/\/assets\/hero-[0-9]+\.webp/g)].map(x => x[0]);
 const mobile = images.find(x => x.includes('hero-1100'));
 const desktop = images.find(x => x.includes('hero-1950'));
-ensure(stylesheets.length === 1 && stylesheets[0] === '/assets/home-bundle.css','Homepage must load exactly the optimized CSS bundle');
+ensure(stylesheets.length === 1 && /^\/assets\/home-bundle\.css(?:\?v=[a-f0-9]{12})?$/.test(stylesheets[0]),'Homepage must load exactly the optimized CSS bundle (with an optional content-version query)');
 ensure(Buffer.byteLength(css, 'utf8') <= 18000,'Optimized bundle exceeded 18 KB budget');
 ensure(Buffer.byteLength(html, 'utf8') <= 22000,'Homepage HTML exceeded 22 KB budget');
 ensure(missing.length === 0,'CSS selectors missing for HTML classes: ' + missing.join(', '));

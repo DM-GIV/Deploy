@@ -6,7 +6,7 @@ import vm from 'node:vm';
 const original = fs.readFileSync(new URL('../assets/analytics.js', import.meta.url), 'utf8');
 const SITE_ID = 'cf28be6b-9c2d-42de-ba95-8c4818e19435';
 
-function harness({websiteId=SITE_ID, consent=null, gpc=false, dnt='0', directLeads=false}={}) {
+function harness({websiteId=SITE_ID, consent=null, gpc=false, dnt='0', directLeads=true}={}) {
   const listeners = new Map();
   const scripts = [];
   const storage = new Map();
@@ -50,7 +50,7 @@ function harness({websiteId=SITE_ID, consent=null, gpc=false, dnt='0', directLea
   };
   const navigator = { globalPrivacyControl:gpc, doNotTrack:dnt };
   let code = original.replace(/var WEBSITE_ID = '[^']*';/, "var WEBSITE_ID = '"+websiteId+"';");
-  if (directLeads) code = code.replace('DIRECT_LEADS_ENABLED = false', 'DIRECT_LEADS_ENABLED = true');
+  code = code.replace('DIRECT_LEADS_ENABLED = true', 'DIRECT_LEADS_ENABLED = '+String(directLeads));
   vm.runInNewContext(code, {window, document, navigator, URL, Date, console, setTimeout, clearTimeout});
   const fireLoad = () => scripts[0]._handlers.load();
   return {window, document, listeners, scripts, storage, tracked, trackedData, fireLoad, get storageGets(){return storageGets;}, get storageSets(){return storageSets;}};
@@ -97,7 +97,7 @@ test('allowlisted event is sent by name only; others ignored', () => {
   h.listeners.get('auction:funnel')({detail:{event:'funnel_contact_open', contact:'secret@example.com', budget:'999'}});
   h.listeners.get('auction:funnel')({detail:{event:'free_text_event'}});
   h.listeners.get('auction:funnel')({detail:{event:'lead_direct_accepted'}});
-  assert.deepEqual(h.tracked, ['funnel_contact_open']);
+  assert.deepEqual(h.tracked, ['funnel_contact_open', 'lead_direct_accepted']);
 });
 
 test('events before tracker load are queued then flushed', () => {
@@ -113,6 +113,10 @@ test('lead_direct_accepted only when direct leads flag is on', () => {
   h.fireLoad();
   h.listeners.get('auction:funnel')({detail:{event:'lead_direct_accepted'}});
   assert.deepEqual(h.tracked, ['lead_direct_accepted']);
+  const off = harness({consent:'accepted', directLeads:false});
+  off.fireLoad();
+  off.listeners.get('auction:funnel')({detail:{event:'lead_direct_accepted'}});
+  assert.deepEqual(off.tracked, []);
 });
 
 test('before-send sanitises pageview and blocks bad payloads', () => {
