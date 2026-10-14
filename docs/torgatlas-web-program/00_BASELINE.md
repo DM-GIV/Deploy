@@ -36,6 +36,9 @@
 | About/методика/контентная матрица | ОТСУТСТВУЕТ | нужен PAGE_SPEC и owner-review фактов до публикации |
 | Legal/price/payment/CRM/Cloud read-model | ЗАБЛОКИРОВАНО | требуется решение владельца и отдельные legal/security/product gates |
 | Search Console/Яндекс Вебмастер | UNKNOWN | доступ владельца не предоставлен; подключение не имитируется |
+| Wave 04 SEO/GEO | РЕАЛИЗОВАНО ЛОКАЛЬНО | `/o-torgatlas/`, `llms.txt`, crawler policy, schema validation, registry/sitemap обновлены; индексация и ранжирование остаются UNKNOWN до наблюдений владельца |
+| Mobile navigation toggle | NOT_APPLICABLE | мобильный UX — доступный постоянно видимый список ссылок с переносом; browser keyboard navigation PASS, toggle не является технической ошибкой |
+| ALTCHA browser E2E | PENDING_INTEGRATION | нужен одноразовый TLS local backend + disposable SQLite, без production или реальных заявок |
 
 ## Проверки исходной базы
 

@@ -27,3 +27,10 @@
 - `interactive-matrix.json`: 11 PASS, 0 FAIL, 2 BLOCKED. Проверены keyboard navigation/CTA, обе локальные карты (validation → generation → change → regeneration → copy), AI disabled/success/empty/503/network failure и consent/Umami accept/decline/persistence.
 - Исправлен AI network failure: технический текст `Failed to fetch` заменён безопасным сообщением о недоступности сервиса и ссылке на первоисточники.
 - BLOCKED: у текущей mobile navigation нет открываемого состояния; ALTCHA challenge/pass/reject/replay требует изолированный TLS+SQLite E2E endpoint и не был подменён фиктивным PASS.
+
+## Wave 04 — 2026-10-14 (локально, не production)
+
+- Добавлена `/o-torgatlas/`: проверяемое описание метода, источников, редакционной политики и ограничений без биографии, цен, гарантий или отзывов.
+- Добавлен экспериментальный `llms.txt` с правдивыми публичными ссылками; он не назван фактором ранжирования.
+- `robots.txt` сохраняет доступность публичных страниц и исключает `/api/` только для model-training crawlers; OAI-SearchBot и ChatGPT-User явно не блокируются.
+- Registry/sitemap расширены до 14 URL. Валидатор теперь проверяет JSON-LD syntax и ключевые обязательные типы, а также `llms.txt`.

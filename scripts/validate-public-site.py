@@ -55,6 +55,7 @@ def main() -> int:
         errors.append("registry contains duplicate public sources")
 
     parsed: dict[str, LinksAndIds] = {}
+    schemas: dict[str, list[object]] = {}
     for path, page in page_by_path.items():
         source = ROOT / page["source"]
         if not source.is_file():
@@ -72,6 +73,30 @@ def main() -> int:
         reader = LinksAndIds()
         reader.feed(html)
         parsed[path] = reader
+        schemas[path] = []
+        for block in re.findall(r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', html, re.I | re.S):
+            try:
+                schemas[path].append(json.loads(block.strip()))
+            except json.JSONDecodeError as error:
+                errors.append(f"{path}: invalid JSON-LD: {error.msg}")
+
+    def schema_types(value: object) -> set[str]:
+        if not isinstance(value, dict):
+            return set()
+        nodes = value.get("@graph", [value])
+        return {node.get("@type") for node in nodes if isinstance(node, dict) and isinstance(node.get("@type"), str)}
+
+    required_schema = {
+        "/": {"WebSite", "ProfessionalService"},
+        "/o-torgatlas/": {"WebPage", "BreadcrumbList"},
+        "/proverka-lota/": {"Service", "BreadcrumbList"},
+        "/poisk-imushchestva/": {"Service", "BreadcrumbList"},
+    }
+    for route, expected_types in required_schema.items():
+        actual_types = set().union(*(schema_types(block) for block in schemas.get(route, [])))
+        missing = expected_types - actual_types
+        if missing:
+            errors.append(f"{route}: missing JSON-LD types: {', '.join(sorted(missing))}")
 
     for source in ROOT.glob("**/index.html"):
         relative = source.relative_to(ROOT).as_posix()
@@ -104,6 +129,10 @@ def main() -> int:
         errors.append("robots.txt must retain the public allow-all group")
     if re.search(r"(?im)^Disallow:\s*/\s*$", robots):
         errors.append("robots.txt blocks the entire public site")
+
+    llms = ROOT / "llms.txt"
+    if not llms.is_file() or "https://torgatlas.ru/o-torgatlas/" not in llms.read_text(encoding="utf-8"):
+        errors.append("llms.txt must be a truthful public navigation file linking to /o-torgatlas/")
 
     known_paths = set(page_by_path) | {"/ai-poisk-lotov/", "/404.html"}
     for origin, reader in parsed.items():

@@ -11,3 +11,5 @@
 | §08/§12/§14: новые публичные контентные страницы | не начато | PAGE_SPEC + owner/factual review | P1 / PENDING_OWNER_APPROVAL |
 | §06/§18: реальные интерактивные действия и consent-gated analytics | только static/DOM evidence | local Chromium actions + intercepted `/ta/` and AI API mocks | TEST_PASS (11 scenarios) |
 | §06: ALTCHA challenge/replay browser E2E | не запущено | existing TLS disposable harness needs separately available browser adapter | BLOCKED, evidence recorded |
+| §09/§10: SEO/GEO public identity and machine-readable navigation | no about page or llms file | `/o-torgatlas/`, `llms.txt`, route registry, validated schema and crawler rules | TEST_PASS / live visibility UNKNOWN |
+| §11: structured data truthful types | inconsistent coverage was unverified | validator parses JSON-LD; WebSite/ProfessionalService, Service, WebPage, BreadcrumbList checked | TEST_PASS |

@@ -1,4 +1,20 @@
 User-agent: *
 Allow: /
 
+# Public pages remain discoverable. API routes are not content for model-training crawlers.
+User-agent: GPTBot
+Disallow: /api/
+
+User-agent: ClaudeBot
+Disallow: /api/
+
+User-agent: Google-Extended
+Disallow: /api/
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
 Sitemap: https://torgatlas.ru/sitemap.xml
