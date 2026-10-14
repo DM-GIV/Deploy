@@ -1,0 +1,18 @@
+{
+  "site_url": "https://torgatlas.ru",
+  "pages": [
+    {"path": "/", "source": "index.html"},
+    {"path": "/proverka-lota/", "source": "proverka-lota/index.html"},
+    {"path": "/poisk-imushchestva/", "source": "poisk-imushchestva/index.html"},
+    {"path": "/soprovozhdenie-torgov/", "source": "soprovozhdenie-torgov/index.html"},
+    {"path": "/pokupka-imushchestva/", "source": "pokupka-imushchestva/index.html"},
+    {"path": "/primery-lotov/", "source": "primery-lotov/index.html"},
+    {"path": "/formaty-raboty/", "source": "formaty-raboty/index.html"},
+    {"path": "/blog/", "source": "blog/index.html"},
+    {"path": "/blog/kak-proverit-lot-pered-torgami/", "source": "blog/kak-proverit-lot-pered-torgami/index.html"},
+    {"path": "/blog/kak-proverit-avtomobil-s-torgov/", "source": "blog/kak-proverit-avtomobil-s-torgov/index.html"},
+    {"path": "/blog/kak-proverit-zemelnyi-uchastok-s-torgov/", "source": "blog/kak-proverit-zemelnyi-uchastok-s-torgov/index.html"},
+    {"path": "/privacy/", "source": "privacy/index.html", "lastmod": "2026-10-13"},
+    {"path": "/privacy/consent/", "source": "privacy/consent/index.html", "lastmod": "2026-10-12"}
+  ]
+}

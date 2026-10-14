@@ -7,5 +7,5 @@
 | §04/§05: честное объяснение инструмента | hero AI обещал подборку без оговорки gate | `ai-poisk-lotov/index.html` описывает предварительный и gated характер | TEST_PASS |
 | §20: analytics event соответствует текущему флагу | тест ожидал устаревший disabled state | `tests/analytics.test.mjs` проверяет true и false flag | TEST_PASS |
 | §17: performance check допускает fingerprint | cache-busting query ломал тест | `scripts/check-performance.mjs` допускает только versioned hash | TEST_PASS |
-| §09: canonical URL registry/sitemap | статичный sitemap с old lastmod | не начато | P1 |
+| §09: canonical URL registry/sitemap | статичный sitemap с old lastmod | registry + generator + offline validator | TEST_PASS |
 | §08/§12/§14: новые публичные контентные страницы | не начато | PAGE_SPEC + owner/factual review | P1 / PENDING_OWNER_APPROVAL |

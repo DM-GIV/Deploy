@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://torgatlas.ru/</loc><lastmod>2026-10-11</lastmod></url>
-  <url><loc>https://torgatlas.ru/proverka-lota/</loc><lastmod>2026-10-11</lastmod></url>
-  <url><loc>https://torgatlas.ru/poisk-imushchestva/</loc><lastmod>2026-10-11</lastmod></url>
-  <url><loc>https://torgatlas.ru/soprovozhdenie-torgov/</loc><lastmod>2026-10-11</lastmod></url>
-  <url><loc>https://torgatlas.ru/pokupka-imushchestva/</loc><lastmod>2026-10-11</lastmod></url>
-  <url><loc>https://torgatlas.ru/primery-lotov/</loc><lastmod>2026-10-11</lastmod></url>
-  <url><loc>https://torgatlas.ru/formaty-raboty/</loc><lastmod>2026-10-11</lastmod></url>
-  <url><loc>https://torgatlas.ru/blog/kak-proverit-lot-pered-torgami/</loc><lastmod>2026-10-11</lastmod></url>
-  <url><loc>https://torgatlas.ru/blog/kak-proverit-avtomobil-s-torgov/</loc><lastmod>2026-10-11</lastmod></url>
-  <url><loc>https://torgatlas.ru/blog/kak-proverit-zemelnyi-uchastok-s-torgov/</loc><lastmod>2026-10-11</lastmod></url>
-  <url><loc>https://torgatlas.ru/blog/</loc><lastmod>2026-10-11</lastmod></url>
-  <url><loc>https://torgatlas.ru/privacy/</loc><lastmod>2026-10-11</lastmod></url>
+  <url><loc>https://torgatlas.ru/</loc></url>
+  <url><loc>https://torgatlas.ru/proverka-lota/</loc></url>
+  <url><loc>https://torgatlas.ru/poisk-imushchestva/</loc></url>
+  <url><loc>https://torgatlas.ru/soprovozhdenie-torgov/</loc></url>
+  <url><loc>https://torgatlas.ru/pokupka-imushchestva/</loc></url>
+  <url><loc>https://torgatlas.ru/primery-lotov/</loc></url>
+  <url><loc>https://torgatlas.ru/formaty-raboty/</loc></url>
+  <url><loc>https://torgatlas.ru/blog/</loc></url>
+  <url><loc>https://torgatlas.ru/blog/kak-proverit-lot-pered-torgami/</loc></url>
+  <url><loc>https://torgatlas.ru/blog/kak-proverit-avtomobil-s-torgov/</loc></url>
+  <url><loc>https://torgatlas.ru/blog/kak-proverit-zemelnyi-uchastok-s-torgov/</loc></url>
+  <url><loc>https://torgatlas.ru/privacy/</loc><lastmod>2026-10-13</lastmod></url>
+  <url><loc>https://torgatlas.ru/privacy/consent/</loc><lastmod>2026-10-12</lastmod></url>
 </urlset>

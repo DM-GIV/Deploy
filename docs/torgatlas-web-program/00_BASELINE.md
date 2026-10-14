@@ -27,7 +27,8 @@
 | ALTCHA + SQLite-first direct lead | РЕАЛИЗОВАНО В КОДЕ | `services/lead-intake`, 43 Python-теста PASS; live состояние UNKNOWN из-за timeout |
 | Consent-gated Umami | РЕАЛИЗОВАНО В КОДЕ | `assets/analytics.js`, 14 Node-тестов PASS; live network UNKNOWN |
 | AI-поиск | ТРЕБУЕТ ИСПРАВЛЕНИЯ → P0 этой волны | исходный UI мог отправлять query при выключенном сервисе; теперь GET status до разблокировки POST |
-| Sitemap registry / правдивый lastmod | ТРЕБУЕТ ИСПРАВЛЕНИЯ | `sitemap.xml` статический, даты 11.10 не соответствуют последующим содержательным изменениям |
+| Sitemap registry / правдивый lastmod | РЕАЛИЗОВАНО (Wave 02) | `content/public-pages.json` — единственный реестр; generator не подставляет даты без подтверждения |
+| Canonical, robots и internal links | РЕАЛИЗОВАНО (Wave 02) | offline validator проверяет registry, XML, robots, H1, canonical, indexability и anchors |
 | About/методика/контентная матрица | ОТСУТСТВУЕТ | нужен PAGE_SPEC и owner-review фактов до публикации |
 | Legal/price/payment/CRM/Cloud read-model | ЗАБЛОКИРОВАНО | требуется решение владельца и отдельные legal/security/product gates |
 | Search Console/Яндекс Вебмастер | UNKNOWN | доступ владельца не предоставлен; подключение не имитируется |
