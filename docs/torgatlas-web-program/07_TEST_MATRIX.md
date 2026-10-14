@@ -16,5 +16,7 @@
 | Wave 06 Web Research Mini | `node --test tests/public-web-research.test.mjs tests/ai-search-api.test.mjs tests/ai-search.test.mjs` | PASS; GIS JSON, ЕФРСБ JSON and МЭТС HTML fixtures, normalization, bounded search/detail, coverage, SSRF/DNS/IP, redirects, response size, API gates |
 | Wave 06 AI responsive UX | `node scripts/ai-browser-smoke.mjs` | PASS 4/4 widths: 320, 390, 768, 1440; disabled and enabled mock states, no overflow, visible focus, coverage, UNKNOWN and CTA |
 | Wave 06 interactive regression | `node scripts/browser-interactive-audit.mjs` | PASS 11, BLOCKED 2 unchanged (mobile disclosure N/A; ALTCHA TLS browser E2E pending) |
+| Wave 06 site-owned API runtime | `node --test tests/ai-search-server.test.mjs ...` | PASS; health/fail-closed, invalid JSON/body cap/routes, loopback/resource/nginx templates |
+| Static release payload | `python3 -m unittest tests.release_build_test` | PASS; tracked static files + SHA-256 manifest, API/services/docs/tests excluded |
 
 `node` отсутствует в системном PATH; применён локальный бинарник Playwright `.../driver/node` только для выполнения тестов, без установки зависимостей. ALTCHA browser E2E требует отдельный disposable TLS/SQLite run; production smoke не выполнялся и не является частью этого пакета.

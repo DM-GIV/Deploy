@@ -40,6 +40,8 @@
 | Mobile navigation toggle | NOT_APPLICABLE | мобильный UX — доступный постоянно видимый список ссылок с переносом; browser keyboard navigation PASS, toggle не является технической ошибкой |
 | ALTCHA browser E2E | PENDING_INTEGRATION | нужен одноразовый TLS local backend + disposable SQLite, без production или реальных заявок |
 | AI UX/CRO Wave 06 | TEST_PASS | disabled/enabled mock states, coverage, provenance, UNKNOWN, CTA и responsive 320/390/768/1440 проверены Chromium; `evidence/wave-06/ai-browser-smoke.json` |
+| Selectel AI runtime | PREPARED / NOT_DEPLOYED | site-owned Node service, loopback compose and nginx shared limits added in Git; production `/api/*` remains static 404, feature OFF |
+| Static release builder | IMPLEMENTED | explicit tracked-files payload + SHA-256 manifest; server sources, docs, tests and secrets excluded |
 
 ## Проверки исходной базы
 

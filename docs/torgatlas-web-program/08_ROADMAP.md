@@ -8,4 +8,4 @@
 6. P1: content matrix 30 вопросов как DRAFT с источниками и review status, без массовой публикации.
 7. BLOCKED: тарифы, оплата, Cloud read-model, CRM, изменение ПД-политики, DNS и deployment — только отдельные решения владельца.
 8. P0 PARTIAL / RELEASE HOLD (Wave 06): GIS, ЕФРСБ and bounded-feed МЭТС profiles are fixture-tested; responsive/interactive UX is complete locally. All live probes remain SOURCE_BLOCKED; RAD is exact-detail-only. Public feature flag remains OFF until live/security acceptance, production egress validation and durable shared rate limiting.
-9. P0 NEXT: targeted full-site regression and reproducible release-candidate checklist. Main static site may be release-ready independently; AI API must stay OFF if its runtime prerequisites remain unverified.
+9. P0 IN PROGRESS: reproducible static builder and release checklist implemented; targeted full-site regression and clean-SHA candidate build remain. Main static site may release independently; AI API stays OFF.

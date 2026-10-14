@@ -56,3 +56,11 @@
 - Фиктивная анимация этапов не добавлялась: интерфейс сообщает только принятие запроса и итог API.
 - `ai-browser-smoke.json`: 4/4 PASS на 320/390/768/1440 для disabled и enabled TEST_ONLY mock states; overflow/console/resource errors отсутствуют, focus/coverage/UNKNOWN/CTA проверены.
 - Повторная общая интерактивная матрица: 11 PASS, 0 FAIL, 2 прежних ограничения; реальные заявки и production analytics не вызывались.
+
+## Wave 06 / Selectel runtime and release preparation — 2026-10-14 (Git only)
+
+- Подтверждена фактическая static topology: `www/current → releases/ec487cf`, отдельные lead/Umami includes, общий `/api/* → 404`. Production не изменялся.
+- Добавлен минимальный `services/ai-search`: built-in Node HTTP server, fail-closed flags, loopback-only compose, read-only/resource limits и exact nginx route с shared IP rate/connection limits.
+- API rate key исправлен: лимит применяется по клиенту, а не по сочетанию IP+query. Доверенный `X-Real-IP` устанавливает только site-owned wrapper при явном proxy mode.
+- Добавлен explicit static builder с SHA-256 manifest и запретом dirty worktree; API/services/docs/tests/secrets не попадают в payload.
+- `10_RELEASE_CHECKLIST.md` разделяет готовый к независимому выпуску static candidate и AI HOLD; deploy/DNS/nginx/container actions не выполнялись.

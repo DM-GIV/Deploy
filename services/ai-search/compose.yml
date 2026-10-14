@@ -1,0 +1,30 @@
+services:
+  ai-search:
+    build:
+      context: ../..
+      dockerfile: services/ai-search/Dockerfile
+    container_name: torgatlas-ai-search
+    restart: unless-stopped
+    env_file:
+      - ${AI_SEARCH_ENV_FILE:?Set AI_SEARCH_ENV_FILE}
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8080
+      AI_LOT_TRUST_PROXY: "true"
+    ports:
+      - "127.0.0.1:18082:8080"
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,noexec,nosuid,nodev
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 64
+    mem_limit: 192m
+    cpus: 0.50
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3

@@ -12,6 +12,6 @@ export default async function handler(req,res){
  const body=req.body||{},query=normalizeQuery(body.query);
  if(JSON.stringify(body).length>1400)return send(res,413,{ok:false,code:'INVALID_BODY'});
  if(query.length<12||query.length>400||!categories.has(body.source)||![5,10].includes(body.limit))return send(res,422,{ok:false,code:'INVALID_QUERY'});
- const clientKey=String(req.socket?.remoteAddress||req.headers['x-real-ip']||'unknown').slice(0,80);
- return send(res,200,await publicResearchMiniSearch(query,{source:body.source,limit:body.limit,rateKey:clientKey+':'+query}));
+ const clientKey=String(req.clientIp||req.socket?.remoteAddress||'unknown').slice(0,80);
+ return send(res,200,await publicResearchMiniSearch(query,{source:body.source,limit:body.limit,rateKey:clientKey}));
 }
