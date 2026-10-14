@@ -53,6 +53,10 @@
 
 Дата реструктуризации: 11 октября 2026 г.
 
+## SEO/GEO Growth program
+
+Git-only программа `TORGATLAS-SEO-GEO-GROWTH-001` хранится в `docs/torgatlas-growth/`: production baseline, defect register, demand research, 90-дневный план, OWNER_APPROVED_ONLY editorial pipeline, GEO/AEO protocol, reporting contour и release plan. Автоматизация production не активирована.
+
 ## Контроль воронки и события
 
 `assets/funnel-events.js` подключён на публичных страницах сайта. События имеют общий `page_type`; скрипт не создаёт cookie, не пишет в localStorage, не отправляет запросы и не собирает контакты. Передача разрешённых событий в self-hosted Umami возможна только после явного согласия через `assets/analytics.js`; текст запросов, контакты и URL лотов в аналитику не передаются.
