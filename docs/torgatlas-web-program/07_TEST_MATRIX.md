@@ -20,3 +20,18 @@
 | Static release payload | `python3 -m unittest tests.release_build_test` | PASS; tracked static files + SHA-256 manifest, API/services/docs/tests excluded |
 
 `node` отсутствует в системном PATH; применён локальный бинарник Playwright `.../driver/node` только для выполнения тестов, без установки зависимостей. ALTCHA browser E2E требует отдельный disposable TLS/SQLite run; production smoke не выполнялся и не является частью этого пакета.
+
+## Финальный regression release candidate
+
+| Проверка | Результат |
+| --- | --- |
+| Все Node contracts (`tests/*.test.mjs`) | PASS 47/47 |
+| Python static + lead intake/CLI + release builder | PASS 46/46 |
+| Static accessibility | PASS 4/4 |
+| Umami privacy contracts | PASS 6/6 |
+| Sitemap/SEO/schema/internal links | PASS; 14 indexable canonical URL |
+| Performance static budget | PASS; homepage HTML 21,584 B, CSS 15,525 B |
+| Чистый static payload | PASS; 49 files, 632,617 B, SHA-256 manifest, forbidden server paths 0 |
+| Artifact Chromium smoke | 6 PASS, 0 FAIL, 2 `BLOCKED_STATIC_API` ожидаемо для AI page при static-only preview |
+
+Artifact smoke охватил `/`, `/proverka-lota/`, `/blog/`, `/ai-poisk-lotov/` на 320/1440. Два ограничения означают только отсутствие неразвёрнутого AI server в static preview; UI при этом остаётся fail-closed. Production smoke не выполнялся.

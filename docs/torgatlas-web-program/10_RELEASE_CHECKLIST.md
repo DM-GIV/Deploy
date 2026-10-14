@@ -63,6 +63,6 @@ Rollback AI: вернуть exact nginx route к 404/fail-closed, провери
 
 ## Текущий вердикт
 
-- `SITE_RELEASE_READY`: определяется финальным чистым test matrix и owner approval; production ещё не изменён.
+- `SITE_RELEASE_READY`: **YES для Candidate A** по исходникам и локальному artifact smoke; требуется отдельное owner approval, production ещё не изменён.
 - `AI_SEARCH_READY`: **NO** — profiles только MOCK_TESTED, live lots 0, production egress/service/nginx не проверены.
 - Требуемое решение владельца: отдельно разрешить Candidate A. Candidate B остаётся HOLD.
