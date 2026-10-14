@@ -9,5 +9,6 @@
 | Umami static | `python3 tests/umami_static_test.py` | PASS, 6/6 |
 | Git | `git diff --check` | PASS |
 | Public URL contract | `python3 -m unittest tests.site_static_test` | PASS; generated sitemap, registry, canonical, robots and links |
+| Static accessibility | `python3 -m unittest tests.accessibility-static-test` | PASS; visible focus and reduced-motion contracts |
 
 `node` отсутствует в системном PATH; применён локальный бинарник Playwright `.../driver/node` только для выполнения тестов, без установки зависимостей. Browser E2E и production smoke не выполнялись: первый требует отдельного disposable-browser run, второй — доступного runtime без release.

@@ -29,6 +29,7 @@
 | AI-поиск | ТРЕБУЕТ ИСПРАВЛЕНИЯ → P0 этой волны | исходный UI мог отправлять query при выключенном сервисе; теперь GET status до разблокировки POST |
 | Sitemap registry / правдивый lastmod | РЕАЛИЗОВАНО (Wave 02) | `content/public-pages.json` — единственный реестр; generator не подставляет даты без подтверждения |
 | Canonical, robots и internal links | РЕАЛИЗОВАНО (Wave 02) | offline validator проверяет registry, XML, robots, H1, canonical, indexability и anchors |
+| Keyboard focus главной | РЕАЛИЗОВАНО В КОДЕ (Wave 03) | локальный Chromium baseline 390 px; добавлен общий `:focus-visible` для links/controls |
 | About/методика/контентная матрица | ОТСУТСТВУЕТ | нужен PAGE_SPEC и owner-review фактов до публикации |
 | Legal/price/payment/CRM/Cloud read-model | ЗАБЛОКИРОВАНО | требуется решение владельца и отдельные legal/security/product gates |
 | Search Console/Яндекс Вебмастер | UNKNOWN | доступ владельца не предоставлен; подключение не имитируется |

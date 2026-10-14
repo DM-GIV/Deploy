@@ -13,3 +13,8 @@
 - `scripts/generate-sitemap.py` генерирует sitemap; lastmod добавляется только когда дата явно подтверждена в registry.
 - `scripts/validate-public-site.py` проверяет canonical, noindex, H1, sitemap XML/registry, robots, внутренние URL и anchors.
 - Production не изменялся; результат относится к исходникам и локальным тестам.
+
+## Wave 03 — 2026-10-14 (локально, не production)
+
+- Локальный Chromium baseline главной на 390 px: hero и основные CTA видимы; браузерный screenshot сохранён только во временном `/tmp` и не является production-evidence.
+- На главной добавлен видимый keyboard focus для ссылок, кнопок и раскрывающихся элементов; reduced-motion contract сохранён.
