@@ -98,6 +98,25 @@ def main() -> int:
         if missing:
             errors.append(f"{route}: missing JSON-LD types: {', '.join(sorted(missing))}")
 
+    def walk_json(value: object):
+        if isinstance(value, dict):
+            yield value
+            for child in value.values():
+                yield from walk_json(child)
+        elif isinstance(value, list):
+            for child in value:
+                yield from walk_json(child)
+
+    for route, blocks in schemas.items():
+        for block in blocks:
+            for node in walk_json(block):
+                if node.get("@type") != "Organization":
+                    continue
+                if node.get("url") != f"{SITE_URL}/":
+                    errors.append(f"{route}: Organization must use the canonical site URL")
+                if node.get("logo") != f"{SITE_URL}/assets/og-card.png":
+                    errors.append(f"{route}: Organization must declare the canonical logo")
+
     for source in ROOT.glob("**/index.html"):
         relative = source.relative_to(ROOT).as_posix()
         path = route_for_source(relative)

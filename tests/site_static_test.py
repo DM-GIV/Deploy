@@ -21,6 +21,12 @@ class PublicSiteContractTests(unittest.TestCase):
         result = self.run_script("scripts/validate-public-site.py")
         self.assertEqual(result.returncode, 0, result.stderr)
 
+    def test_structured_data_keeps_organization_identity_complete(self) -> None:
+        result = self.run_script("scripts/validate-public-site.py")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        article = (ROOT / "blog/kak-proverit-lot-pered-torgami/index.html").read_text(encoding="utf-8")
+        self.assertIn('"logo":"https://torgatlas.ru/assets/og-card.png"', article)
+
 
 if __name__ == "__main__":
     unittest.main()
