@@ -1,4 +1,4 @@
-import { gisMiniSearch, normalizeQuery } from '../lib/torgatlas-public-web-research.mjs';
+import { emptyResearch, gisMiniSearch, normalizeQuery } from '../lib/torgatlas-public-web-research.mjs';
 export const maxDuration=15;
 const categories=new Set(['all','bankruptcy','government','commercial']);
 const enabled=()=>process.env.AI_LOT_SEARCH_ENABLED==='true'&&process.env.AI_LOT_SECURITY_APPROVED==='true'&&process.env.AI_LOT_LEGAL_APPROVED==='true';
@@ -12,5 +12,7 @@ export default async function handler(req,res){
  const body=req.body||{},query=normalizeQuery(body.query);
  if(JSON.stringify(body).length>1400)return send(res,413,{ok:false,code:'INVALID_BODY'});
  if(query.length<12||query.length>400||!categories.has(body.source)||![5,10].includes(body.limit))return send(res,422,{ok:false,code:'INVALID_QUERY'});
- return send(res,200,await gisMiniSearch(query));
+ if(!['all','government'].includes(body.source))return send(res,200,emptyResearch(query,'NO_VERIFIED_SOURCE_ADAPTER'));
+ const clientKey=String(req.socket?.remoteAddress||req.headers['x-real-ip']||'unknown').slice(0,80);
+ return send(res,200,await gisMiniSearch(query,{limit:body.limit,rateKey:clientKey+':'+query}));
 }

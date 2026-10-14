@@ -34,3 +34,10 @@
 - Добавлен экспериментальный `llms.txt` с правдивыми публичными ссылками; он не назван фактором ранжирования.
 - `robots.txt` сохраняет доступность публичных страниц и исключает `/api/` только для model-training crawlers; OAI-SearchBot и ChatGPT-User явно не блокируются.
 - Registry/sitemap расширены до 14 URL. Валидатор теперь проверяет JSON-LD syntax и ключевые обязательные типы, а также `llms.txt`.
+
+## Wave 06 / GIS Mini — 2026-10-14 (локально, feature OFF)
+
+- Внешний OpenAI web search удалён из публичного API; добавлен самостоятельный bounded GIS JSON profile.
+- Исправлена семантика `biddEndTime`: поле не считается application deadline; `PUBLISHED` не считается открытым приёмом.
+- Реализованы fixed listing/detail URLs, local query filtering, deduplication, provenance, coverage/cost metadata, cache, rate/concurrency budgets и DNS/IP-safe HTTPS transport without redirects.
+- Fixture tests are MOCK_TESTED. Один live GIS GET завершился `SOURCE_NETWORK_ERROR`; текущих лотов не подтверждено, public flag остаётся OFF.
