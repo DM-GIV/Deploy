@@ -142,6 +142,9 @@ def main():
             posts = []
             context, page, requested = open_page(browser, on.server_address[1], external, posts)
             prepare_draft(page, "TEST_E2E_AUC204 синтетическая заявка из автоматического браузерного теста, без реальных данных.")
+            check("free lot-check map generated",
+                  page.locator("#lot-check-result").is_visible()
+                  and len(page.locator("#lot-check-result").inner_text().strip()) >= 40)
             page.wait_for_selector(".direct-lead form", timeout=10000)
             page.fill(".direct-lead input[name=contact]", "test-e2e@example.invalid")
             submit = page.locator(".direct-lead button[type=submit]")
@@ -172,7 +175,10 @@ def main():
                 r.continue_()
             context.route("**/*", tamper)
             submit.click()
-            page.wait_for_function("document.querySelector('.direct-lead-status').textContent.length>10", timeout=10000)
+            page.wait_for_function(
+                "document.querySelector('.direct-lead-status').textContent.includes('Проверка от спама')",
+                timeout=10000,
+            )
             check("corrupted CAPTCHA rejected with message", "Проверка от спама" in page.locator(".direct-lead-status").inner_text())
             check("corrupted CAPTCHA: no success UI", page.locator(".direct-lead-done").count() == 0)
             check("corrupted CAPTCHA: nothing stored", not Path(on_db).exists() or sqlite3.connect(on_db).execute("SELECT COUNT(*) FROM leads").fetchone()[0] == 0)
@@ -208,6 +214,13 @@ def main():
             check("exactly one physical SQLite row with that receipt", rows == [(receipt, "accepted", "test-e2e@example.invalid", "not_configured")])
             check("one CAPTCHA challenge consumed", db.execute("SELECT COUNT(*) FROM altcha_used").fetchone()[0] == 1)
             db.close()
+            owner_stats = subprocess.run(
+                [sys.executable, str(ROOT / "services" / "lead-intake" / "leadctl.py"),
+                 "--db", on_db, "stats"],
+                check=True, capture_output=True, text=True,
+            ).stdout
+            check("owner CLI sees one new accepted lead",
+                  "total=1" in owner_stats and "new_unreviewed=1" in owner_stats and "status:accepted=1" in owner_stats)
             # same UUID/payload again through the API from the page: same receipt, no new row
             again = page.evaluate("""async (body) => { const r = await fetch('/api/lead', {method:'POST', headers:{'Content-Type':'application/json'}, body}); return [r.status, await r.json()]; }""",
                                   json.dumps(attempts[1]))
