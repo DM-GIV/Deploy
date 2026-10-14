@@ -14,5 +14,7 @@
 | Local interactive browser matrix | `scripts/browser-interactive-audit.mjs` | 11 PASS, 0 FAIL, 2 BLOCKED; JSON: `evidence/wave-03/interactive-matrix.json` |
 | Wave 04 SEO/schema | `python3 scripts/validate-public-site.py` | PASS; 14 canonical registry URLs, sitemap, robots, internal links and JSON-LD required-type contracts |
 | Wave 06 Web Research Mini | `node --test tests/public-web-research.test.mjs tests/ai-search-api.test.mjs tests/ai-search.test.mjs` | PASS; GIS JSON, ЕФРСБ JSON and МЭТС HTML fixtures, normalization, bounded search/detail, coverage, SSRF/DNS/IP, redirects, response size, API gates |
+| Wave 06 AI responsive UX | `node scripts/ai-browser-smoke.mjs` | PASS 4/4 widths: 320, 390, 768, 1440; disabled and enabled mock states, no overflow, visible focus, coverage, UNKNOWN and CTA |
+| Wave 06 interactive regression | `node scripts/browser-interactive-audit.mjs` | PASS 11, BLOCKED 2 unchanged (mobile disclosure N/A; ALTCHA TLS browser E2E pending) |
 
 `node` отсутствует в системном PATH; применён локальный бинарник Playwright `.../driver/node` только для выполнения тестов, без установки зависимостей. ALTCHA browser E2E требует отдельный disposable TLS/SQLite run; production smoke не выполнялся и не является частью этого пакета.

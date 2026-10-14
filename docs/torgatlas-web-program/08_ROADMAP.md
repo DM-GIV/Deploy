@@ -7,4 +7,5 @@
 5. P1: PAGE_SPEC для `/metodika/`; публикация только после фактической проверки владельцем.
 6. P1: content matrix 30 вопросов как DRAFT с источниками и review status, без массовой публикации.
 7. BLOCKED: тарифы, оплата, Cloud read-model, CRM, изменение ПД-политики, DNS и deployment — только отдельные решения владельца.
-8. P0 IN PROGRESS (Wave 06): GIS, ЕФРСБ and bounded-feed МЭТС profiles are fixture-tested; all live probes remain SOURCE_BLOCKED in this environment. RAD is exact-detail-only and cannot provide discovery. Next: AI-search UX + targeted site/release regression. Public feature flag remains OFF until live/security acceptance, production egress validation and durable shared rate limiting.
+8. P0 PARTIAL / RELEASE HOLD (Wave 06): GIS, ЕФРСБ and bounded-feed МЭТС profiles are fixture-tested; responsive/interactive UX is complete locally. All live probes remain SOURCE_BLOCKED; RAD is exact-detail-only. Public feature flag remains OFF until live/security acceptance, production egress validation and durable shared rate limiting.
+9. P0 NEXT: targeted full-site regression and reproducible release-candidate checklist. Main static site may be release-ready independently; AI API must stay OFF if its runtime prerequisites remain unverified.

@@ -13,3 +13,6 @@
 | §06: ALTCHA challenge/replay browser E2E | не запущено | existing TLS disposable harness needs separately available browser adapter | BLOCKED, evidence recorded |
 | §09/§10: SEO/GEO public identity and machine-readable navigation | no about page or llms file | `/o-torgatlas/`, `llms.txt`, route registry, validated schema and crawler rules | TEST_PASS / live visibility UNKNOWN |
 | §11: structured data truthful types | inconsistent coverage was unverified | validator parses JSON-LD; WebSite/ProfessionalService, Service, WebPage, BreadcrumbList checked | TEST_PASS |
+| §04/§18: собственный публичный web research без внешнего AI-search | OpenAI web_search dependency | deterministic planner + GIS/ЕФРСБ/МЭТС profiles; V1/V2/TinyFish/Cloud не вызываются | MOCK_TESTED; live sources BLOCKED |
+| §18/§19: SSRF, бюджеты, cache/rate/concurrency | отсутствовал самостоятельный transport | exact HTTPS host/path allowlist, DNS/public-IP pin, redirect/type/size/time limits, 12-request budget, 0 LLM tokens | TEST_PASS; shared multi-instance rate limit PENDING |
+| §04/§05/§06: понятный и честный AI UX | карточки скрывали coverage/provenance и общий UNKNOWN | реальные source/checked-at/status, coverage note, примеры, empty/error states, карта проверки CTA | TEST_PASS: 4 responsive widths + 5 interactive API states |

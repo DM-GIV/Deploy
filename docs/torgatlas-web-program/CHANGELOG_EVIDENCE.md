@@ -49,3 +49,10 @@
 - Общий HTTPS transport применяет source/path allowlist, DNS/public-IP pinning, запрет redirect, лимит типа/размера/таймаута. Детерминированный planner в режиме «Все» честно возвращает выбранный и непросмотренные источники.
 - Live ЕФРСБ: HTTP 403 через обязательный локальный egress proxy; live МЭТС: timeout 4 s через тот же контур. Обход не выполнялся. РАД не подключён как discovery, потому что принятое исследование разрешает только exact detail по уже известному ID.
 - `PUBLIC_SOURCE_VERIFIED=0`, live lots `0`, LLM calls/tokens `0`; публичные gates остаются OFF.
+
+## Wave 06 / AI-search UX — 2026-10-14 (локально, feature OFF)
+
+- Существующая `/ai-poisk-lotov/` дополнена примерами запросов, фактическим состоянием server research, source/time provenance, честным статусом приёма заявок, coverage note, empty/error states и переходом к карте проверки.
+- Фиктивная анимация этапов не добавлялась: интерфейс сообщает только принятие запроса и итог API.
+- `ai-browser-smoke.json`: 4/4 PASS на 320/390/768/1440 для disabled и enabled TEST_ONLY mock states; overflow/console/resource errors отсутствуют, focus/coverage/UNKNOWN/CTA проверены.
+- Повторная общая интерактивная матрица: 11 PASS, 0 FAIL, 2 прежних ограничения; реальные заявки и production analytics не вызывались.

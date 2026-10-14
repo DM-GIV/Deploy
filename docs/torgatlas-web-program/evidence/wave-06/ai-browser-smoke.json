@@ -1,0 +1,102 @@
+{
+  "generated_at": "2026-10-14T19:19:21.186Z",
+  "environment": "TEST_ONLY local preview; API GET intercepted disabled",
+  "results": [
+    {
+      "route": "/ai-poisk-lotov/",
+      "width": 320,
+      "status": "PASS",
+      "disabled_state": {
+        "overflow": false,
+        "scroll_width": 320,
+        "query_disabled": true,
+        "submit_disabled": true,
+        "examples_visible": true,
+        "main_navigation_visible": true,
+        "focus_visible_contract": true
+      },
+      "result_state": {
+        "overflow": false,
+        "result_focused": true,
+        "coverage_visible": true,
+        "source_link": "https://torgi.gov.ru/new/public/lots/lot/TEST_ONLY",
+        "check_cta": true,
+        "unknown_state_visible": true
+      },
+      "console_errors": [],
+      "failed_resources": []
+    },
+    {
+      "route": "/ai-poisk-lotov/",
+      "width": 390,
+      "status": "PASS",
+      "disabled_state": {
+        "overflow": false,
+        "scroll_width": 390,
+        "query_disabled": true,
+        "submit_disabled": true,
+        "examples_visible": true,
+        "main_navigation_visible": true,
+        "focus_visible_contract": true
+      },
+      "result_state": {
+        "overflow": false,
+        "result_focused": true,
+        "coverage_visible": true,
+        "source_link": "https://torgi.gov.ru/new/public/lots/lot/TEST_ONLY",
+        "check_cta": true,
+        "unknown_state_visible": true
+      },
+      "console_errors": [],
+      "failed_resources": []
+    },
+    {
+      "route": "/ai-poisk-lotov/",
+      "width": 768,
+      "status": "PASS",
+      "disabled_state": {
+        "overflow": false,
+        "scroll_width": 768,
+        "query_disabled": true,
+        "submit_disabled": true,
+        "examples_visible": true,
+        "main_navigation_visible": true,
+        "focus_visible_contract": true
+      },
+      "result_state": {
+        "overflow": false,
+        "result_focused": true,
+        "coverage_visible": true,
+        "source_link": "https://torgi.gov.ru/new/public/lots/lot/TEST_ONLY",
+        "check_cta": true,
+        "unknown_state_visible": true
+      },
+      "console_errors": [],
+      "failed_resources": []
+    },
+    {
+      "route": "/ai-poisk-lotov/",
+      "width": 1440,
+      "status": "PASS",
+      "disabled_state": {
+        "overflow": false,
+        "scroll_width": 1440,
+        "query_disabled": true,
+        "submit_disabled": true,
+        "examples_visible": true,
+        "main_navigation_visible": true,
+        "focus_visible_contract": true
+      },
+      "result_state": {
+        "overflow": false,
+        "result_focused": true,
+        "coverage_visible": true,
+        "source_link": "https://torgi.gov.ru/new/public/lots/lot/TEST_ONLY",
+        "check_cta": true,
+        "unknown_state_visible": true
+      },
+      "console_errors": [],
+      "failed_resources": []
+    }
+  ]
+}

@@ -14,9 +14,17 @@ test('AI search starts fail-closed and explains that input is not sent', () => {
 });
 
 test('AI search checks status with GET before it permits a POST query', () => {
-  assert.match(script, /let searchReady=false/);
-  assert.match(script, /method:'GET'/);
-  assert.match(script, /if\(!searchReady\)\{notice\('Автоматический поиск не включён/);
-  assert.match(script, /method:'POST'/);
+  assert.match(script, /let searchReady\s*=\s*false/);
+  assert.match(script, /method:\s*'GET'/);
+  assert.match(script, /if \(!searchReady\)/);
+  assert.match(script, /method:\s*'POST'/);
   assert.match(script, /setSearchReady\(false\)/);
+});
+
+test('AI search explains coverage and provides real next-step CTAs', () => {
+  assert.match(page, /class="ai-example"/);
+  assert.match(page, /id="ai-results-coverage"/);
+  assert.match(script, /coverage_note/);
+  assert.match(script, /Получить карту проверки/);
+  assert.match(script, /Возможность подать заявку не подтверждена/);
 });
