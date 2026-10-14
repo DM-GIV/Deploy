@@ -44,7 +44,7 @@ const p=el('p');const verify=el('a','Заказать проверку');verify.
 results.hidden=false;document.getElementById('ai-results-title').textContent=count?'Найдено публикаций: '+count:'Подтверждаемых публикаций не найдено';
 document.getElementById('ai-results-caption').textContent='Поиск: '+(data.retrieved_at||'время неизвестно')+'. Сведения предварительные; проверьте на сайте первоисточника.';
 notice(count?'Подборка сформирована. Перед участием проверьте документы и условия.':'Нет подтверждаемых кандидатов по заданным параметрам.');
-}catch(err){notice(err?.name==='AbortError'?'Время поиска истекло. Откройте первоисточники ниже.':err.message||'Сервис недоступен.',true);}
+}catch(err){notice(err?.name==='AbortError'?'Время поиска истекло. Откройте первоисточники ниже.':err?.name==='TypeError'?'Сервис недоступен. Откройте первоисточники ниже.':err.message||'Сервис недоступен.',true);}
 finally{clearTimeout(timer);button.disabled=false;}
 });
 async function checkAvailability(){

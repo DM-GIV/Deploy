@@ -20,3 +20,10 @@
 - На главной добавлен видимый keyboard focus для ссылок, кнопок и раскрывающихся элементов; reduced-motion contract сохранён.
 - Screenshot 320 px выявил обрезание menu items; меню на узком экране переведено на перенос строк. До/после сохранены локально в `evidence/wave-03/`.
 - Возобновляемый Chromium harness создал `browser-matrix-v2.json`: 15 маршрутов × 7 ширин, без duplicate keys. AI search отмечен BLOCKED_STATIC_API только потому, что localhost static preview не содержит serverless endpoint.
+
+## Wave 03B — 2026-10-14 (локально, не production)
+
+- Добавлен `scripts/browser-interactive-audit.mjs`: изолированный local HTTP preview, Chromium и перехваты `/api/ai-lot-search` и `/ta/`; production-запросы, реальные контакты и заявки исключены.
+- `interactive-matrix.json`: 11 PASS, 0 FAIL, 2 BLOCKED. Проверены keyboard navigation/CTA, обе локальные карты (validation → generation → change → regeneration → copy), AI disabled/success/empty/503/network failure и consent/Umami accept/decline/persistence.
+- Исправлен AI network failure: технический текст `Failed to fetch` заменён безопасным сообщением о недоступности сервиса и ссылке на первоисточники.
+- BLOCKED: у текущей mobile navigation нет открываемого состояния; ALTCHA challenge/pass/reject/replay требует изолированный TLS+SQLite E2E endpoint и не был подменён фиктивным PASS.

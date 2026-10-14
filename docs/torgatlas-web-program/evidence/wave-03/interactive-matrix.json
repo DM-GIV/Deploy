@@ -1,0 +1,71 @@
+{
+  "generated_at": "2026-10-14T14:08:14.698Z",
+  "environment": "TEST_ONLY local HTTP server, intercepted APIs, no production requests",
+  "results": [
+    {
+      "id": "mobile-navigation-keyboard",
+      "status": "PASS",
+      "evidence": "Browser action and assertion completed in isolated local preview."
+    },
+    {
+      "id": "cta-anchor-and-focus",
+      "status": "PASS",
+      "evidence": "Browser action and assertion completed in isolated local preview."
+    },
+    {
+      "id": "lot-map-validation-generation-copy-regeneration",
+      "status": "PASS",
+      "evidence": "Browser action and assertion completed in isolated local preview."
+    },
+    {
+      "id": "search-map-validation-generation-copy-regeneration",
+      "status": "PASS",
+      "evidence": "Browser action and assertion completed in isolated local preview."
+    },
+    {
+      "id": "ai-disabled-no-query",
+      "status": "PASS",
+      "evidence": "Browser action and assertion completed in isolated local preview."
+    },
+    {
+      "id": "ai-enabled-success",
+      "status": "PASS",
+      "evidence": "Browser action and assertion completed in isolated local preview."
+    },
+    {
+      "id": "ai-enabled-empty",
+      "status": "PASS",
+      "evidence": "Browser action and assertion completed in isolated local preview."
+    },
+    {
+      "id": "ai-enabled-server-error",
+      "status": "PASS",
+      "evidence": "Browser action and assertion completed in isolated local preview."
+    },
+    {
+      "id": "ai-enabled-network-failure",
+      "status": "PASS",
+      "evidence": "Browser action and assertion completed in isolated local preview."
+    },
+    {
+      "id": "consent-decline-persistence-and-no-umami",
+      "status": "PASS",
+      "evidence": "Browser action and assertion completed in isolated local preview."
+    },
+    {
+      "id": "consent-accept-persistence-and-local-umami",
+      "status": "PASS",
+      "evidence": "Browser action and assertion completed in isolated local preview."
+    },
+    {
+      "id": "mobile-menu-open-close",
+      "status": "BLOCKED",
+      "evidence": "The implemented mobile navigation is an always-visible wrapping link list, not a disclosure/menu control; there is no open/close state to exercise. Keyboard link navigation is separately PASS."
+    },
+    {
+      "id": "altcha-challenge-pass-reject-replay",
+      "status": "BLOCKED",
+      "evidence": "Existing isolated ALTCHA E2E harness requires a TLS lead-intake test service and a browser adapter not exposed to this Node static preview. No challenge endpoint was invented and no lead/SQLite production store was contacted."
+    }
+  ]
+}

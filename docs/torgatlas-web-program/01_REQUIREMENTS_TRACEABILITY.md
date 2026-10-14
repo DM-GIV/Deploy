@@ -9,3 +9,5 @@
 | §17: performance check допускает fingerprint | cache-busting query ломал тест | `scripts/check-performance.mjs` допускает только versioned hash | TEST_PASS |
 | §09: canonical URL registry/sitemap | статичный sitemap с old lastmod | registry + generator + offline validator | TEST_PASS |
 | §08/§12/§14: новые публичные контентные страницы | не начато | PAGE_SPEC + owner/factual review | P1 / PENDING_OWNER_APPROVAL |
+| §06/§18: реальные интерактивные действия и consent-gated analytics | только static/DOM evidence | local Chromium actions + intercepted `/ta/` and AI API mocks | TEST_PASS (11 scenarios) |
+| §06: ALTCHA challenge/replay browser E2E | не запущено | existing TLS disposable harness needs separately available browser adapter | BLOCKED, evidence recorded |
