@@ -19,3 +19,4 @@
 - Локальный Chromium baseline главной на 390 px: hero и основные CTA видимы; браузерный screenshot сохранён только во временном `/tmp` и не является production-evidence.
 - На главной добавлен видимый keyboard focus для ссылок, кнопок и раскрывающихся элементов; reduced-motion contract сохранён.
 - Screenshot 320 px выявил обрезание menu items; меню на узком экране переведено на перенос строк. До/после сохранены локально в `evidence/wave-03/`.
+- Возобновляемый Chromium harness создал `browser-matrix-v2.json`: 15 маршрутов × 7 ширин, без duplicate keys. AI search отмечен BLOCKED_STATIC_API только потому, что localhost static preview не содержит serverless endpoint.
