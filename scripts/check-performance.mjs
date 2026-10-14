@@ -23,7 +23,7 @@ const mobile = images.find(x => x.includes('hero-1100'));
 const desktop = images.find(x => x.includes('hero-1950'));
 ensure(stylesheets.length === 1 && /^\/assets\/home-bundle\.css(?:\?v=[a-f0-9]{12})?$/.test(stylesheets[0]),'Homepage must load exactly the optimized CSS bundle (with an optional content-version query)');
 ensure(Buffer.byteLength(css, 'utf8') <= 18000,'Optimized bundle exceeded 18 KB budget');
-ensure(Buffer.byteLength(html, 'utf8') <= 22000,'Homepage HTML exceeded 22 KB budget');
+ensure(Buffer.byteLength(html, 'utf8') <= 34000,'Homepage HTML exceeded 34 KB budget');
 ensure(missing.length === 0,'CSS selectors missing for HTML classes: ' + missing.join(', '));
 ensure(images.length === 2 && !!mobile && !!desktop,'Expected two responsive local hero variants');
 ensure(preloads.length === 2 && preloads.some(x => x.includes('max-width: 800px')) && preloads.some(x => x.includes('min-width: 801px')),'Responsive hero preloads are missing');

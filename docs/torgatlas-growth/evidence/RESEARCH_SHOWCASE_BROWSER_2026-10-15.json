@@ -1,0 +1,29 @@
+{
+  "schema": "torgatlas-research-showcase-browser-v1",
+  "results": [
+    {
+      "width": 1440,
+      "cards": 8,
+      "columns": 4,
+      "overflow": false,
+      "unnamedLinks": 0,
+      "status": "PASS"
+    },
+    {
+      "width": 768,
+      "cards": 8,
+      "columns": 2,
+      "overflow": false,
+      "unnamedLinks": 0,
+      "status": "PASS"
+    },
+    {
+      "width": 390,
+      "cards": 8,
+      "columns": 1,
+      "overflow": false,
+      "unnamedLinks": 0,
+      "status": "PASS"
+    }
+  ]
+}

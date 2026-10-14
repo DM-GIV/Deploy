@@ -1,59 +1,11 @@
-/* Weekly rotation of published, previously researched auction cases.
-   No external crawl on a visitor request; no estimated market discount without
-   independent priced comparables. Source snapshots are Sep–Oct 2026. */
-(function () {
-  'use strict';
-  const cases = [
-    {id:'atc-13145',title:'Hyundai ix55, 2012 год',kind:'Автомобиль',price:'923 737,50 ₽',url:'https://atctrade.ru/trade/view/purchase/general.html?id=105491275'},
-    {id:'atc-13144',title:'Земельный участок 1 040 м², Московская область',kind:'Участок',price:'554 400 ₽',url:'https://atctrade.ru/trade/view/purchase/general.html?id=105490686'},
-    {id:'atc-13152',title:'Жилое помещение, открытый аукцион',kind:'Жилая недвижимость',price:'4 575 600 ₽',url:'https://atctrade.ru/trade/view/purchase/general.html?id=105493145'},
-    {id:'atc-13151',title:'Дом с земельным участком',kind:'Составной лот',price:'5 237 800 ₽',url:'https://atctrade.ru/trade/view/purchase/general.html?id=105492993'},
-    {id:'ver-3004',title:'Дом 111,7 м² и участок около 700 м²',kind:'Недвижимость',price:'7 977 005,24 ₽',url:'https://bankrot.vertrades.ru/showTrades?id=700848293'},
-    {id:'ver-2976',title:'Электропогрузчики Toyota 7FBE15',kind:'Оборудование',price:'52 650 ₽',url:'https://bankrot.vertrades.ru/showTrades?id=700837242'},
-    {id:'ru-100004279',title:'Участок 1 000 ± 22 м² для садоводства',kind:'Участок',price:'350 000 ₽',url:'https://ru-trade24.ru/bidding/AnounsmentDetails/100004279'}
-  ];
-  function isoWeekNumber(d) {
-    const t = new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()));
-    t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7));
-    const start = new Date(Date.UTC(t.getUTCFullYear(),0,1));
-    return Math.ceil((((t-start)/86400000)+1)/7);
-  }
-  function weeklySelection(d) {
-    const week=isoWeekNumber(d);
-    const year=d.getUTCFullYear();
-    const start=((year*53+week)*3)%cases.length;
-    return [cases[start],cases[(start+1)%cases.length],cases[(start+2)%cases.length]];
-  }
-  function el(tag,cls,content) {
-    const out=document.createElement(tag);
-    if(cls)out.className=cls;
-    if(content!==undefined)out.textContent=content;
-    return out;
-  }
-  function render() {
-    const container=document.getElementById('weekly-lot-showcase');
-    if(!container)return;
-    const picks=weeklySelection(new Date());
-    const grid=el('div','research-case-grid');
-    picks.forEach(function(item){
-      const article=el('article','research-case-card');
-      const top=el('div','research-case-top');
-      top.append(el('span','research-case-category',item.kind),el('span','research-case-n','Исследование · 2026'));
-      const inner=el('div','research-case-inner');
-      inner.append(el('h3','',item.title),el('div','research-case-price-label','Цена на дату исследования'),el('div','research-case-price',item.price));
-      inner.append(el('p','research-case-mode','Исторический пример: актуальность торгов уточняется по источнику.'));
-      inner.append(el('p','','Дисконт к рыночной цене не оценён: нужны подтверждённые сопоставимые предложения.'));
-      const a=el('a','research-case-link','Открыть первоисточник ↗');
-      a.href=item.url;a.target='_blank';a.rel='noopener noreferrer';
-      inner.append(a);article.append(top,inner);grid.append(article);
-    });
-    container.replaceChildren(grid);
-    const info=document.getElementById('weekly-lots-note');
-    if(info)info.textContent='Примеры меняются автоматически раз в неделю из проверяемой подборки семи исторических публикаций. Ни рыночная скидка, ни текущая доступность лота этим не подтверждаются.';
-  }
-  if (typeof module!=='undefined' && module.exports) module.exports={weeklySelection,cases,isoWeekNumber};
-  if (typeof document!=='undefined') {
-    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render,{once:true});
-    else render();
-  }
+/* Generated from content/research-cases.json. Do not edit by hand. */
+(function(){'use strict';
+const cases=[{"id":"atc-13145","title":"Hyundai ix55, 2012 год","kind":"Автомобиль","price":"923 737,50 ₽","procedure":"13145-ОТПП","url":"https://atctrade.ru/trade/view/purchase/general.html?id=105491275","recorded_at":"2026-10-12","source_origin":"existing_project_research","source_status":"historical_snapshot","summary":"Пять периодов публичного предложения; в публикации указана необходимость ремонта.","check":"Состояние, VIN, ограничения, документы и полная стоимость владения.","image":null,"image_rights":"not_used"},{"id":"atc-13144","title":"Участок 1 040 м², Московская область","kind":"Земельный участок","price":"554 400 ₽","procedure":"13144-ОТПП","url":"https://atctrade.ru/trade/view/purchase/general.html?id=105490686","recorded_at":"2026-10-12","source_origin":"existing_project_research","source_status":"historical_snapshot","summary":"Зафиксированы кадастровый номер 50:26:0040106:314, оценка и выписка ЕГРН.","check":"Категория, ВРИ, границы, доступ, ограничения и передача.","image":null,"image_rights":"not_used"},{"id":"atc-13152","title":"Жилое помещение, открытый аукцион","kind":"Жилая недвижимость","price":"4 575 600 ₽","procedure":"13152-ОАОФ","url":"https://atctrade.ru/trade/view/purchase/general.html?id=105493145","recorded_at":"2026-10-12","source_origin":"existing_project_research","source_status":"historical_snapshot","summary":"В публикации указан кадастровый номер 24:55:0000000:8289 и задаток.","check":"Права, обременения, пользование, осмотр и расходы после покупки.","image":null,"image_rights":"not_used"},{"id":"atc-13151","title":"Дом вместе с земельным участком","kind":"Составной лот","price":"5 237 800 ₽","procedure":"13151-ОАОФ","url":"https://atctrade.ru/trade/view/purchase/general.html?id=105492993","recorded_at":"2026-10-12","source_origin":"existing_project_research","source_status":"historical_snapshot","summary":"Один лот включает дом 08:14:030134:11060 и участок 08:14:030134:11079.","check":"Права по обоим объектам, связь объектов, доступ и передача.","image":null,"image_rights":"not_used"},{"id":"ver-3004","title":"Дом 111,7 м² и участок около 700 м²","kind":"Недвижимость","price":"7 977 005,24 ₽","procedure":"3004-ОТПП","url":"https://bankrot.vertrades.ru/showTrades?id=700848293","recorded_at":"2026-10-12","source_origin":"existing_project_research","source_status":"historical_snapshot","summary":"Два объекта с отдельными кадастровыми номерами и восемь ценовых периодов.","check":"Права, ограничения, осмотр, порядок передачи и период цены.","image":null,"image_rights":"not_used"},{"id":"ver-2976","title":"Электропогрузчики Toyota 7FBE15","kind":"Оборудование","price":"52 650 ₽","procedure":"2976-ОТПП","url":"https://bankrot.vertrades.ru/showTrades?id=700837242","recorded_at":"2026-10-12","source_origin":"existing_project_research","source_status":"historical_snapshot","summary":"Три погрузчика с разными идентификаторами; цена относится к одному лоту.","check":"Номер лота, идентификатор, работоспособность, комплектность и вывоз.","image":null,"image_rights":"not_used"},{"id":"ru-100004279","title":"Участок 1 000 ± 22 м² для садоводства","kind":"Земельный участок","price":"350 000 ₽","procedure":"100004279","url":"https://ru-trade24.ru/bidding/AnounsmentDetails/100004279","recorded_at":"2026-10-12","source_origin":"existing_project_research","source_status":"historical_snapshot","summary":"В публичной карточке указан кадастровый номер 33:11:090405:12.","check":"Границы, ВРИ, доступ, обременения, осмотр и полный бюджет.","image":null,"image_rights":"not_used"},{"id":"ver-3000-lot15","title":"Производственная площадка № 1 в Самарской области","kind":"Производственный комплекс","price":"40 167 720,45 ₽","procedure":"3000-ОТПП · лот 15","url":"https://bankrot.vertrades.ru/showTrades?id=700840981","recorded_at":"2026-10-14","source_origin":"live_public_source_research","source_status":"source_page_observed","summary":"Земельные участки, нежилые здания, водовод и движимое оборудование в едином лоте.","check":"Полный состав, права, сельхоз-ограничения, чужое оборудование и осмотр.","image":null,"image_rights":"not_used"},{"id":"ver-2815-lot9","title":"Участок 1 424 м² в Чеховском районе","kind":"Земельный участок","price":"223 425 ₽","procedure":"2815-ОТПП · лот 9","url":"https://bankrot.vertrades.ru/showTrades?id=700761914","recorded_at":"2026-10-14","source_origin":"live_public_source_research","source_status":"source_page_observed","summary":"Кадастровый номер 50:31:0010501:1110; источник сообщает ограничения по статье 56 ЗК.","check":"Содержание ограничений, ВРИ, доступ, результат торгов и документы передачи.","image":null,"image_rights":"not_used"},{"id":"ver-2937-lot1","title":"Недвижимость и производственные линии в Орловской области","kind":"Промышленное имущество","price":"226 894 098 ₽","procedure":"2937-ОТПП · лот 1","url":"https://bankrot.vertrades.ru/showTrades?id=700829696","recorded_at":"2026-10-14","source_origin":"live_public_source_research","source_status":"source_page_observed","summary":"Совместная продажа недвижимости, движимого имущества и производственных линий двух должников.","check":"Два продавца, залоги, запреты регистрации, комплектность линий и полный перечень.","image":null,"image_rights":"not_used"}];
+const visible=8;
+function moscowSerial(d){const parts=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Moscow',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d).filter(x=>x.type!=='literal').map(x=>[x.type,Number(x.value)]));return Math.floor(Date.UTC(parts.year,parts.month-1,parts.day)/86400000);}
+function rotationSelection(d){const period=Math.floor(moscowSerial(d)/3);const start=((period*3)%cases.length+cases.length)%cases.length;return Array.from({length:visible},(_,i)=>cases[(start+i)%cases.length]);}
+function el(tag,cls,text){const out=document.createElement(tag);if(cls)out.className=cls;if(text!==undefined)out.textContent=text;return out;}
+function render(){const host=document.getElementById('research-lot-showcase');if(!host)return;const grid=el('div','rotation-case-grid');rotationSelection(new Date()).forEach(item=>{const article=el('article','rotation-case-card');const top=el('div','rotation-case-top');top.append(el('span','',item.kind),el('span','',item.procedure));const body=el('div','rotation-case-body');body.append(el('h3','',item.title),el('div','rotation-case-label','Цена на дату исследования'),el('div','rotation-case-price',item.price),el('p','',item.summary));const check=el('p');const strong=el('strong','','Проверить: ');check.append(strong,document.createTextNode(item.check));const link=el('a','','Первоисточник ↗');link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';body.append(check,link);article.append(top,body);grid.append(article);});host.replaceChildren(grid);}
+if(typeof module!=='undefined'&&module.exports)module.exports={cases,rotationSelection,moscowSerial};
+if(typeof document!=='undefined'){if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render,{once:true});else render();}
 })();

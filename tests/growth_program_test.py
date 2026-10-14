@@ -20,6 +20,7 @@ def load_module(name: str, path: Path):
 
 
 SCHEDULER = load_module("editorial_scheduler", ROOT / "scripts/editorial_scheduler.py")
+SHOWCASE = load_module("generate_research_showcase", ROOT / "scripts/generate-research-showcase.py")
 
 
 class GrowthProgramTests(unittest.TestCase):
@@ -65,6 +66,26 @@ class GrowthProgramTests(unittest.TestCase):
         self.assertGreaterEqual(len(rows), 15)
         self.assertLessEqual(len(rows), 30)
         self.assertEqual(len({row["question"] for row in rows}), len(rows))
+
+    def test_research_showcase_is_eight_of_ten_and_changes_every_three_days(self):
+        pool = json.loads((ROOT / "content/research-cases.json").read_text(encoding="utf-8"))
+        cases = pool["cases"]
+        first = SHOWCASE.selection(cases, date.fromisoformat("2026-10-13"))
+        same = SHOWCASE.selection(cases, date.fromisoformat("2026-10-15"))
+        next_period = SHOWCASE.selection(cases, date.fromisoformat("2026-10-16"))
+        self.assertEqual(len(cases), 10)
+        self.assertEqual(first, same)
+        self.assertNotEqual(first, next_period)
+        self.assertEqual(len(first), 8)
+        self.assertEqual(len({item["id"] for item in first}), 8)
+        self.assertTrue(all(item["image"] is None and item["image_rights"] == "not_used" for item in cases))
+
+    def test_showcase_fallback_and_desktop_grid_contract(self):
+        page = (ROOT / "index.html").read_text(encoding="utf-8")
+        block = page.split("<!-- RESEARCH_SHOWCASE_START -->", 1)[1].split("<!-- RESEARCH_SHOWCASE_END -->", 1)[0]
+        self.assertEqual(block.count('class="rotation-case-card"'), 8)
+        css = (ROOT / "assets/home-bundle.css").read_text(encoding="utf-8")
+        self.assertIn(".rotation-case-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))", css)
 
 
 if __name__ == "__main__":

@@ -7,8 +7,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #ff
 
 /* Evidence-first weekly auction showcase: no unsupported market-discount badges. */
 .examples-notice { margin: 16px 0; padding: 14px 16px; background: #fff7e8; border-left: 4px solid #ca8d2e; border-radius: 7px; line-height: 1.55; color: #352b20; }
-#weekly-lots-note { margin-top: 12px; font-size: .88rem; }
-#weekly-lot-showcase .research-case-grid { margin-top: 18px; }
 
 /* AUC-204 post-launch: bring primary CTAs above the fold on small devices without horizontal page overflow. */
 @media (max-width:600px){
@@ -24,3 +22,18 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #ff
 .hero .hero-buttons{gap:8px;margin-top:10px}
 .hero .hero-buttons .button{min-height:48px;padding:8px 10px;font-size:14px;flex:1 1 44%;text-align:center}
 }
+
+/* Three-day, source-backed showcase: exactly four columns on desktop. */
+.rotation-case-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:18px}
+.rotation-case-card{display:flex;min-width:0;flex-direction:column;overflow:hidden;border:1px solid #dce5ec;border-radius:14px;background:#fff;box-shadow:0 10px 24px rgba(13,37,57,.07)}
+.rotation-case-top{display:flex;justify-content:space-between;gap:8px;padding:12px 14px;background:#173c54;color:#fff;font-size:11px;font-weight:750}
+.rotation-case-top span:last-child{white-space:nowrap}
+.rotation-case-body{display:flex;flex:1;flex-direction:column;padding:15px}
+.rotation-case-body h3{font-size:17px;line-height:1.25;margin:0 0 12px}
+.rotation-case-label{color:#6a7785;font-size:11px}
+.rotation-case-price{font-size:20px;font-weight:850;line-height:1.25;margin:3px 0 10px}
+.rotation-case-body p{font-size:12px;line-height:1.5;color:#526274;margin:0 0 9px}
+.rotation-case-body a{margin-top:auto;color:#a95604;font-size:12px;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+#research-lots-note{margin:14px 0}
+@media(max-width:1100px){.rotation-case-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.rotation-case-grid{grid-template-columns:1fr}.rotation-case-body h3{font-size:18px}}
