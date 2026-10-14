@@ -67,7 +67,8 @@
 
 ## Release candidate regression — 2026-10-14 (локально, не production)
 
-- Полный прогон: Node 47/47, Python 46/46, accessibility 4/4, Umami 6/6, sitemap/SEO/schema/links PASS, performance budget PASS.
+- Полный прогон: Node 48/48, Python 46/46, accessibility 4/4, Umami 6/6, sitemap/SEO/schema/links PASS, performance budget PASS.
 - Чистый static builder сформировал 49 файлов / 632,617 bytes с SHA-256 manifest; server/API/docs/tests paths в payload отсутствуют.
 - Chromium smoke самого payload: 6 PASS, 0 FAIL, 2 ожидаемых `BLOCKED_STATIC_API` для AI page в static-only preview. Страница остаётся fail-closed и не отправляет query.
 - `SITE_RELEASE_READY=YES` для independent static Candidate A; `AI_SEARCH_READY=NO`. Production, DNS, nginx, containers, lead data и analytics не менялись.
+- После release review process-local cache/rate maps получили жёсткие пределы 500/5000 ключей; уникальные запросы больше не могут неограниченно увеличивать эти структуры.

@@ -4,7 +4,7 @@
 
 ## Результаты
 
-- Node: 47/47 PASS.
+- Node: 48/48 PASS.
 - Python static/lead/build: 46/46 PASS.
 - Accessibility: 4/4 PASS.
 - Umami privacy: 6/6 PASS.

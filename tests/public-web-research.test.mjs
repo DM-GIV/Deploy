@@ -22,6 +22,7 @@ import {
   parseMetsFeed,
   parseSimpleQuery,
   ResearchError,
+  RESEARCH_BUDGET,
   resolvePublicHost,
   safeJsonGet
 } from '../lib/torgatlas-public-web-research.mjs';
@@ -125,6 +126,13 @@ test('query parser handles trailer synonym and PFO deterministically', () => {
   const parsed = parseSimpleQuery('Найди полуприцепы в ПФО');
   assert.ok(parsed.assetTerms.includes('полуприцеп'));
   assert.ok(parsed.regionCodes.has('52'));
+});
+
+test('process-local abuse controls have hard memory caps', () => {
+  assert.equal(RESEARCH_BUDGET.maxCacheEntries, 500);
+  assert.equal(RESEARCH_BUDGET.maxRateEntries, 5000);
+  assert.equal(RESEARCH_BUDGET.maxConcurrentSearches, 2);
+  assert.equal(RESEARCH_BUDGET.llmTokens, 0);
 });
 
 test('fixed GIS URLs and SSRF rules reject arbitrary input', async () => {

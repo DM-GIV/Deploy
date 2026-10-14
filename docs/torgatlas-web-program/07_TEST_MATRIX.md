@@ -25,7 +25,7 @@
 
 | Проверка | Результат |
 | --- | --- |
-| Все Node contracts (`tests/*.test.mjs`) | PASS 47/47 |
+| Все Node contracts (`tests/*.test.mjs`) | PASS 48/48 |
 | Python static + lead intake/CLI + release builder | PASS 46/46 |
 | Static accessibility | PASS 4/4 |
 | Umami privacy contracts | PASS 6/6 |
