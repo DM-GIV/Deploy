@@ -1,0 +1,17 @@
+[Unit]
+Description=TorgAtlas owner-approved editorial scheduler (example, inactive)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=deploy
+WorkingDirectory=__REPOSITORY_PATH__
+ExecStart=/usr/bin/python3 __REPOSITORY_PATH__/scripts/editorial_scheduler.py --log __LOG_PATH__/editorial.jsonl
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=__REPOSITORY_PATH__ __LOG_PATH__
+
+# This example only records READY/SKIP/BLOCKED. Production materialization and
+# atomic deployment must be added by a separately approved release package.
+

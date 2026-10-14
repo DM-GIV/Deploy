@@ -60,6 +60,18 @@ class GrowthProgramTests(unittest.TestCase):
         self.assertEqual(ready["status"], "READY")
         self.assertEqual(ready["article_id"], "deposit-guide-v1")
 
+    def test_owner_approved_rejects_nonofficial_source(self):
+        queue = copy.deepcopy(SCHEDULER.load_queue())
+        item = queue["items"][0]
+        item["status"] = "OWNER_APPROVED"
+        item["owner_approved_by"] = "owner"
+        item["owner_approved_at"] = "2026-10-17T12:00:00+03:00"
+        item["gates"] = {key: True for key in SCHEDULER.REQUIRED_GATES}
+        item["sources"] = ["https://example.com/unverified"]
+        result = SCHEDULER.decision(queue, datetime.fromisoformat("2026-10-18T09:00:00+03:00"))
+        self.assertEqual(result["status"], "BLOCKED")
+        self.assertIn("allowlisted official sources", " ".join(result["errors"]))
+
     def test_geo_matrix_has_bounded_question_set(self):
         with (ROOT / "content/geo-aeo/questions.csv").open(encoding="utf-8", newline="") as stream:
             rows = list(csv.DictReader(stream))

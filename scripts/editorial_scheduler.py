@@ -7,11 +7,20 @@ import hashlib
 import json
 from datetime import date, datetime, timedelta
 from pathlib import Path
+from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 QUEUE = ROOT / "content/editorial/queue.json"
 REQUIRED_GATES = {"demand", "official_sources", "editorial", "legal", "originality", "metadata", "interlinking", "tests"}
+OFFICIAL_SOURCE_HOSTS = {
+    "bankrot.fedresurs.ru",
+    "torgi.gov.ru",
+    "pravo.gov.ru",
+    "publication.pravo.gov.ru",
+    "rosreestr.gov.ru",
+    "gibdd.ru",
+}
 
 
 def digest(path: Path) -> str:
@@ -49,6 +58,10 @@ def validate_queue(queue: dict, root: Path = ROOT) -> list[str]:
                 errors.append(f"{item['id']}: explicit owner approval evidence is required")
             if digest(source) != item.get("content_sha256"):
                 errors.append(f"{item['id']}: content changed after owner approval")
+            sources = item.get("sources", [])
+            invalid_sources = [url for url in sources if urlparse(url).scheme != "https" or urlparse(url).hostname not in OFFICIAL_SOURCE_HOSTS]
+            if not sources or invalid_sources:
+                errors.append(f"{item['id']}: approved article needs allowlisted official sources; invalid={invalid_sources}")
             html = source.read_text(encoding="utf-8")
             if 'name="robots" content="noindex,follow"' not in html:
                 errors.append(f"{item['id']}: approved source must remain noindex until scheduled materialization")

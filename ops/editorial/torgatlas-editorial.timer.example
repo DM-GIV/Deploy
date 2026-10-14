@@ -1,0 +1,14 @@
+[Unit]
+Description=Check TorgAtlas editorial queue daily (example, inactive)
+
+[Timer]
+OnCalendar=*-*-* 09:05:00 Europe/Moscow
+Persistent=true
+RandomizedDelaySec=300
+Unit=torgatlas-editorial.service
+
+[Install]
+WantedBy=timers.target
+
+# Do not install or enable before owner approval of schedule, paths, logging,
+# first final article and the production release/rollback executor.

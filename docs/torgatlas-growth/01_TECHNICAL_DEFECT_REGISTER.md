@@ -9,6 +9,7 @@
 | SEO-005 | P2 | `/blog/` 191 слово, `/o-torgatlas/` 299 слов | Автоматический low-severity сигнал, сам по себе не доказывает thin content. Расширять только полезными source-backed разделами |
 | PERF-001 | P1 | CrUX API key не настроен | OWNER action; до подключения LCP/INP/CLS остаются UNKNOWN |
 | PERF-002 | P1 | Lighthouse mobile/desktop в этой среде недоступен | Запустить в разрешённом CI/рабочем браузере; не подменять статическим budget |
+| HEADER-001 | P1 | Текущие production security/cache headers кроме наблюдаемого gzip не получены доступными инструментами | После owner-approved release проверить HSTS, CSP/report-only, nosniff, frame, referrer, permissions, cache-control и ETag; конфиг в Git не считать live evidence |
 | SEARCH-001 | P1 | Yandex Webmaster не подключён | OWNER action; подключить read-only официальный доступ |
 | DEMAND-001 | P1 | Wordstat/Wordstat API и подтверждённые частотности отсутствуют | OWNER action; официальный export/API. До этого частотность не заполнять |
 | GEO-001 | P1 | AI answer engines не подключены как измерительные поверхности | Выполнять утверждённый ручной/официальный аудит по фиксированной матрице; отмечать NOT_CONNECTED |
