@@ -1,0 +1,20 @@
+{
+  "TEST_ONLY": true,
+  "guid": "33333333-3333-4333-8333-333333333333",
+  "messageType": "Auction",
+  "publicationDate": "2026-10-10T12:00:00+03:00",
+  "content": {
+    "messageInfo": {
+      "messageContent": {
+        "lotTable": [
+          {
+            "order": "1",
+            "description": "Прицеп автомобильный TEST_ONLY, Нижегородская область",
+            "startPrice": "562500",
+            "classifierCollection": [{ "code": "07", "name": "Транспорт" }]
+          }
+        ]
+      }
+    }
+  }
+}

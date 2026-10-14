@@ -1,0 +1,12 @@
+{
+  "TEST_ONLY": true,
+  "pageData": [
+    {
+      "guid": "38d2b184-ec81-4780-9d3f-386d18454359",
+      "number": "ПП-TEST-220946",
+      "status": { "code": "BiddingDeclared", "name": "Объявлены торги" },
+      "dateCreate": "2026-10-10T12:00:00+03:00"
+    }
+  ],
+  "found": 1
+}

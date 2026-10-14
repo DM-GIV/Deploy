@@ -2,7 +2,7 @@
 'use strict';
 const form=document.getElementById('ai-lot-form');if(!form)return;
 const q=document.getElementById('ai-query'),source=document.getElementById('ai-source'),limit=document.getElementById('ai-limit'),status=document.getElementById('ai-status'),button=document.getElementById('ai-submit'),links=document.getElementById('ai-links'),results=document.getElementById('ai-results'),cards=document.getElementById('ai-cards');
-const hosts=['bankrot.fedresurs.ru','torgi.gov.ru','lot-online.ru','m-ets.ru'];
+const hosts=['fedresurs.ru','bankrot.fedresurs.ru','torgi.gov.ru','lot-online.ru','m-ets.ru'];
 let searchReady=false;
 function safeUrl(raw){try{const u=new URL(raw);return u.protocol==='https:'&&hosts.some(h=>u.hostname===h||u.hostname.endsWith('.'+h))?u.href:null;}catch{return null;}}
 function el(type,value){const n=document.createElement(type);if(value!=null)n.textContent=String(value);return n;}

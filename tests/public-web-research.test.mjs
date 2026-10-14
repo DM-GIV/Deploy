@@ -2,17 +2,35 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { EventEmitter } from 'node:events';
 import { Readable } from 'node:stream';
+import fs from 'node:fs';
 import {
   allowedPublicUrl,
+  efrsbDetailUrl,
+  efrsbMessageUrl,
+  efrsbMiniSearch,
+  efrsbSearchUrl,
   gisDetailUrl,
   gisMiniSearch,
   gisSearchUrl,
   isPrivateIp,
+  metsDetailUrl,
+  metsFeedUrl,
+  metsMiniSearch,
+  parseEfrsbLots,
   parseGisLot,
+  parseMetsDetail,
+  parseMetsFeed,
   parseSimpleQuery,
+  ResearchError,
   resolvePublicHost,
   safeJsonGet
 } from '../lib/torgatlas-public-web-research.mjs';
+
+const efrsbList = JSON.parse(fs.readFileSync('tests/fixtures/efrsb-list.test-only.json', 'utf8'));
+const efrsbDetail = JSON.parse(fs.readFileSync('tests/fixtures/efrsb-detail.test-only.json', 'utf8'));
+const efrsbMessage = JSON.parse(fs.readFileSync('tests/fixtures/efrsb-message.test-only.json', 'utf8'));
+const metsFeed = fs.readFileSync('tests/fixtures/mets-feed.test-only.html', 'utf8');
+const metsDetail = fs.readFileSync('tests/fixtures/mets-detail.test-only.html', 'utf8');
 
 const listing = {
   id: '21000000000000000001_1',
@@ -123,6 +141,105 @@ test('fixed GIS URLs and SSRF rules reject arbitrary input', async () => {
     resolvePublicHost('torgi.gov.ru', async () => [{ address: '127.0.0.1', family: 4 }]),
     /PRIVATE_IP_DENIED/
   );
+});
+
+test('fixed EFRSB routes allow only bounded list and UUID detail/message URLs', () => {
+  assert.match(efrsbSearchUrl(0), /^https:\/\/fedresurs\.ru\/backend\/biddings\?limit=5&offset=0$/);
+  assert.match(efrsbDetailUrl(efrsbDetail.guid), /\/backend\/biddings\/38d2b184-/);
+  assert.match(efrsbMessageUrl(efrsbMessage.guid), /\/backend\/bankruptcy-messages\/33333333-/);
+  assert.throws(() => efrsbSearchUrl(10), /PAGE_LIMIT/);
+  assert.throws(() => efrsbDetailUrl('../admin'), /INVALID_SOURCE_ID/);
+  assert.equal(allowedPublicUrl('https://fedresurs.ru/backend/biddings?limit=200&offset=0'), null);
+  assert.equal(allowedPublicUrl('https://fedresurs.ru/backend/biddings/x'), null);
+});
+
+test('EFRSB parser preserves explicit application window and publication provenance', () => {
+  const lots = parseEfrsbLots(
+    efrsbList.pageData[0],
+    efrsbDetail,
+    [{ guid: efrsbMessage.guid, payload: efrsbMessage, url: efrsbMessageUrl(efrsbMessage.guid) }],
+    '2026-10-14T10:00:00Z',
+    Date.parse('2026-10-14T10:00:00Z')
+  );
+  assert.equal(lots.length, 1);
+  assert.equal(lots[0].region_code, '52');
+  assert.equal(lots[0].price_rub, 562500);
+  assert.equal(lots[0].application_deadline, '2026-11-01T10:00:00+03:00');
+  assert.equal(lots[0].accepting_applications, 'CONFIRMED_BY_PUBLICATION_DATES');
+  assert.match(lots[0].provenance.title, /^bankruptcy-message:/);
+});
+
+test('EFRSB never claims open applications after the explicit window', () => {
+  const [lot] = parseEfrsbLots(
+    efrsbList.pageData[0], efrsbDetail,
+    [{ guid: efrsbMessage.guid, payload: efrsbMessage }],
+    '2026-12-01T00:00:00Z', Date.parse('2026-12-01T00:00:00Z')
+  );
+  assert.equal(lot.accepting_applications, 'UNKNOWN');
+});
+
+test('bounded EFRSB research reads list, detail and linked message without documents', async () => {
+  const requested = [];
+  const requestJson = async url => {
+    requested.push(url);
+    if (url.includes('/bankruptcy-messages/')) return efrsbMessage;
+    if (url.includes('/backend/biddings/')) return efrsbDetail;
+    return efrsbList;
+  };
+  const result = await efrsbMiniSearch('Найди прицепы в Приволжском федеральном округе', {
+    requestJson, cacheEnabled: false, rateKey: 'efrsb-pfo-test', now: () => Date.parse('2026-10-14T10:00:00Z')
+  });
+  assert.equal(result.lots.length, 1);
+  assert.equal(result.lots[0].source, 'efrsb');
+  assert.equal(result.cost.http_requests, 3);
+  assert.equal(result.cost.llm_tokens, 0);
+  assert.equal(result.coverage, 'SCANNED_AVAILABLE_PAGES');
+  assert.ok(requested.every(url => !/\.pdf|\.zip/i.test(url)));
+});
+
+test('EFRSB blocked source is transparent and never leaks TEST_ONLY lots', async () => {
+  const result = await efrsbMiniSearch('прицепы на торгах по банкротству', {
+    requestJson: async () => { throw new ResearchError('SOURCE_BLOCKED'); },
+    cacheEnabled: false,
+    rateKey: 'efrsb-blocked-test',
+    now: () => 50_000
+  });
+  assert.equal(result.reason, 'SOURCE_BLOCKED');
+  assert.deepEqual(result.lots, []);
+});
+
+test('METS bounded feed accepts only exact public event/card paths', () => {
+  assert.equal(metsFeedUrl(), 'https://m-ets.ru/');
+  assert.equal(metsDetailUrl('238369', '1'), 'https://m-ets.ru/238369-1');
+  assert.throws(() => metsDetailUrl('../admin', '1'), /INVALID_SOURCE_ID/);
+  assert.equal(allowedPublicUrl('https://m-ets.ru/search?q=anything'), null);
+  assert.equal(allowedPublicUrl('https://m-ets.ru/238369-1'), 'https://m-ets.ru/238369-1');
+  assert.deepEqual(parseMetsFeed(metsFeed).map(row => row.key), ['238369:1']);
+});
+
+test('METS detail extracts source facts and does not invent timezone dates', () => {
+  const lot = parseMetsDetail(metsDetail, { trade_number: '238369', lot_number: '1' }, '2026-10-14T00:00:00Z');
+  assert.equal(lot.source_lot_id, '269509384');
+  assert.equal(lot.price_rub, 1072800);
+  assert.equal(lot.region_code, '52');
+  assert.equal(lot.application_deadline, '24.10.2026 00:00');
+  assert.equal(lot.accepting_applications, 'CONFIRMED_BY_SOURCE_STATUS');
+  assert.equal(lot.checked_at, '2026-10-14T00:00:00Z');
+});
+
+test('METS mini search is bounded to event feed and reports incomplete coverage', async () => {
+  const requested = [];
+  const result = await metsMiniSearch('Найди прицепы в Приволжском федеральном округе', {
+    requestHtml: async url => { requested.push(url); return url === metsFeedUrl() ? metsFeed : metsDetail; },
+    cacheEnabled: false,
+    rateKey: 'mets-test',
+    now: () => 60_000
+  });
+  assert.equal(result.lots.length, 1);
+  assert.equal(result.coverage, 'BOUNDED_EVENT_FEED');
+  assert.equal(result.cost.http_requests, 2);
+  assert.equal(result.cost.llm_tokens, 0);
+  assert.deepEqual(requested, [metsFeedUrl(), metsDetailUrl('238369', '1')]);
 });
 
 function fakeHttpsResponse({ status = 200, contentType = 'application/json', body = '{}' }) {

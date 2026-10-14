@@ -1,0 +1,11 @@
+{
+  "TEST_ONLY": true,
+  "guid": "38d2b184-ec81-4780-9d3f-386d18454359",
+  "number": "ПП-TEST-220946",
+  "status": { "code": "BiddingDeclared", "name": "Объявлены торги" },
+  "application": {
+    "start": "2026-10-01T10:00:00+03:00",
+    "end": "2026-11-01T10:00:00+03:00"
+  },
+  "auctionMessageGuid": "33333333-3333-4333-8333-333333333333"
+}

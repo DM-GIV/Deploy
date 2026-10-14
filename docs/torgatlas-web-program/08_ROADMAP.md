@@ -7,4 +7,4 @@
 5. P1: PAGE_SPEC для `/metodika/`; публикация только после фактической проверки владельцем.
 6. P1: content matrix 30 вопросов как DRAFT с источниками и review status, без массовой публикации.
 7. BLOCKED: тарифы, оплата, Cloud read-model, CRM, изменение ПД-политики, DNS и deployment — только отдельные решения владельца.
-8. P0 IN PROGRESS (Wave 06): GIS Mini is fixture-tested; live endpoint is SOURCE_BLOCKED in this environment. Next: Fedresurs public frontend profile, then AI-search UX. Public feature flag remains OFF until live/security acceptance and durable rate limiting.
+8. P0 IN PROGRESS (Wave 06): GIS, ЕФРСБ and bounded-feed МЭТС profiles are fixture-tested; all live probes remain SOURCE_BLOCKED in this environment. RAD is exact-detail-only and cannot provide discovery. Next: AI-search UX + targeted site/release regression. Public feature flag remains OFF until live/security acceptance, production egress validation and durable shared rate limiting.

@@ -41,3 +41,11 @@
 - Исправлена семантика `biddEndTime`: поле не считается application deadline; `PUBLISHED` не считается открытым приёмом.
 - Реализованы fixed listing/detail URLs, local query filtering, deduplication, provenance, coverage/cost metadata, cache, rate/concurrency budgets и DNS/IP-safe HTTPS transport without redirects.
 - Fixture tests are MOCK_TESTED. Один live GIS GET завершился `SOURCE_NETWORK_ERROR`; текущих лотов не подтверждено, public flag остаётся OFF.
+
+## Wave 06 / public source profiles — 2026-10-14 (локально, feature OFF)
+
+- Добавлен ЕФРСБ Mini: две фиксированные list-страницы, bidding detail и первая связанная bankruptcy-message; документы не запрашиваются. TEST_ONLY fixtures подтверждают путь list → detail → real lot object.
+- Добавлен МЭТС Mini: ограниченная серверная лента событий и до шести точных HTML-карточек; `/search`, `/catalog`, участие и документы исключены. TEST_ONLY fixtures подтверждают microdata/visible-field extraction.
+- Общий HTTPS transport применяет source/path allowlist, DNS/public-IP pinning, запрет redirect, лимит типа/размера/таймаута. Детерминированный planner в режиме «Все» честно возвращает выбранный и непросмотренные источники.
+- Live ЕФРСБ: HTTP 403 через обязательный локальный egress proxy; live МЭТС: timeout 4 s через тот же контур. Обход не выполнялся. РАД не подключён как discovery, потому что принятое исследование разрешает только exact detail по уже известному ID.
+- `PUBLIC_SOURCE_VERIFIED=0`, live lots `0`, LLM calls/tokens `0`; публичные gates остаются OFF.

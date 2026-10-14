@@ -24,9 +24,9 @@ test('API preserves content type and body size protections', async () => {
   gates('false');
 });
 
-test('unsupported source returns transparent empty result without outbound research', async () => {
+test('unknown source is rejected before any outbound research', async () => {
   gates('true'); const res=response();
-  await handler({method:'POST',headers:{origin:'https://torgatlas.ru','content-type':'application/json'},body:{query:'найди имущество на торгах',source:'bankruptcy',limit:5},socket:{remoteAddress:'127.0.0.1'}},res);
-  assert.equal(res.code,200); assert.deepEqual(res.body.lots,[]); assert.equal(res.body.reason,'NO_VERIFIED_SOURCE_ADAPTER');
+  await handler({method:'POST',headers:{origin:'https://torgatlas.ru','content-type':'application/json'},body:{query:'найди имущество на торгах',source:'unknown',limit:5},socket:{remoteAddress:'127.0.0.1'}},res);
+  assert.equal(res.code,422); assert.equal(res.body.code,'INVALID_QUERY');
   gates('false');
 });
