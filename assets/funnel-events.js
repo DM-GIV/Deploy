@@ -8,6 +8,7 @@
     '/':'home',
     '/proverka-lota/':'lot_check',
     '/poisk-imushchestva/':'property_search',
+    '/ai-poisk-lotov/':'ai_lot_search',
     '/soprovozhdenie-torgov/':'auction_support',
     '/pokupka-imushchestva/':'purchase',
     '/primery-lotov/':'examples',
