@@ -30,6 +30,7 @@
 | Sitemap registry / правдивый lastmod | РЕАЛИЗОВАНО (Wave 02) | `content/public-pages.json` — единственный реестр; generator не подставляет даты без подтверждения |
 | Canonical, robots и internal links | РЕАЛИЗОВАНО (Wave 02) | offline validator проверяет registry, XML, robots, H1, canonical, indexability и anchors |
 | Keyboard focus главной | РЕАЛИЗОВАНО В КОДЕ (Wave 03) | локальный Chromium baseline 390 px; добавлен общий `:focus-visible` для links/controls |
+| Мобильная навигация 320 px | ИСПРАВЛЕНО (Wave 03) | до: обрезанные пункты; после: перенос строк, screenshots `evidence/wave-03/home-320*.png` |
 | About/методика/контентная матрица | ОТСУТСТВУЕТ | нужен PAGE_SPEC и owner-review фактов до публикации |
 | Legal/price/payment/CRM/Cloud read-model | ЗАБЛОКИРОВАНО | требуется решение владельца и отдельные legal/security/product gates |
 | Search Console/Яндекс Вебмастер | UNKNOWN | доступ владельца не предоставлен; подключение не имитируется |

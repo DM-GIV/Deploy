@@ -18,6 +18,10 @@ class AccessibilityStaticTests(unittest.TestCase):
         self.assertIn("@media(prefers-reduced-motion:reduce)", css)
         self.assertIn("scroll-behavior:auto", css)
 
+    def test_narrow_home_navigation_wraps_instead_of_clipping_links(self) -> None:
+        css = (ROOT / "assets/home-bundle.css").read_text(encoding="utf-8")
+        self.assertIn(".home-nav .nav-links{overflow:visible;flex-wrap:wrap;white-space:normal}", css)
+
     def test_internal_pages_keep_visible_focus(self) -> None:
         css = (ROOT / "assets/seo.css").read_text(encoding="utf-8")
         self.assertIn("a:focus-visible,summary:focus-visible", css)

@@ -12,6 +12,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #ff
 
 /* AUC-204 post-launch: bring primary CTAs above the fold on small devices without horizontal page overflow. */
 @media (max-width:600px){
+.home-nav .nav-links{overflow:visible;flex-wrap:wrap;white-space:normal}
 .home-nav nav{padding:10px 0 7px}
 .home-nav .nav-links{gap:18px;padding:2px 0 7px;border-bottom:1px solid rgba(255,255,255,.24)}
 .hero{padding:34px 0 40px}
