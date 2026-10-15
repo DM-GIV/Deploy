@@ -1,0 +1,2 @@
+{"api_mode":"PUBLIC_WEB_RESEARCH_MINI","static_claims_catalogue":false,"ui":{"eyebrow":"Бета-версия","note":"Упрощённый режим: быстрый просмотр открытых страниц. Точность по региону и типу имущества ограничена, часть результатов может не соответствовать запросу — проверяйте каждую карточку.","disabled":false}}
+PASS label matches the real engine mode
