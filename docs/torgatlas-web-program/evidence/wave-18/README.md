@@ -14,3 +14,4 @@ Home and AI page: no noindex, canonical present, both in sitemap.xml (18 URLs), 
 ## Open decisions for the owner
 1. The visible header tagline «Все имущественные торги России» (all pages) and the social card heading still read as full coverage. Not changed because only the offer block was approved; recommend replacing with e.g. «Имущественные торги: поиск и проверка».
 2. Google Search Console (no access from this host): in Sitemaps remove the wrongly submitted entry `https://torgatlas.ru/ai-poisk-lotov/` (it is a page, not a sitemap; do NOT delete the page), keep `https://torgatlas.ru/sitemap.xml` (0 errors); then URL Inspection -> `https://torgatlas.ru/` and `https://torgatlas.ru/ai-poisk-lotov/` -> «Запросить индексирование».
+Release 8b362435acdcc829c4f0f7a4ea51128c2425fa75 (site only, 2026-10-15T19:15Z). Rollback: scripts/publish-release.sh db7092539779bf2a2290b83a96580acff816db22. Live: seo-crawl 85/85, e2e 102/102, public-smoke 32/32.
