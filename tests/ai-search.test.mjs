@@ -101,3 +101,13 @@ test('no stale result-count claim remains on the page', () => {
   assert.doesNotMatch(page, /До 10 результатов|10 результатов/);
   assert.equal((page.match(/До 5 результатов/g) || []).length, 2);
 });
+
+test('page never claims a catalogue search statically; the mode label comes from the real engine mode', () => {
+  assert.doesNotMatch(page, /Поиск по каталогу(?! ТоргАтлас)/);
+  assert.match(page, /id="ai-eyebrow">Бета-версия</);
+  assert.match(script, /data\.mode === 'CORE_SEARCH'/);
+  assert.match(script, /data\.mode === 'PUBLIC_WEB_RESEARCH_MINI'/);
+  assert.match(script, /UNAVAILABLE_CORE_REQUIRED/);
+  assert.match(script, /Упрощённый режим/);
+  assert.doesNotMatch(page, /подберёт до 5 наиболее подходящих/);
+});

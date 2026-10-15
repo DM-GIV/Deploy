@@ -21,3 +21,4 @@
 .ai-card-status{padding:6px 9px;border-radius:8px;background:#e8f5ec;color:#16502a;font-size:13px;margin:8px 0}.ai-card-status[data-confirmed="false"]{background:#fff4e0;color:#674000}
 .ai-catalog-cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:18px 0 0;padding-top:16px;border-top:1px solid #e3ebf1}
 .ai-cta-off{padding:10px 14px;border:1px dashed #9fb3c1;border-radius:9px;color:#6a7d8c;cursor:not-allowed;user-select:none}.ai-soon{padding:3px 9px;border-radius:999px;background:#ffe9c7;color:#6a4300;font-size:12px;font-weight:800}
+.ai-mode-note{margin:12px 0 0;padding:10px 12px;border-left:4px solid #d96a00;background:#fff7ec;border-radius:8px;font-size:13px;color:#5c3b00}

@@ -1,0 +1,36 @@
+PASS REAL field usable immediately, nothing disabled ""
+PASS REAL label follows the real engine: Core mode shows «Поиск по каталогу ТоргАтлас», no legacy-mode warning ""
+PASS REAL page states «До 5 результатов» and the CTA is hidden before the first search ""
+PASS REAL keyboard typing reached the field before the CAPTCHA was touched ""
+PASS REAL submit WITHOUT «Я человек»: clear message, text kept, no POST sent {"status":"Сначала пройдите проверку «Я человек» — она над кнопкой «Найти лоты». Текст запроса сохран","posts":0}
+PASS REAL real click on the ALTCHA checkbox solved a real proof of work ""
+PASS REAL «Думаю…» visible after the click {"ms":122}
+PASS REAL POST carried the typed text and an ALTCHA token ""
+PASS REAL query 1 «квартиры … публичном предложении»: 1–5 apartment cards, all PUBLIC OFFER, regions in ЮФО {"n":5,"regions":["Волгоградская область","Краснодарский край","Краснодарский край","Краснодарский край","Краснодарский край"]}
+PASS REAL every card: https primary-source link, check date, price meaning, deadline or «не подтверждён» ["https://fedresurs.ru/biddings/001a1b4d-0214-4032-9499-9fc576630017","https://fedresurs.ru/biddings/22665ce7-409e-4259-891c-6270119d2e9a","https://fedresurs.ru/biddings/364795ba-02b3-4400-94ca-4c363eb490cc","https://fedresurs.ru/biddings/69624227-e24a-4b49-aa19-013bef53d9e3","https://fedresurs.ru/biddings/a47d6294-5840-42df-944
+PASS REAL «Как понят запрос» shows type, district and procedure "Как понят запросПроцедура: публичное предложениеФедеральный округ: Южный федеральный округТип имущества: Квартира"
+PASS REAL catalogue CTA after the results: «Посмотреть больше лотов в каталоге ТоргАтлас» + «Скоро», not a link {"hidden":false,"text":"Посмотреть больше лотов в каталоге ТоргАтласСкоро","links":0,"disabled":true,"after":2}
+PASS REAL coverage caveat names no marketplaces ""
+PASS REAL after a search the CAPTCHA is reset (single use) and the text is kept "Перед следующим поиском снова отметьте «Я человек»."
+PASS REAL "квартиры в ЮФО" (click) -> 5 card(s), consistent with the query {"title":"Подходящих предложений: 5 (до 5)","regions":["Волгоградская область","Ростовская область","Ростовская область","Краснодарский край","Краснодарский край"]}
+PASS REAL "автомобильные прицепы в ПФО" (Enter) -> 4 card(s), consistent with the query {"title":"Подходящих предложений: 4 (до 5)","regions":["Оренбургская область","Оренбургская область","Оренбургская область","Оренбургская область"]}
+PASS REAL "прицепы в Поволжье до 800000 рублей" (click) -> 0 card(s), consistent with the query {"title":"Подходящих предложений не найдено","regions":[]}
+PASS REAL "нежилые помещения в Самарской области" (Enter) -> 0 card(s), consistent with the query {"title":"Подходящих предложений не найдено","regions":[]}
+PASS REAL "грузовые автомобили в Татарстане" (click) -> 0 card(s), consistent with the query {"title":"Подходящих предложений не найдено","regions":[]}
+PASS REAL Поволжье rule is displayed and it is not silently the whole ПФО "Как понят запросЦена: до 800 000 ₽Поволжье (Волжский экономический район): Астраханская область, Волгоградская область, Пензенская область, Самарская область, Саратовская область, Ульяновская область,"
+PASS REAL repeat searches worked without a page reload (5+ searches in one page) {"posts":7,"pageErrors":[]}
+PASS REAL OWNER SCENARIO "Найди квартиры на торгах в Москве" -> 5 card(s) all matching ["Москва","Москва","Москва","Москва","Москва"]
+PASS REAL OWNER SCENARIO "Найди автомобильные прицепы на торгах в Приволжском федеральном округе" -> 4 card(s) all matching ["Оренбургская область","Оренбургская область","Оренбургская область","Оренбургская область"]
+PASS REAL OWNER SCENARIO "Найди легковые автомобили на торгах" -> 5 card(s) all matching ["регион не указан","регион не указан","регион не указан","регион не указан","регион не указан"]
+PASS REAL «в Сибири» -> «Уточните запрос», zero cards, typed text kept "Уточните запрос | Название «сибири» не соответствует точному региону. Укажите субъект РФ или федеральный округ (например, «Сибирский федеральный округ»)."
+PASS SIMULATED backend 503: readable message, text kept, button usable again ""
+PASS SIMULATED CAPTCHA_REPLAY from server: asks to tick «Я человек» again, text kept ""
+PASS REAL recovery: after the failures a real retry on the same page returns results (no reload) ""
+PASS SIMULATED CAPTCHA challenge endpoint unreachable: field usable, text kept, message shown, button not stuck "Сначала пройдите проверку «Я человек» — она над кнопкой «Найти лоты». Текст запроса сохранён."
+PASS SIMULATED ALTCHA widget script blocked: typing still works, explicit message about the check "Не загрузилась проверка «Я человек». Обновите страницу или проверьте блокировщики и сеть; введённый текст сохр"
+PASS REAL mobile: tap + typing reach the field ""
+PASS REAL mobile: example button fills the field ""
+PASS REAL mobile: touch-verified CAPTCHA, tap submit, 1–5 cards, no horizontal scroll {"n":5}
+PASS REAL mobile: CTA «Скоро» visible after the results ""
+
+SUMMARY pass=34 fail=0

@@ -72,6 +72,8 @@ async function searchOnce(h, text, { enter = false } = {}) {
 // ============================ DESKTOP (1440): the six requested queries, real everything ============================
 const D = await open(1440);
 rec('REAL', 'field usable immediately, nothing disabled', await D.page.evaluate(() => !document.getElementById('ai-query').disabled && !document.getElementById('ai-submit').disabled));
+await D.page.waitForFunction(() => /Поиск по каталогу ТоргАтлас/.test(document.getElementById('ai-eyebrow').textContent), null, { timeout: 8000 }).catch(() => {});
+rec('REAL', 'label follows the real engine: Core mode shows «Поиск по каталогу ТоргАтлас», no legacy-mode warning', await D.page.evaluate(() => /Поиск по каталогу ТоргАтлас/.test(document.getElementById('ai-eyebrow').textContent) && document.getElementById('ai-mode-note').hidden));
 rec('REAL', 'page states «До 5 результатов» and the CTA is hidden before the first search', await D.page.evaluate(() => /До 5 результатов/.test(document.body.textContent) && document.getElementById('ai-catalog-cta').hidden));
 await typeReal(D, 'Квартиры в Южном федеральном округе на публичном предложении');
 rec('REAL', 'keyboard typing reached the field before the CAPTCHA was touched', (await D.page.inputValue('#ai-query')) === 'Квартиры в Южном федеральном округе на публичном предложении');
@@ -117,6 +119,15 @@ const pv = await D.page.textContent('#ai-understood');
 rec('REAL', 'Поволжье rule is displayed and it is not silently the whole ПФО', /Волжский экономический район/.test(pv) && /не весь Приволжский/.test(pv), pv.slice(0, 200));
 rec('REAL', 'repeat searches worked without a page reload (5+ searches in one page)', D.posts.length >= 6 && D.errors.length === 0, { posts: D.posts.length, pageErrors: D.errors });
 
+for (const [query, ok] of [
+  ['Найди квартиры на торгах в Москве', c => /Вид имущества: Квартира/.test(c.text) && /Регион: Москва/.test(c.text) && !/Ханты|Краснодар|Нежилое|Жилой дом/.test(c.text)],
+  ['Найди автомобильные прицепы на торгах в Приволжском федеральном округе', c => /Прицеп/.test(c.text) && /Регион: Оренбургская/.test(c.text)],
+  ['Найди легковые автомобили на торгах', c => /Легковой автомобиль/.test(c.text) && !/негоход|LYNX|РЫСЬ/i.test(c.text)]
+]) {
+  await searchOnce(D, query);
+  const l = await cards(D.page);
+  rec('REAL', `OWNER SCENARIO "${query}" -> ${l.length} card(s) all matching`, l.length >= 1 && l.length <= 5 && l.every(ok), l.map(c => (c.text.match(/Регион: (.+?)(?:Начальная|Цена)/) || ['', 'регион не указан'])[1]));
+}
 // -------- clarification: unresolved geography keeps the text and does not search the whole country --------
 await searchOnce(D, 'квартиры в Сибири на публичном предложении');
 const clar = await D.page.textContent('#ai-results-title') + ' | ' + await D.page.textContent('#ai-results-caption');

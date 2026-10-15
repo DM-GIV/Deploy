@@ -229,6 +229,7 @@
     if (status === 429 || code === 'RATE_LIMITED') return 'Слишком много запросов. Подождите минуту и нажмите «Найти лоты» ещё раз. Текст запроса сохранён.';
     if (status === 413 || status === 400) return 'Запрос не принят: проверьте текст (от 12 до 400 символов) и повторите.';
     if (status === 403) return 'Запрос отклонён защитой сайта. Обновите страницу и повторите. Текст запроса сохранён.';
+    if (code === 'SERVICE_UNAVAILABLE') return 'Поиск временно недоступен. Мы не подставляем неточные результаты; повторите позже. Текст запроса сохранён.';
     if (code === 'BUSY') return 'Сервис сейчас занят. Подождите немного и повторите; текст запроса сохранён.';
     if (code === 'TIMEOUT') return 'Каталог не успел ответить. Повторите поиск через минуту; текст запроса сохранён.';
     if (status === 503 || status === 502 || status === 504 || code === 'NOT_ENABLED' || code === 'SERVICE_UNAVAILABLE') return 'Поиск временно недоступен или перезапускается. Подождите минуту и повторите; текст запроса сохранён.';
@@ -298,6 +299,12 @@
       const response = await fetch('/api/ai-lot-search', { method: 'GET', headers: { Accept: 'application/json' }, cache: 'no-store', signal: probe.signal });
       window.clearTimeout(t);
       const data = await response.json().catch(() => ({}));
+      // Honest description of the engine that is actually connected (the page copy is mode-neutral).
+      const eyebrow = document.getElementById('ai-eyebrow');
+      const modeNote = document.getElementById('ai-mode-note');
+      if (data.mode === 'CORE_SEARCH' && eyebrow) eyebrow.textContent = 'Поиск по каталогу ТоргАтлас';
+      if (data.mode === 'PUBLIC_WEB_RESEARCH_MINI' && modeNote) { modeNote.textContent = 'Упрощённый режим: быстрый просмотр открытых страниц. Точность по региону и типу имущества ограничена, часть результатов может не соответствовать запросу — проверяйте каждую карточку.'; modeNote.hidden = false; }
+      if (data.mode === 'UNAVAILABLE_CORE_REQUIRED' && modeNote) { modeNote.textContent = 'Поиск временно недоступен: сервис каталога не подключён. Мы не подменяем его неточным поиском.'; modeNote.hidden = false; }
       if (data.enabled === false && !activeController) notice('Поиск сейчас может быть отключён администратором: запрос будет принят, когда сервис включится.');
     } catch { /* Ignored on purpose: the form stays usable. */ }
   })();

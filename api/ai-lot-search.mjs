@@ -22,6 +22,8 @@ export function createAiLotSearchHandler({ env = process.env, nowSeconds = () =>
   const startedAt = nowSeconds();   // challenges issued before this process started carry no replay memory and are refused
 
   const captchaRequired = () => env.AI_LOT_ALTCHA_REQUIRED === 'true';
+  // Policy switch: with AI_LOT_REQUIRE_CORE=true the legacy web-research engine is NEVER used as a silent substitute.
+  const requireCore = () => env.AI_LOT_REQUIRE_CORE === 'true';
   const captchaKey = () => (strongKey(env.AI_LOT_ALTCHA_HMAC_KEY) ? env.AI_LOT_ALTCHA_HMAC_KEY : null);
 
   return async function handler(req, res) {
@@ -33,7 +35,8 @@ export function createAiLotSearchHandler({ env = process.env, nowSeconds = () =>
         if (!issueLimiter.allow(clientKey)) { res.setHeader('Retry-After', '30'); return send(res, 429, { ok: false, code: 'RATE_LIMITED' }); }
         return send(res, 200, createChallenge(key, nowSeconds()));
       }
-      return send(res, 200, { enabled: enabled(env), max_results: MAX_RESULTS, mode: coreConfig(env) ? 'CORE_SEARCH' : 'PUBLIC_WEB_RESEARCH_MINI', captcha: { required: captchaRequired() } });
+      const mode = coreConfig(env) ? 'CORE_SEARCH' : requireCore() ? 'UNAVAILABLE_CORE_REQUIRED' : 'PUBLIC_WEB_RESEARCH_MINI';
+      return send(res, 200, { enabled: enabled(env), max_results: MAX_RESULTS, mode, captcha: { required: captchaRequired() } });
     }
     if (req.method !== 'POST') return send(res, 405, { ok: false, code: 'METHOD_NOT_ALLOWED' });
     if (!enabled(env)) return send(res, 503, { ok: false, code: 'NOT_ENABLED' });
@@ -62,6 +65,9 @@ export function createAiLotSearchHandler({ env = process.env, nowSeconds = () =>
 
     const retrievedAt = new Date().toISOString();
     const config = coreConfig(env);
+    if (!config && requireCore()) {
+      return send(res, 503, { ok: false, code: 'SERVICE_UNAVAILABLE', reason: 'CORE_NOT_CONNECTED' });
+    }
     if (!config) {
       // Core not connected: the existing bounded public-web-research path (unchanged behaviour), capped at five cards.
       // Its own matcher decides relevance, so the rule-based interpretation is NOT shown (it would over-claim).

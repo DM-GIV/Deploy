@@ -1,0 +1,7 @@
+Production Core DB, read-only transactions (BEGIN READ ONLY; statement_timeout 8s; max_parallel_workers_per_gather=1; ROLLBACK), 2026-10-15 ~15:22 local.
+Execution time (ms), run1 (cold) / run2 (warm):
+  Москва, квартиры           230 / 24
+  ПФО, прицепы               125 / 12
+  легковые автомобили (РФ)  2661 / 1635   <- broad: no region filter, ~50k candidate rows
+  земельные участки (РФ)    2714 / 2076   <- broad
+No index, migration or write was executed.

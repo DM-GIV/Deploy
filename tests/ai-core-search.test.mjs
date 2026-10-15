@@ -261,3 +261,23 @@ test('Core client: only whitelisted filter keys are sent, with a bearer token, n
   await assert.rejects(searchCore({}, { config: CONFIG, timeoutMs: 20, fetchImpl: (url, init) => new Promise((_, reject) => init.signal.addEventListener('abort', () => reject(Object.assign(new Error('x'), { name: 'AbortError' })))) }), error => error.code === 'CORE_TIMEOUT');
   await assert.rejects(searchCore({}, { config: null }), error => error.code === 'CORE_NOT_CONFIGURED');
 });
+
+test('policy AI_LOT_REQUIRE_CORE=true: no silent fallback to the legacy engine; clear unavailability instead', async () => {
+  const t = build({ env: { AI_LOT_CORE_URL: '', AI_LOT_CORE_TOKEN: '', AI_LOT_REQUIRE_CORE: 'true' } });
+  t.clock.now = NOW + 1;
+  const res = await t.post({ query: Q, altcha: token() });
+  assert.equal(res.code, 503); assert.equal(res.body.code, 'SERVICE_UNAVAILABLE'); assert.equal(res.body.reason, 'CORE_NOT_CONNECTED');
+  assert.equal(res.body.lots, undefined);
+  assert.equal(t.calls.web.length + t.calls.core.length, 0);
+  assert.equal((await t.get()).body.mode, 'UNAVAILABLE_CORE_REQUIRED');
+  // a Core failure with Core configured also never falls back
+  const failing = build({ env: { AI_LOT_REQUIRE_CORE: 'true' }, core: async () => { throw new CoreSearchError('CORE_UNREACHABLE'); } });
+  failing.clock.now = NOW + 1;
+  assert.equal((await failing.post({ query: Q, altcha: token() })).code, 503);
+  assert.equal(failing.calls.web.length, 0);
+});
+
+test('GET reports the engine that is really connected', async () => {
+  assert.equal((await build({ env: { AI_LOT_CORE_URL: '', AI_LOT_CORE_TOKEN: '' } }).get()).body.mode, 'PUBLIC_WEB_RESEARCH_MINI');
+  assert.equal((await build().get()).body.mode, 'CORE_SEARCH');
+});

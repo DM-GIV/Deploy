@@ -1,0 +1,35 @@
+# NOT APPLIED. Dedicated read-only public-search container for TorgAtlas (approval package, see README.md).
+# It is a NEW container: the existing aa-data004-api-1, its network settings, secrets and database are not touched.
+# It joins two EXISTING networks as an additional member: the Core database network (to reach PostgreSQL with a SELECT-only role)
+# and the AI-search internal network (so ai-search can call it by name). It publishes no port.
+services:
+  ai-core-search:
+    image: ${CORE_PS_IMAGE:?set CORE_PS_IMAGE, e.g. auction-data004:torgatlas-public-search-737e2fd}
+    container_name: torgatlas-ai-core-search
+    restart: unless-stopped
+    command: ["uvicorn", "public_search_app:app", "--host", "0.0.0.0", "--port", "8000"]
+    env_file:
+      - ${CORE_PS_ENV_FILE:?set CORE_PS_ENV_FILE (0600): DATABASE_URL (SELECT-only role), PUBLIC_SEARCH_TOKEN_SHA256}
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PUBLIC_SEARCH_MAX_CONCURRENCY: "2"
+    networks: [core_db, ai_internal]
+    read_only: true
+    tmpfs: ["/tmp:size=16m,noexec,nosuid,nodev"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 64
+    mem_limit: 256m
+    cpus: 0.5
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+networks:
+  core_db:
+    name: aa-data004_default
+    external: true
+  ai_internal:
+    name: torgatlas-ai_ta_ai_internal
+    external: true
