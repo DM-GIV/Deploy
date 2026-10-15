@@ -1,0 +1,4 @@
+torgatlas-ai-search torgatlas-ai-search:local
+torgatlas-ai-core-search auction-data004:torgatlas-public-search-1a42994
+torgatlas-ai-edge 0f291758a9c8
+aa-data004-api-1 auction-data004:auc163-fc6dbce
