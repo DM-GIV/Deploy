@@ -1,0 +1,31 @@
+PASS REAL published HTML: textarea and submit are NOT disabled {"status":200,"has_noscript":true,"script":"ai-search.js?v=2"}
+PASS REAL PUBLIC_SOURCE_TEXT: no marketplace names / counts / disabled-source notes in page text and meta description {"description":"AI-поиск лотов по банкротству, арестованного имущества и коммерческих торгов. Результаты — со ссылками на первоисточники."}
+PASS REAL COLD_CACHE desktop: field and button enabled right after load, script ready {"q":false,"b":false,"ready":true,"pageErrors":[]}
+PASS REAL INPUT_MOUSE desktop: real mouse click puts the cursor in the textarea {}
+PASS REAL INPUT_KEYBOARD desktop: ordinary typing works {"typed":"найди транспорт на торгах банкротов"}
+PASS REAL SUBMIT_CLICK + REAL_POST + RESULT_RENDER desktop: «Думаю…», real results with primary-source links and check dates {"thinking_ms":47,"total_ms":13285,"posts":1,"cards":2,"sample":["https://bankrupt.utpl.ru/public/auctions/lots/view/127861/","https://bankrupt.centerr.ru/public/auctions/lots/view/1170959/"],"busyBtn":{"disabled":true,"text":"Поиск выполняется…","cancel":true}}
+PASS REAL PUBLIC_SOURCE_TEXT: coverage text shown after a result is the neutral caveat (no platform list) {"coverage":"Показаны не все возможные предложения: поиск ограничен открытыми сведениями и временем ответа. Отсутствие карточки не означает, что лота нет."}
+PASS REAL desktop: button returns to ready state after the result and the query text is kept {"disabled":false,"text":"Найти лоты","value":"найди транспорт на торгах банкротов"}
+PASS REAL SUBMIT_ENTER + repeat search desktop: Enter sends, second real search renders new results {"posts":2,"cards":5,"first":"Вальцы (ИБ 2220) б/у, 1шт."}
+PASS REAL analytics: no /ta/ requests before consent during the whole search session {"ta":[]}
+PASS REAL INPUT_MOUSE mobile: real tap puts the cursor in the textarea {}
+PASS REAL INPUT_PASTE mobile: real paste (Ctrl+V into the focused field) {"pasted":"найди недвижимость на публичном предложении"}
+PASS REAL example button fills the field and focuses it {"ex":"Найди оборудование на открытых торгах"}
+PASS REAL MOBILE: tap submit -> real POST -> cards with primary-source links, no horizontal scroll {"cards":5,"posts":1,"overflow_px":0,"total_ms":4525}
+PASS SIMULATED GET_FAILURE_RECOVERY (SIMULATED GET failure): field and button stay enabled {"get_aborts":1,"q":false,"b":false,"text":"Найти лоты"}
+PASS SIMULATED network failure on POST (SIMULATED): clear message, text kept, button ready again {"v":"найди оборудование на торгах банкротов","b":false,"t":"Найти лоты","cancelHidden":true}
+PASS REAL GET_FAILURE_RECOVERY: after failed GET + failed POST the SAME page re-sends and gets REAL results (no reload) {"cards":5,"total_ms":104,"title":"Проверено актуальных карточек: 5"}
+PASS SIMULATED HTTP 429 response (SIMULATED): readable message, text kept, button re-enabled {"status":"Слишком много запросов. Подождите минуту и нажмите «Найти лоты» ещё раз. Текст запроса сохранён."}
+PASS SIMULATED HTTP 503 response (SIMULATED): readable message, text kept, button re-enabled {"status":"Поиск временно недоступен или перезапускается. Подождите минуту и повторите; текст запроса сохранён."}
+PASS SIMULATED HTTP 502 response (SIMULATED): readable message, text kept, button re-enabled {"status":"Поиск временно недоступен или перезапускается. Подождите минуту и повторите; текст запроса сохранён."}
+PASS SIMULATED HTTP 403 response (SIMULATED): readable message, text kept, button re-enabled {"status":"Запрос отклонён защитой сайта. Обновите страницу и повторите. Текст запроса сохранён."}
+PASS SIMULATED HTTP 200 response (SIMULATED): readable message, text kept, button re-enabled {"status":"Сервис вернул неожиданный ответ. Повторите запрос; текст запроса сохранён."}
+PASS SIMULATED double submit (button, Enter, button again) sends exactly ONE request {"requests":1}
+PASS SIMULATED cancel a running request: message, text kept, button ready, can start again {"v":"найди транспорт на торгах банкротов","b":false,"cancelHidden":true}
+PASS SIMULATED search can be started again after cancel without reload {"requests":2}
+PASS SIMULATED client timeout after 24 s (SIMULATED hung server): message, button ready, text kept {"v":35,"b":false}
+PASS SIMULATED external JS blocked (SIMULATED): visible message instead of a silently dead form; typing still possible; nothing sent {"status":"Скрипт поиска не загрузился. Обновите страницу или проверьте блокировщики и сеть; введённы","posts":0}
+PASS SIMULATED JavaScript disabled in the browser: <noscript> notice is shown {"visible":true}
+PASS REAL stale cache (profile primed with the previous JS): fixed page works, new versioned script is fetched {"q":false,"b":false,"v":"найди транспорт на торгах","ready":true,"scriptReq":[{"url":"/assets/ai-search.js?v=2","status":200,"fromCache":"network"}]}
+SUMMARY pass=29 fail=0
+rc=0
