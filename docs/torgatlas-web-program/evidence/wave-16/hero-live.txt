@@ -1,0 +1,5 @@
+ 320px  h1 4 lines @34px  subtitle 5 lines  hero 565px  CTA top 590/700 bottom 652  ctaOnFirstScreen=true  hscroll=false
+ 375px  h1 3 lines @35.625px  subtitle 4 lines  hero 478px  CTA top 517/812 bottom 565  ctaOnFirstScreen=true  hscroll=false
+ 412px  h1 3 lines @39.14px  subtitle 4 lines  hero 489px  CTA top 528/892 bottom 576  ctaOnFirstScreen=true  hscroll=false
+ 768px  h1 2 lines @50.688px  subtitle 2 lines  hero 562px  CTA top 526/1024 bottom 582  ctaOnFirstScreen=true  hscroll=false
+1440px  h1 3 lines @78px  subtitle 3 lines  hero 796px  CTA top 674/900 bottom 730  ctaOnFirstScreen=true  hscroll=false
