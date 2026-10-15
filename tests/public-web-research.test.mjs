@@ -25,6 +25,11 @@ import {
   RESEARCH_BUDGET,
   resolvePublicHost,
   safeJsonGet
+  , parseUtplCatalog
+  , parseUtplDetail
+  , utplCatalogUrl
+  , utplDetailUrl
+  , utplMiniSearch
 } from '../lib/torgatlas-public-web-research.mjs';
 
 const efrsbList = JSON.parse(fs.readFileSync('tests/fixtures/efrsb-list.test-only.json', 'utf8'));
@@ -32,6 +37,8 @@ const efrsbDetail = JSON.parse(fs.readFileSync('tests/fixtures/efrsb-detail.test
 const efrsbMessage = JSON.parse(fs.readFileSync('tests/fixtures/efrsb-message.test-only.json', 'utf8'));
 const metsFeed = fs.readFileSync('tests/fixtures/mets-feed.test-only.html', 'utf8');
 const metsDetail = fs.readFileSync('tests/fixtures/mets-detail.test-only.html', 'utf8');
+const utplCatalog = fs.readFileSync('tests/fixtures/utpl-catalog.test-only.html', 'utf8');
+const utplDetail = fs.readFileSync('tests/fixtures/utpl-detail.test-only.html', 'utf8');
 
 const listing = {
   id: '21000000000000000001_1',
@@ -126,6 +133,11 @@ test('query parser handles trailer synonym and PFO deterministically', () => {
   const parsed = parseSimpleQuery('Найди полуприцепы в ПФО');
   assert.ok(parsed.assetTerms.includes('полуприцеп'));
   assert.ok(parsed.regionCodes.has('52'));
+});
+
+test('region parser distinguishes Moscow region and recognises Tyumen city', () => {
+  assert.ok(parseSimpleQuery('недвижимость в Московской области').regionCodes.has('50'));
+  assert.ok(parseSimpleQuery('помещение в Тюмени').regionCodes.has('72'));
 });
 
 test('process-local abuse controls have hard memory caps', () => {
@@ -248,6 +260,38 @@ test('METS mini search is bounded to event feed and reports incomplete coverage'
   assert.equal(result.cost.http_requests, 2);
   assert.equal(result.cost.llm_tokens, 0);
   assert.deepEqual(requested, [metsFeedUrl(), metsDetailUrl('238369', '1')]);
+});
+
+test('UTPL parser reads public catalog and confirms only an open unexpired detail card', async () => {
+  const candidates = parseUtplCatalog(utplCatalog, 'auction');
+  assert.equal(candidates.length, 2);
+  assert.equal(candidates[0].url, utplDetailUrl('auction', '127861'));
+  assert.equal(utplCatalogUrl('auction'), 'https://bankrupt.utpl.ru/public/auctions-all/');
+  const lot = parseUtplDetail(utplDetail, candidates[0], '2026-10-15T00:00:00Z', Date.parse('2026-10-15T00:00:00Z'));
+  assert.equal(lot.source, 'utpl');
+  assert.equal(lot.region_code, '63');
+  assert.equal(lot.price_rub, 1190000);
+  assert.equal(lot.accepting_applications, 'CONFIRMED_BY_SOURCE_STATUS_AND_DATE');
+  const expired = parseUtplDetail(utplDetail.replace('18.11.2026', '01.01.2026'), candidates[0], '2026-10-15T00:00:00Z', Date.parse('2026-10-15T00:00:00Z'));
+  assert.equal(expired.accepting_applications, 'UNKNOWN');
+});
+
+test('UTPL mini search reopens matching detail and excludes expired or closed rows', async () => {
+  const requested = [];
+  const result = await utplMiniSearch('Найди транспорт в Самарской области', {
+    requestHtml: async url => {
+      requested.push(url);
+      if (url.includes('/lots/view/127861/')) return utplDetail;
+      return url.includes('public-offers-all') ? '<html></html>' : utplCatalog;
+    },
+    cacheEnabled: false,
+    rateKey: 'utpl-test',
+    now: () => Date.parse('2026-10-15T00:00:00Z')
+  });
+  assert.equal(result.status, 'LIVE_VERIFIED_SOURCE_DATA');
+  assert.equal(result.lots.length, 1);
+  assert.ok(requested.includes(utplDetailUrl('auction', '127861')));
+  assert.ok(requested.every(url => !url.includes('127.0.0.1')));
 });
 
 function fakeHttpsResponse({ status = 200, contentType = 'application/json', body = '{}' }) {

@@ -11,6 +11,9 @@ services:
       HOST: 0.0.0.0
       PORT: 8080
       AI_LOT_TRUST_PROXY: "true"
+      HTTPS_PROXY: ${HTTPS_PROXY:-}
+      HTTP_PROXY: ${HTTP_PROXY:-}
+      NO_PROXY: ${NO_PROXY:-127.0.0.1,localhost}
     ports:
       - "127.0.0.1:18082:8080"
     read_only: true

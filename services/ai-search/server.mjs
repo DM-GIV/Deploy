@@ -3,7 +3,7 @@ import { pathToFileURL } from 'node:url';
 import handler from '../../api/ai-lot-search.mjs';
 
 const MAX_BODY_BYTES = 1_500;
-const REQUEST_TIMEOUT_MS = 20_000;
+const REQUEST_TIMEOUT_MS = 60_000;
 
 function validForwardedIp(value) {
   const candidate = String(value || '').split(',')[0].trim();

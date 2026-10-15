@@ -1,0 +1,11 @@
+{
+  "schema": "torgatlas-live-lot-rotation-v1",
+  "enabled": false,
+  "timezone": "Europe/Moscow",
+  "activation_date": "2026-10-15",
+  "run_at_local": "05:00",
+  "cadence_calendar_days": 3,
+  "required_lots": 8,
+  "publish_policy": "ATOMIC_ONLY_WHEN_EIGHT_LIVE_VERIFIED",
+  "production_scheduler": "NOT_INSTALLED"
+}

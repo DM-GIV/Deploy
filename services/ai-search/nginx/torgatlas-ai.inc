@@ -4,7 +4,7 @@ location = /api/ai-lot-search {
     limit_req zone=torgatlas_ai_search burst=2 nodelay;
     limit_conn torgatlas_ai_conn 1;
     proxy_connect_timeout 2s;
-    proxy_read_timeout 20s;
+    proxy_read_timeout 60s;
     proxy_send_timeout 5s;
     proxy_pass http://127.0.0.1:18082;
     proxy_set_header Host $host;
