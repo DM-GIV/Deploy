@@ -1,0 +1,40 @@
+# ingestion timeline (read-only, 2026-10-15 13:28Z)
+lots created 2026-10-01|1337
+lots created 2026-10-02|2903
+lots created 2026-10-03|2485
+lots created 2026-10-04|857
+lots created 2026-10-05|2346
+lots created 2026-10-06|3326
+lots created 2026-10-07|3224
+lots created 2026-10-08|6402
+lots created 2026-10-09|5560
+lots created 2026-10-10|4520
+lots created 2026-10-11|3340
+lots created 2026-10-12|2040
+lots created 2026-10-15|1
+lot_source_records last_seen 2026-10-01|2133
+lot_source_records last_seen 2026-10-02|5722
+lot_source_records last_seen 2026-10-03|3363
+lot_source_records last_seen 2026-10-04|13703
+lot_source_records last_seen 2026-10-05|12058
+lot_source_records last_seen 2026-10-07|26
+lot_source_records last_seen 2026-10-11|1
+lot_source_records last_seen 2026-10-12|3
+lot_source_records last_seen 2026-10-15|1
+newest snapshot cdtrf|2026-10-15 13:16:28.337229+00
+newest snapshot rad|2026-10-12 12:19:47.334498+00
+newest snapshot ?|2026-10-12 10:48:13.457737+00
+newest snapshot mets|2026-10-07 11:48:23.82249+00
+newest snapshot nis|2026-09-27 06:50:58.86167+00
+newest snapshot fabrikant|2026-09-21 20:48:46.189932+00
+checkpoint live/rad/lotonline-bounded-html idle|2026-10-12 12:20:49.516671+00
+checkpoint live/rad/lotonline-bounded-html idle|2026-10-12 12:20:32.616226+00
+checkpoint live/rad/lotonline-bounded-html idle|2026-10-12 12:20:32.616226+00
+checkpoint live/rad/lotonline-bounded-html idle|2026-10-12 12:20:32.616226+00
+# containers (one-shot ingestion jobs), no cron/timer schedules found for deploy user or system:
+aa-data004-scanner-1|auction-data004:auc154-41b447d|Exited (0) 3 days ago
+aa-data004-gis-ingest-1|auction-data004:auc196-e29777a|Exited (0) 3 days ago
+aa-data004-gis-refresh-1|auction-data004:auc194-9438778|Exited (0) 3 days ago
+aa-data004-mets-refresh-1|auction-data004:auc194-9438778|Exited (137) 3 days ago
+auction-worker|auction-worker:6abe646dd739843ecda5401bc1ed4fe38937d87e|Up 2 weeks
+auction-worker-test|auction-analytics-test-worker-test|Up 2 weeks

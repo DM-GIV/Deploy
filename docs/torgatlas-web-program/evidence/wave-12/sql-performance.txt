@@ -1,0 +1,10 @@
+Read-only EXPLAIN ANALYZE on the production Core DB (BEGIN READ ONLY; statement_timeout; max_parallel_workers_per_gather=1; ROLLBACK). No index, migration or write.
+2026-10-15 ~19:00 local (cache state after other owners' scans of source_snapshots):
+  Москва, квартиры        272 ms cold / 25 ms warm
+  ПФО, прицепы            111 ms cold / 15 ms warm
+  легковые (РФ)           3.1-3.5 s   (earlier today 1.6-2.7 s)
+  земельные участки (РФ)  8.2-8.5 s   (earlier today 2.1-2.7 s) -> real service answers 504 TIMEOUT at the 5 s limit
+A/B on the same instant, interleaved: query form before the title change (c13524f) vs after: 3.43/3.38 s vs 3.14/3.22 s (passenger), 8.19/8.33 s vs 8.42/8.22 s (land): no cost from the title lookup (it runs on <=30 rows only).
+Plan (passenger cars): branch A = parallel seq scan of auctions (~10.4k auctions with a future deadline) + 10.4k random index lookups into lots (19-25k buffers read from disk, ~0.47 ms each); branch B = bitmap heap scan on ix_lots_projection_asset_subtype (23k lots) with external-merge sort; heap rows of lots are wide (2.3 GB table).
+Cause of the variance: the PostgreSQL container has a 768 MiB cgroup limit that includes page cache, shared_buffers=128MB; container memory fell from 525-740 MiB to ~270 MiB after other owners' large scans, so lots heap pages are re-read from disk. Broad queries are I/O bound.
+Live service now (3 runs each): легковые 200 in 3.2-3.3 s; земельные участки РФ 504 at 5.0 s; Москва 200 in 31 ms.

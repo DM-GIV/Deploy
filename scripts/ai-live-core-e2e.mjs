@@ -56,10 +56,12 @@ await sleep(40000);
 r = await search(D, 'Найди автомобильные прицепы на торгах в Приволжском федеральном округе');
 rec('REAL', 'прицепы ПФО: only trailers, only ПФО regions, exactly the real records', r.cards.length === 4 && r.cards.every(c => /Прицеп/.test(c.text) && /Оренбургская область/.test(region(c) || '')), { n: r.cards.length, regions: r.cards.map(region) });
 rec('REAL', 'four lots of ONE publication are marked as one source (shared link), not as four independent sources', new Set(r.cards.map(c => c.href)).size === 1 && r.cards.every(c => /общую публикацию/.test(c.text) && /один источник/.test(c.text)) && new Set(r.cards.map(c => c.title)).size === 4, { links: [...new Set(r.cards.map(c => c.href))], titles: r.cards.map(c => c.title) });
+rec('REAL', 'trailer titles name the property (from the stored description), keep the lot number, expose no VIN/plate/location', r.cards.length === 4 && r.cards.every(c => /^(?:Полуприцеп|Прицеп)[^]* — лот №\d+$/.test(c.title) && !/VIN|ГРЗ|[A-Z0-9]{17}|Бузулук/.test(c.title)) && r.cards.some(c => /СЗАП 9327 — лот №4$/.test(c.title)) && r.cards.some(c => /ЧМЗАП 9906 — лот №11$/.test(c.title)), r.cards.map(c => c.title));
 await D.page.screenshot({ path: `${out}/live-core-trailers-desktop.png`, fullPage: true });
 
 await sleep(40000);
 r = await search(D, 'Найди легковые автомобили на торгах', { enter: true });
+rec('REAL', 'легковые: no VIN or registration plate shown in any card', !/[A-HJ-NPR-Z0-9]{17}|[АВЕКМНОРСТУХ]\d{3}[АВЕКМНОРСТУХ]{2}\d{2,3}/.test(r.cards.map(c => c.title + ' ' + c.text).join(' ')), r.cards.map(c => c.title.slice(0, 70)));
 rec('REAL', 'легковые (Enter): 1–5 passenger cars, no snowmobile/motorcycle/quad', r.cards.length >= 1 && r.cards.length <= 5 && r.cards.every(c => /Легковой автомобиль/.test(c.text)) && !/негоход|LYNX|РЫСЬ|мотоцикл|квадроцикл|скутер/i.test(r.cards.map(c => c.text).join(' ')), { n: r.cards.length, titles: r.cards.map(c => c.title.slice(0, 40)) });
 
 await sleep(40000);

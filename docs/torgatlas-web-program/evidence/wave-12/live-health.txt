@@ -1,0 +1,4 @@
+# live health during a brief outage of torgatlas-ai-core-search (own container only), 2026-10-15 13:41-13:42Z
+GET status lags up to 10 s (cached probe), then reports CORE_UNAVAILABLE; healthcheck log line while stopped:
+{"...":"...","ai_ok":1,"site_ok":1,"core":"CORE_UNAVAILABLE","core_c":"unhealthy","result":"ok"}  (informational: not counted toward the AI kill switch)
+after restart (healthy in ~40 s): core=CORE_SEARCH core_c=healthy
