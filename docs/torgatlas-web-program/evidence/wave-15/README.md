@@ -11,3 +11,6 @@ FIX
 
 CHECKS (local, TEST_ONLY server): `css-cache-probe.txt` (real browser profile with the previous release cached, then the new release: fingerprinted CSS is fetched, margins 340/340 px; cold profile identical), `article-layout-after.txt` (six articles, 1440 and 375: identical centring, no horizontal scroll), screenshots in `screens/` (`before-*` = new HTML with the old cached CSS, `after-*` = fixed).
 Note: `content/editorial/queue.json` hash of the unapproved draft `public-property-guide-v1` refreshed because only its asset `?v=` strings changed.
+
+RELEASE: commit a1fe76178c27b8a4e9888f0bb2033e8a79484a05 published with `scripts/publish-release.sh` (current -> releases/a1fe76178c27b8a4e9888f0bb2033e8a79484a05, 2026-10-15T18:18Z, site only). Rollback: `scripts/publish-release.sh 3555239c78f2f28fd27c6929e9e7c1e36027f324`.
+POST-DEPLOY (live): seo-crawl 85/85, site-growth-e2e 102/102, public-smoke site 32/32, `article-layout-live.txt`, `hero-live.txt`; the live HTML requests `seo.css?v=<hash>` (asset cache header unchanged: 86400 s), dateModified 2026-10-15, sitemap lastmod <= 2026-10-15.
