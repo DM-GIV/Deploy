@@ -1,0 +1,45 @@
+PASS REAL page / @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /poisk-imushchestva/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /pokupka-imushchestva/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /soprovozhdenie-torgov/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /proverka-lota/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /primery-lotov/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /formaty-raboty/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /o-torgatlas/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /blog/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /privacy/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /ai-poisk-lotov/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":1}
+PASS REAL page / @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /poisk-imushchestva/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /pokupka-imushchestva/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /soprovozhdenie-torgov/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /proverka-lota/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /primery-lotov/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /formaty-raboty/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /o-torgatlas/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /blog/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /privacy/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /ai-poisk-lotov/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":1}
+PASS REAL home cards+contacts @1440 {"rotation_cards":8,"cards_with_external_link":8,"icons":6,"active_icons":4,"consent_banner":1,"analytics_requests":0}
+PASS REAL home cards+contacts @390 {"rotation_cards":8,"cards_with_external_link":8,"icons":6,"active_icons":4,"consent_banner":1,"analytics_requests":0}
+PASS REAL free-map forms present (not submitted) /proverka-lota/ {"forms":[{"id":"lot-check-form-element","inputs":4}]}
+PASS REAL examples page content /primery-lotov/ {"external_links":10}
+PASS REAL GET /robots.txt {"status":200,"bytes":349}
+PASS REAL GET /sitemap.xml {"status":200,"bytes":1076}
+PASS REAL GET /llms.txt {"status":200,"bytes":1045}
+PASS REAL GET /api/lead-config {"status":200,"enabled":true}
+PASS REAL GET /api/altcha-challenge (ALTCHA, no submit) {"status":200,"keys":["algorithm","challenge","salt","signature","maxnumber"]}
+PASS REAL GET /ta/s.js (Umami script, no events) {"status":200,"type":"application/javascript; charset=UTF-8"}
+PASS REAL ai real query: транспорт @1440 {"thinking_visible_ms":64,"total_ms":13247,"cards":2,"primary_source_links_ok":true,"pii_in_titles":false,"sample":[{"title":"Транспортное средство АУДИ А1, 2011 года выпуска, VIN: WAUZZ","href":"https://bankrupt.utpl.ru/public/auctions/lots/view/127861/","pri
+PASS REAL ai real query: оборудование @390 {"thinking_visible_ms":934,"total_ms":13228,"cards":5,"primary_source_links_ok":true,"pii_in_titles":false,"sample":[{"title":"Вальцы (ИБ 2220) б/у, 1шт.","href":"https://bankrupt.utpl.ru/public/auctions/lots/view/127737/","price":"496 678 ₽","until":"11 нояб.
+PASS REAL ai real query: недвижимость @390 {"thinking_visible_ms":933,"total_ms":5359,"cards":5,"primary_source_links_ok":true,"pii_in_titles":false,"sample":[{"title":"Помещение, кад № 72:23:0219003:7543, назначение: Нежилое, ад","href":"https://bankrupt.utpl.ru/public/public-offers/lots/view/127847/"
+PASS REAL ai real empty result {"title":"Подтверждённых совпадений не найдено","cards":0}
+PASS REAL ai real cancel {"status":"Поиск отменён или достиг лимита времени. Неполные данные не показаны как подтвер"}
+PASS REAL ai real rate limit 429 / BUSY at public edge {"responses":[[200,"LIVE_VERIFIED_SOURCE_DATA"],[200,"SOURCE_NOT_ALLOWED"],[200,"RATE_LIMITED"],[429,"RATE_LIMITED"],[429,"RATE_LIMITED"],[429,"RATE_LIMITED"]]}
+PASS SIMULATED ai simulated: timeout result {"status_text":"Сервис сейчас занят или время поиска исчерпано. Это не означает, что лотов нет: повторите запрос через минуту.","raw_error_visible":false}
+PASS SIMULATED ai simulated: BUSY result {"status_text":"Сервис сейчас занят или время поиска исчерпано. Это не означает, что лотов нет: повторите запрос через минуту.","raw_error_visible":false}
+PASS SIMULATED ai simulated: source error (pacing skipped) {"status_text":"Сервис сейчас занят или время поиска исчерпано. Это не означает, что лотов нет: повторите запрос через минуту.","raw_error_visible":false}
+PASS SIMULATED ai simulated: 429 JSON {"status_text":"Поиск временно недоступен. Запрос не сохранён; попробуйте позже.","raw_error_visible":false}
+PASS SIMULATED ai simulated: 502 raw html {"status_text":"Поиск временно недоступен. Запрос не сохранён; попробуйте позже.","raw_error_visible":false}
+SUMMARY pass=43 fail=0
+rc=0
