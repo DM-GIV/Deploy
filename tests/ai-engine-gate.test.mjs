@@ -96,6 +96,7 @@ test('overall deadline returns a definite TIMEOUT result before the nginx limit'
 test('registry listing exposes ids and statuses only', () => {
   configureSourceRegistry({ sources: base });
   assert.ok(SOURCE_REGISTRY.every(row => Object.keys(row).sort().join() === 'id,status'));
+  assert.deepEqual(SOURCE_REGISTRY.map(r => r.id).sort(), ['etpu', 'utpl']);
 });
 
 test('robots Crawl-delay is honoured: per-host pacing, over-limit requests are skipped not sent', async () => {
