@@ -1,0 +1,33 @@
+PASS REAL page / @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /poisk-imushchestva/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /pokupka-imushchestva/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /soprovozhdenie-torgov/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /proverka-lota/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /primery-lotov/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /formaty-raboty/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /o-torgatlas/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /blog/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /privacy/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /ai-poisk-lotov/ @1440 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":1}
+PASS REAL page / @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /poisk-imushchestva/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /pokupka-imushchestva/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /soprovozhdenie-torgov/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /proverka-lota/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /primery-lotov/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /formaty-raboty/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /o-torgatlas/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /blog/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /privacy/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":0}
+PASS REAL page /ai-poisk-lotov/ @390 {"status":200,"h1":1,"horizontal_overflow_px":0,"keyboard":{"focusable":10,"withVisibleIndicator":10},"analytics_requests_before_consent":0,"console_errors":0,"noindex":1}
+PASS REAL home cards+contacts @1440 {"rotation_cards":8,"cards_with_external_link":8,"icons":6,"active_icons":4,"consent_banner":1,"analytics_requests":0}
+PASS REAL home cards+contacts @390 {"rotation_cards":8,"cards_with_external_link":8,"icons":6,"active_icons":4,"consent_banner":1,"analytics_requests":0}
+PASS REAL free-map forms present (not submitted) /proverka-lota/ {"forms":[{"id":"lot-check-form-element","inputs":4}]}
+PASS REAL examples page content /primery-lotov/ {"external_links":10}
+PASS REAL GET /robots.txt {"status":200,"bytes":349}
+PASS REAL GET /sitemap.xml {"status":200,"bytes":1454}
+PASS REAL GET /llms.txt {"status":200,"bytes":1503}
+PASS REAL GET /api/lead-config {"status":200,"enabled":true}
+PASS REAL GET /api/altcha-challenge (ALTCHA, no submit) {"status":200,"keys":["algorithm","challenge","salt","signature","maxnumber"]}
+PASS REAL GET /ta/s.js (Umami script, no events) {"status":200,"type":"application/javascript; charset=UTF-8"}
+SUMMARY pass=32 fail=0

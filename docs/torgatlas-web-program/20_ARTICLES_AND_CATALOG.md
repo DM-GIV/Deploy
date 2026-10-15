@@ -33,3 +33,6 @@
 - Очередь редакции: `deposit-guide-v1`, `public-offer-guide-v1` переведены в `PUBLISHED` (новые хеши); тесты планировщика перенацелены на оставшийся черновик.
 - События Umami: `article_ai_search_cta_click`, `article_lot_check_cta_click`, `ai_search_cta_click` (без персональных данных и текста запросов); статьи входят в тип страницы `guide`.
 - sitemap: статьи с `lastmod 2026-10-15` (реальная дата выпуска), `/blog/` — тоже.
+
+## Публикация и проверка после релиза
+Релиз `b55635546066a9a85e67e3d32a0ae77fa1e145e0` (через `publish-release.sh`; предыдущий `1062e1fcfa265b933c0c4a5ec6650f97b2bc14a0` — откат: `scripts/publish-release.sh 1062e1fcfa265b933c0c4a5ec6650f97b2bc14a0`). После релиза: SEO-обход всех 17 URL из sitemap 80/80, браузерная приёмка на torgatlas.ru 76/76 (ПК 1440, Android-UA 412, без JavaScript), AI-поиск на Core 16/16 (CORE_SEARCH, ALTCHA, Москва/прицепы/легковые/ЮФО), smoke сайта 32/32, healthcheck в норме; хеши изменились только у `/` и `/privacy/` (меню/подвал), `/api/lead-config`, `/ta/s.js` и default-vhost прежние; контейнеры Core и AI не пересоздавались. Lighthouse не запускался (не установлен; см. `evidence/wave-13/lighthouse-status.txt`).
