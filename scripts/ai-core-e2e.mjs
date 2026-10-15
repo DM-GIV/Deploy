@@ -74,7 +74,7 @@ const D = await open(1440);
 rec('REAL', 'field usable immediately, nothing disabled', await D.page.evaluate(() => !document.getElementById('ai-query').disabled && !document.getElementById('ai-submit').disabled));
 await D.page.waitForFunction(() => /Поиск по каталогу ТоргАтлас/.test(document.getElementById('ai-eyebrow').textContent), null, { timeout: 8000 }).catch(() => {});
 rec('REAL', 'label follows the real engine: Core mode shows «Поиск по каталогу ТоргАтлас», no legacy-mode warning', await D.page.evaluate(() => /Поиск по каталогу ТоргАтлас/.test(document.getElementById('ai-eyebrow').textContent) && document.getElementById('ai-mode-note').hidden));
-rec('REAL', 'page states «До 5 результатов» and the CTA is hidden before the first search', await D.page.evaluate(() => /До 5 результатов/.test(document.body.textContent) && document.getElementById('ai-catalog-cta').hidden));
+rec('REAL', 'page states «до 10 подходящих лотов» and the CTA is hidden before the first search', await D.page.evaluate(() => /до 10 подходящих лотов/i.test(document.body.textContent) && document.getElementById('ai-catalog-cta').hidden));
 await typeReal(D, 'Квартиры в Южном федеральном округе на публичном предложении');
 rec('REAL', 'keyboard typing reached the field before the CAPTCHA was touched', (await D.page.inputValue('#ai-query')) === 'Квартиры в Южном федеральном округе на публичном предложении');
 await realClick(D, '#ai-submit');

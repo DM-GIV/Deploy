@@ -48,12 +48,23 @@ class UxHotfix(unittest.TestCase):
         html = (ROOT / "index.html").read_text(encoding="utf-8")
         h1 = re.search(r"<h1>(.*?)</h1>", html, re.S).group(1)
         text = re.sub(r"<[^>]+>", "", h1).replace("&nbsp;", " ")
-        self.assertEqual(text, "Торги по банкротству: от интересного лота до уверенного решения")
+        self.assertEqual(text, "Имущество с торгов: от интересного лота до уверенного решения")
         self.assertIn("Помогаем найти и проверить имущество, разобраться в его стоимости, документах и условиях продажи, чтобы вы могли принять обоснованное решение о покупке", html)
         self.assertNotIn("без покупки вслепую", html)
         self.assertNotIn("с анализом цены и рисков", html)
         self.assertNotRegex(h1 + re.search(r'<p class="hero-text">(.*?)</p>', html, re.S).group(1), "[—–]")
         self.assertIn("h1-a", h1)
+        self.assertIn("<title>Имущество с торгов: поиск и проверка | ТоргАтлас</title>", html)
+        desc = "Поиск и проверка имущества с торгов, включая торги по банкротству. Помогаем изучить документы, оценить стоимость и условия приобретения по всей России"
+        self.assertIn(f'<meta name="description" content="{desc}">', html)
+        self.assertIn(f'<meta property="og:description" content="{desc}">', html)
+        self.assertIn('<meta property="og:title" content="Имущество с торгов: поиск и проверка | ТоргАтлас">', html)
+        self.assertIn("получите до 10 предложений", html)
+        self.assertNotIn("до 5 предложений", html)
+        ld = json.loads(re.search(r'ld\+json">(.*?)</script>', html, re.S).group(1))["@graph"][0]
+        self.assertEqual((ld["telephone"], ld["email"], ld["url"]), ("+79800512327", "mailto:dmitry.g.iv@yandex.ru", "https://torgatlas.ru/"))
+        self.assertNotIn("Все имущественные торги", ld["slogan"] + ld["description"])
+        self.assertIn("<h2", html)
         self.assertIn("hero-buttons", html)
 
     def test_social_cards_identical(self):
