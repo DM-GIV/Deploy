@@ -72,6 +72,9 @@ def build_release(root: Path, output: Path, *, allow_dirty: bool = False) -> dic
         manifest_path = temporary / "release-manifest.json"
         manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         os.chmod(manifest_path, 0o644)
+        # mkdtemp creates 0700; the web server runs as another user and must be able to traverse the release.
+        for directory in [temporary, *[d for d in temporary.rglob('*') if d.is_dir()]]:
+            os.chmod(directory, 0o755)
         os.replace(temporary, output)
         return manifest
     except Exception:
