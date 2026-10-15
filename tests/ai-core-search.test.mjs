@@ -281,3 +281,10 @@ test('GET reports the engine that is really connected', async () => {
   assert.equal((await build({ env: { AI_LOT_CORE_URL: '', AI_LOT_CORE_TOKEN: '' } }).get()).body.mode, 'PUBLIC_WEB_RESEARCH_MINI');
   assert.equal((await build().get()).body.mode, 'CORE_SEARCH');
 });
+
+test('lots that share one publication link are marked, so one publication is never shown as several independent sources', async () => {
+  const same = ['Лот №4', 'Лот №7', 'Лот №9'].map(title => ({ ...GOOD_CARD, title, source_url: 'https://fedresurs.ru/biddings/6e47f89f-5bf4-465d-942d-01fbc32f1205' }));
+  const other = { ...GOOD_CARD, title: 'Квартира', source_url: 'https://fedresurs.ru/biddings/aaaaaaaa-0000-0000-0000-000000000000' };
+  const result = await searchCore({}, { config: CONFIG, fetchImpl: async () => new Response(JSON.stringify({ results: [...same, other] })) });
+  assert.deepEqual(result.lots.map(l => l.same_publication_count), [2, 2, 2, 0]);
+});

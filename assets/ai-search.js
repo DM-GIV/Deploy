@@ -93,9 +93,11 @@
     else if (catalogue) card.append(el('p', 'Цена в каталоге не указана.'));
     if (lot.application_deadline) card.append(el('p', `Приём заявок до: ${checkedTime(lot.application_deadline)}`));
     if (lot.summary) card.append(el('p', String(lot.summary).slice(0, 320)));
-    const state = el('p', applicationState(lot.accepting_applications), 'ai-card-status');
+    const stateText = catalogue && lot.status_label ? `${String(lot.status_label).slice(0, 200)}${lot.accepting_applications === 'CONFIRMED_BY_CATALOGUE_DEADLINE' ? ' Перепроверьте статус в первоисточнике.' : ' Проверьте статус в первоисточнике.'}` : applicationState(lot.accepting_applications);
+    const state = el('p', stateText, 'ai-card-status');
     state.dataset.confirmed = lot.accepting_applications === 'CONFIRMED_BY_CATALOGUE_DEADLINE' ? 'true' : 'false';
     card.append(state);
+    if (catalogue && Number.isInteger(lot.same_publication_count) && lot.same_publication_count > 0) card.append(el('p', `Ссылка ведёт на общую публикацию торгов: в ней ещё ${lot.same_publication_count} ${lot.same_publication_count === 1 ? 'лот' : 'лота/лотов'} из этого списка. Это один источник, а не несколько независимых.`, 'ai-note'));
     const actions = el('div', null, 'ai-card-actions');
     const sourceLink = el('a', 'Открыть карточку лота ↗');
     sourceLink.href = url;

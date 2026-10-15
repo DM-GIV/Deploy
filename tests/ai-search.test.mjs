@@ -111,3 +111,9 @@ test('page never claims a catalogue search statically; the mode label comes from
   assert.match(script, /Упрощённый режим/);
   assert.doesNotMatch(page, /подберёт до 5 наиболее подходящих/);
 });
+
+test('catalogue cards show the honest status label and the shared-publication note', () => {
+  assert.match(script, /lot\.status_label/);
+  assert.match(script, /same_publication_count/);
+  assert.match(script, /один источник, а не несколько независимых/);
+});
