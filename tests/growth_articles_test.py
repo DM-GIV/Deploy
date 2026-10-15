@@ -75,7 +75,7 @@ class Articles(unittest.TestCase):
             self.assertIn('<main id="main" class="post">', html)
             self.assertIn('class="post-lede" id="answer"', html)
             self.assertGreaterEqual(html.count('<section class="post-section"><h2>'), 4, slug)
-            self.assertRegex(html, r'<p class="post-meta">Обновлено 16 октября 2026 · около \d+ мин чтения</p>')
+            self.assertRegex(html, r'<p class="post-meta">Обновлено 15 октября 2026 · около \d+ мин чтения</p>')
             self.assertIn('class="post-sources"', html); self.assertIn('class="post-cta"', html); self.assertIn('class="post-related"', html)
             self.assertEqual(len(re.findall(r"<h1>", html)), 1)
             self.assertIn(f"<h1>{H1[slug]}</h1>", html)
@@ -120,7 +120,7 @@ class Articles(unittest.TestCase):
             crumbs = next(b for b in blocks if b["@type"] == "BreadcrumbList")
             self.assertEqual(post["url"], f"https://torgatlas.ru/blog/{slug}/")
             self.assertEqual(post["author"]["@type"], "Organization")
-            self.assertEqual(post["datePublished"], "2026-10-15"); self.assertEqual(post["dateModified"], "2026-10-16")
+            self.assertEqual(post["datePublished"], "2026-10-15"); self.assertEqual(post["dateModified"], "2026-10-15")
             self.assertEqual(post["headline"], H1[slug])
             for forbidden in ("aggregateRating", "review", "reviewRating", "Person", "interactionStatistic"):
                 self.assertNotIn(forbidden, json.dumps(post), forbidden)
@@ -174,7 +174,7 @@ class SitemapAndDrafts(unittest.TestCase):
     def test_sitemap_has_the_articles_and_the_ai_page_and_nothing_noindex(self):
         sitemap = read("sitemap.xml")
         for slug in SLUGS:
-            self.assertIn(f"<loc>https://torgatlas.ru/blog/{slug}/</loc><lastmod>2026-10-16</lastmod>", sitemap)
+            self.assertIn(f"<loc>https://torgatlas.ru/blog/{slug}/</loc><lastmod>2026-10-15</lastmod>", sitemap)
         self.assertIn("<loc>https://torgatlas.ru/ai-poisk-lotov/</loc>", sitemap)
         for path, html in all_html().items():
             url = "https://torgatlas.ru/" + path[: -len("index.html")] if path.endswith("index.html") else None

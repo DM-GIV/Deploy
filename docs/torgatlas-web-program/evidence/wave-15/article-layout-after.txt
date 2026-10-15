@@ -1,0 +1,12 @@
+fresh desktop   lot           h1 L170/W870  para L340/W760/R340  cta L170  hscroll=false font=18px
+fresh desktop   auto          h1 L170/W870  para L340/W760/R340  cta L170  hscroll=false font=18px
+fresh desktop   land          h1 L170/W870  para L340/W760/R340  cta L170  hscroll=false font=18px
+fresh desktop   participate   h1 L170/W1100  para L340/W760/R340  cta L170  hscroll=false font=18px
+fresh desktop   public-offer  h1 L170/W1100  para L340/W760/R340  cta L170  hscroll=false font=18px
+fresh desktop   deposit       h1 L170/W1100  para L340/W760/R340  cta L170  hscroll=false font=18px
+fresh mobile375 lot           h1 L19/W337  para L19/W337/R19  cta L19  hscroll=false font=17px
+fresh mobile375 auto          h1 L19/W337  para L19/W337/R19  cta L19  hscroll=false font=17px
+fresh mobile375 land          h1 L19/W337  para L19/W337/R19  cta L19  hscroll=false font=17px
+fresh mobile375 participate   h1 L19/W337  para L19/W337/R19  cta L19  hscroll=false font=17px
+fresh mobile375 public-offer  h1 L19/W337  para L19/W337/R19  cta L19  hscroll=false font=17px
+fresh mobile375 deposit       h1 L19/W337  para L19/W337/R19  cta L19  hscroll=false font=17px

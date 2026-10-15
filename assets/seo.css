@@ -72,13 +72,11 @@ main section{padding:58px 0}.subhead{max-width:740px;margin-bottom:24px}h2{font-
 .service-guide-links a,.case-guide-links a{color:#92500c;text-decoration:underline;text-underline-offset:3px;font-weight:700}
 
 /* Editorial article template: shared by the new articles and the older guides (.article-copy).  Everything is visible, no scripts, no accordions. */
-.post-wrap{width:min(760px,calc(100% - 38px));margin:auto}
-.post-hero{position:relative;isolation:isolate;overflow:hidden;padding:56px 0 52px;color:#fff;background:linear-gradient(118deg,#061827 8%,#12334c 65%,#25516a)}
-.post-hero::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 92% 20%,rgba(255,156,33,.26),transparent 30%)}
+.post-hero{padding:52px 0 50px}
 .post-hero h1{font-size:clamp(30px,4.6vw,46px);line-height:1.15;letter-spacing:-1px;max-width:none;margin:14px 0 16px}
 .post-meta{margin:0;color:#c3d5e2;font-size:14px}
 .article-copy{max-width:760px;margin-inline:auto;font-size:18px;line-height:1.75;color:#17293b}
-.article-copy.post-body{padding:44px 0 8px;width:min(760px,calc(100% - 38px))}
+main .post-bodywrap{padding:44px 0 8px}
 .article-copy h2{font-size:clamp(23px,2.8vw,29px);line-height:1.25;letter-spacing:-.4px;margin:44px 0 14px}
 .article-copy h2::before{content:"";display:block;width:34px;height:4px;border-radius:2px;background:var(--orange);margin-bottom:12px}
 .article-copy p{margin:0 0 18px}

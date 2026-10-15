@@ -49,6 +49,7 @@ capture "$BASE"; require_all_200 "$BASE" "BASELINE (current release must be heal
 if [ ! -d "$REL" ]; then
   [ -z "$(git -C "$REPO" status --porcelain)" ] || { echo "dirty tree" >&2; exit 5; }
   [ "$(git -C "$REPO" rev-parse HEAD)" = "$SHA" ] || { echo "SHA is not HEAD; build only from HEAD" >&2; exit 5; }
+  python3 "$REPO/scripts/fingerprint-assets.py" --check >/dev/null || { echo "asset fingerprints are stale: run scripts/build-site-assets.sh" >&2; exit 5; }
   python3 "$REPO/scripts/build-static-release.py" --output "$REL" >/dev/null
 fi
 python3 - "$REL" "$SHA" <<'P' || exit 6

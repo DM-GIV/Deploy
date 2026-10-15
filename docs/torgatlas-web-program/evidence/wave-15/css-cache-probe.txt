@@ -1,0 +1,10 @@
+PASS step1: previous release cached unversioned seo.css {"cssHref":"/assets/seo.css","h1L":170,"pL":300,"pR":300,"hscroll":false}
+PASS step2 cached-profile kak-proverit-lot-pered-torgami: new HTML asks for fingerprinted CSS, text in the 760px column {"cssHref":"/assets/seo.css?v=420684a99b3e","h1L":170,"pL":340,"pR":340,"hscroll":false,"reqs":[{"url":"seo.css?v=420684a99b3e","fromCache":null}]}
+PASS step2 cached-profile kak-uchastvovat-v-torgah-po-bankrotstvu: new HTML asks for fingerprinted CSS, text in the 760px column {"cssHref":"/assets/seo.css?v=420684a99b3e","h1L":170,"pL":340,"pR":340,"hscroll":false,"reqs":[{"url":"seo.css?v=420684a99b3e","fromCache":null}]}
+PASS step2 cached-profile publichnoe-predlozhenie-bankrotstvo: new HTML asks for fingerprinted CSS, text in the 760px column {"cssHref":"/assets/seo.css?v=420684a99b3e","h1L":170,"pL":340,"pR":340,"hscroll":false,"reqs":[{"url":"seo.css?v=420684a99b3e","fromCache":null}]}
+PASS step2 cached-profile zadatok-na-torgah-po-bankrotstvu: new HTML asks for fingerprinted CSS, text in the 760px column {"cssHref":"/assets/seo.css?v=420684a99b3e","h1L":170,"pL":340,"pR":340,"hscroll":false,"reqs":[{"url":"seo.css?v=420684a99b3e","fromCache":null}]}
+PASS step3 cold kak-proverit-lot-pered-torgami {"cssHref":"/assets/seo.css?v=420684a99b3e","h1L":170,"pL":340,"pR":340,"hscroll":false}
+PASS step3 cold kak-uchastvovat-v-torgah-po-bankrotstvu {"cssHref":"/assets/seo.css?v=420684a99b3e","h1L":170,"pL":340,"pR":340,"hscroll":false}
+PASS step3 cold publichnoe-predlozhenie-bankrotstvo {"cssHref":"/assets/seo.css?v=420684a99b3e","h1L":170,"pL":340,"pR":340,"hscroll":false}
+PASS step3 cold zadatok-na-torgah-po-bankrotstvu {"cssHref":"/assets/seo.css?v=420684a99b3e","h1L":170,"pL":340,"pR":340,"hscroll":false}
+ALL PASS

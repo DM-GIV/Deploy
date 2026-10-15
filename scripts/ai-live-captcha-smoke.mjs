@@ -37,7 +37,7 @@ const noH = page => page.evaluate(() => document.documentElement.scrollWidth <= 
 const html = await (await fetch(`${base}/ai-poisk-lotov/`)).text();
 rec('REAL', 'published HTML: nothing disabled, CAPTCHA before the button, «До 5 результатов», CTA «В разработке» without a link, no marketplace list',
   !/<textarea[^>]*\sdisabled/.test(html) && html.indexOf('id="ai-captcha"') < html.indexOf('id="ai-submit"') && /До 5 результатов/.test(html) && !/До 10 результатов/.test(html)
-  && /Посмотреть больше лотов в каталоге ТоргАтлас/.test(html) && !/<p class="ai-catalog-cta"[^>]*>[^]*?<a\b/.test(html.match(/<p class="ai-catalog-cta"[^]*?<\/p>/)[0]) && !/УТПЛ|УЭТП|Центр реализации|ГИС Торги|ЕФРСБ|МЭТС/.test(html), { script: (html.match(/ai-search\.js\?v=\d+/) || [])[0] });
+  && /Посмотреть больше лотов в каталоге ТоргАтлас/.test(html) && !/<p class="ai-catalog-cta"[^>]*>[^]*?<a\b/.test(html.match(/<p class="ai-catalog-cta"[^]*?<\/p>/)[0]) && !/УТПЛ|УЭТП|Центр реализации|ГИС Торги|ЕФРСБ|МЭТС/.test(html), { script: (html.match(/ai-search\.js\?v=[a-f0-9]{12}/) || [])[0] });
 
 // API-level negative probes (plain HTTP, labelled as such)
 const post = (body, origin = 'https://torgatlas.ru') => fetch(`${base}/api/ai-lot-search`, { method: 'POST', headers: { 'content-type': 'application/json', ...(origin ? { origin } : {}) }, body: JSON.stringify(body) });

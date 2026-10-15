@@ -13,7 +13,7 @@ test('AI search form is usable immediately: nothing is disabled in the published
   assert.doesNotMatch(page, /id="ai-limit"/);
   assert.match(page, /<noscript>[\s\S]*JavaScript[\s\S]*<\/noscript>/);
   assert.match(page, /__aiSearchReady/);
-  assert.match(page, /ai-search\.js\?v=\d+/);
+  assert.match(page, /ai-search\.js\?v=[a-f0-9]{12}/);
 });
 
 test('public page names no marketplaces, source counts or disabled sources; uses the owner-approved wording', () => {

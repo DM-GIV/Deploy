@@ -21,13 +21,22 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://torgatlas.ru"
 PUBLISHED = "2026-10-15"
-MODIFIED = "2026-10-16"
+MODIFIED = "2026-10-15"   # never later than the real date of the release; checked by tests against the server clock
 VERIFIED_ON = "15.10.2026"
 ART110 = "https://www.consultant.ru/document/cons_doc_LAW_39331/970a8647d4bfb2868e3ca913c3f3188e6d81d092/"
 ART139 = "https://www.consultant.ru/document/cons_doc_LAW_39331/daac864a9cec4a65469d6383ef1bf1fe0a5367cc/"
 GARANT110 = "https://base.garant.ru/185181/61be80f84cf4d95f84aeddb3178a7797/"
 GARANT139 = "https://base.garant.ru/185181/c11465d9cdd9cd41f225c2e996875142/"
 EFRSB = "https://bankrot.fedresurs.ru/"
+
+_fp_spec = importlib.util.spec_from_file_location("fingerprint_assets", ROOT / "scripts/fingerprint-assets.py")
+fingerprint_assets = importlib.util.module_from_spec(_fp_spec)
+_fp_spec.loader.exec_module(fingerprint_assets)
+
+
+def asset(path: str) -> str:
+    return f"{path}?v={fingerprint_assets.fingerprint(path)}"
+
 
 _spec = importlib.util.spec_from_file_location("site_nav", ROOT / "scripts/apply-site-nav.py")
 site_nav = importlib.util.module_from_spec(_spec)
@@ -216,6 +225,14 @@ def body_words(article: dict) -> int:
     return total
 
 
+RU_MONTHS = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"]
+
+
+def ru_date(iso: str) -> str:
+    y, m, d = (int(x) for x in iso.split("-"))
+    return f"{d} {RU_MONTHS[m - 1]} {y}"
+
+
 def footer() -> str:
     extra = "".join(f'<a href="{h}">{t}</a> ' for h, t in site_nav.FOOTER_EXTRA)
     return f'<footer class="site-footer"><div class="wrap">ТоргАтлас · Работа по всей России · <a href="/">На главную</a> {extra}<a href="/privacy/">Конфиденциальность</a></div></footer>'
@@ -247,26 +264,26 @@ def render(article: dict) -> str:
         f'<title>{esc(article["title"])}</title><meta name="description" content="{esc(article["description"])}">'
         '<meta name="robots" content="index,follow,max-image-preview:large">'
         f'<link rel="canonical" href="{url}"><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">'
-        '<link rel="stylesheet" href="/assets/seo.css"><meta property="og:type" content="article"><meta property="og:locale" content="ru_RU">'
+        f'<link rel="stylesheet" href="{asset("/assets/seo.css")}"><meta property="og:type" content="article"><meta property="og:locale" content="ru_RU">'
         f'<meta property="og:title" content="{esc(article["title"])}"><meta property="og:description" content="{esc(article["description"])}"><meta property="og:url" content="{url}">'
         '<meta property="og:image" content="https://torgatlas.ru/assets/torgatlas-social.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">'
         '<meta property="og:image:alt" content="ТоргАтлас — Все имущественные торги России">'
         f'<script type="application/ld+json">{dump(blogposting)}</script><script type="application/ld+json">{dump(breadcrumbs)}</script></head><body>'
         f'<header class="site-header"><div class="wrap header-inner"><a class="brand" href="/">ТоргАтлас<small>Все имущественные торги России</small></a>{site_nav.inner_nav("/blog/" + slug + "/")}</div></header>'
-        '<main id="main" class="post"><div class="post-hero"><div class="post-wrap">'
+        '<main id="main" class="post"><div class="intro post-hero"><div class="wrap">'
         f'<nav class="crumbs" aria-label="Навигационная цепочка"><a href="/">Главная</a> / <a href="/blog/">Материалы</a> / {esc(article["crumb"])}</nav>'
         f'<div class="eyebrow">{esc(article["rubric"])}</div><h1>{esc(article["h1"])}</h1>'
-        f'<p class="post-meta">Обновлено 16 октября 2026 · около {minutes} мин чтения</p></div></div>'
-        f'<article class="article-copy post-body"><p class="post-lede" id="answer">{esc(article["answer"])}</p>{sections}'
+        f'<p class="post-meta">Обновлено {ru_date(MODIFIED)} · около {minutes} мин чтения</p></div></div>'
+        f'<section class="post-bodywrap"><div class="wrap"><article class="article-copy post-body"><p class="post-lede" id="answer">{esc(article["answer"])}</p>{sections}'
         f'<section class="post-sources"><h2>Источники и проверка</h2><p>{esc(article["verified"])}</p>{sources}</section>'
-        '<p class="statement">Материал носит информационный характер и не заменяет индивидуальную юридическую, техническую или финансовую проверку конкретного имущества; результат торгов и экономический эффект не гарантируются.</p></article>'
-        f'<aside class="post-cta" aria-labelledby="cta-title"><div class="post-wrap"><h2 id="cta-title">{esc(article["cta_title"])}</h2><p>{esc(article["cta_text"])}</p>'
+        '<p class="statement">Материал носит информационный характер и не заменяет индивидуальную юридическую, техническую или финансовую проверку конкретного имущества; результат торгов и экономический эффект не гарантируются.</p></article></div></section>'
+        f'<aside class="post-cta" aria-labelledby="cta-title"><div class="wrap"><h2 id="cta-title">{esc(article["cta_title"])}</h2><p>{esc(article["cta_text"])}</p>'
         '<div class="ctas"><a class="btn" href="/ai-poisk-lotov/" data-track="article_ai_search_cta_click">Найти лот в AI-поиске</a>'
         '<a class="btn outline" href="/proverka-lota/#lot-check-form" data-track="article_lot_check_cta_click">Бесплатная карта проверки</a></div>'
         '<p class="post-cta-more">Нужна помощь специалиста? <a href="/formaty-raboty/">Посмотрите форматы работы</a>.</p></div></aside>'
-        f'<section class="post-related"><div class="post-wrap"><h2>Читайте также</h2><div class="related-grid">{related}</div></div></section>'
+        f'<section class="post-related"><div class="wrap"><h2>Читайте также</h2><div class="related-grid">{related}</div></div></section>'
         f'</main>{footer()}'
-        '<script src="/assets/analytics.js?v=963d97011965" defer></script><script src="/assets/funnel-events.js" defer></script></body></html>\n'
+        f'<script src="{asset("/assets/analytics.js")}" defer></script><script src="{asset("/assets/funnel-events.js")}" defer></script></body></html>\n'
     )
 
 
