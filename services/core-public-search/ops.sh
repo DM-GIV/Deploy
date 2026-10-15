@@ -9,7 +9,7 @@ set -uo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
 OPS=${TA_OPS:-/home/deploy/torgatlas-ops}
 ENV_FILE=${CORE_PS_ENV_FILE:-$OPS/core-public-search.env}
-export CORE_PS_IMAGE=${CORE_PS_IMAGE:-auction-data004:torgatlas-public-search-c13524f}
+export CORE_PS_IMAGE=${CORE_PS_IMAGE:-auction-data004:torgatlas-public-search-1a42994}
 export CORE_PS_ENV_FILE=$ENV_FILE
 compose() { docker compose -p torgatlas-core-ps -f "$HERE/compose.yml" "$@"; }
 ok() { printf 'OK    %s\n' "$*"; }; bad() { printf 'FAIL  %s\n' "$*"; FAILS=$((FAILS+1)); }

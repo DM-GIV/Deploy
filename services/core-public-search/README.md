@@ -18,7 +18,7 @@ image/env/ports, no change of Docker networks' configuration, no secret of Core*
 
 ## Exact steps after approval
 ```
-# 0. build the image (local, no registry)            cd /home/deploy/aa-core-public-search-wt/app/backend && docker build -f Dockerfile.data004 -t auction-data004:torgatlas-public-search-c13524f .
+# 0. build the image (local, no registry)            cd /home/deploy/aa-core-public-search-wt/app/backend && docker build -f Dockerfile.data004 -t auction-data004:torgatlas-public-search-1a42994 .
 # 1. DB role (Core DB owner)                          psql ... -f <role.sql with the generated password>
 # 2. env files (0600), see above
 # 3. preflight (read-only)                            services/core-public-search/ops.sh preflight
