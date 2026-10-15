@@ -1,0 +1,15 @@
+proxy container -> edge /health: {"ok":true,"feature_enabled":true}
+proxy container -> edge /api/ai-lot-search: {"enabled":true,"max_results":5,"mode":"CORE_SEARCH","captcha":{"required":true}}
+public address 192.168.0.2:18082 closed: OK
+/ 200 ecceee463447
+/privacy/ 200 a5656e28abfd
+/api/lead-config 200 10eb1f25fa3d
+/ta/s.js 200 654f12c7548b
+default-vhost 404 cf9be91f18e1
+aa-data004-postgres-1 cpu=35.10% mem=289.3MiB / 768MiB
+aa-data004-api-1 cpu=0.16% mem=106MiB / 768MiB
+torgatlas-ai-search cpu=0.00% mem=24.44MiB / 192MiB
+torgatlas-ai-core-search cpu=0.16% mem=54.24MiB / 256MiB
+pg_connections|13
+db_size|26 GB
+lots|218503|2026-10-15 13:16:28.337229+00

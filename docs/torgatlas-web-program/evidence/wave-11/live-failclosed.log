@@ -1,0 +1,5 @@
+2026-10-15 13:15:49Z  docker stop torgatlas-ai-core-search (only this container); GET /api/ai-lot-search -> mode CORE_SEARCH (configuration mode; GET does not probe Core health)
+Real browser search (ALTCHA ticked, button clicked):
+{"get_mode":"CORE_SEARCH","post_status":[503],"status":"Поиск временно недоступен. Мы не подставляем неточные результаты; повторите позже. Текст запроса сохранён.","cards":0,"results_hidden":true,"kept":"Найди квартиры на торгах в Москве","button_enabled":true}
+PASS fail-closed: clear unavailability, no cards, no fallback, text kept, button usable
+2026-10-15 13:16:14Z  docker start torgatlas-ai-core-search -> healthy after ~40 s; aa-data004-api-1 untouched (same image, StartedAt 2026-10-14T22:24:14Z, restarts 0)

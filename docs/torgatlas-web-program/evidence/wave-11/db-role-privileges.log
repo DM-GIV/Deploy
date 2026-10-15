@@ -1,0 +1,20 @@
+# role privileges on PRODUCTION Core DB, 2026-10-15 (password not shown)
+select count(*) from lots                          -> 218503
+select count(*) from auctions                      -> 57475
+select count(*) from lot_source_records            -> 205419
+select count(*) from price_periods                 -> 5016
+UPDATE lots SET title=title WHERE id=0             -> ERROR:  cannot execute UPDATE in a read-only transaction
+DELETE FROM lots WHERE id=0                        -> ERROR:  cannot execute DELETE in a read-only transaction
+INSERT INTO lots(title) VALUES ('x')               -> ERROR:  cannot execute INSERT in a read-only transaction
+CREATE TABLE torgatlas_x(i int)                    -> ERROR:  cannot execute CREATE TABLE in a read-only transaction
+TRUNCATE lots                                      -> ERROR:  cannot execute TRUNCATE TABLE in a read-only transaction
+DROP TABLE lots                                    -> ERROR:  cannot execute DROP TABLE in a read-only transaction
+SELECT 1 FROM assets LIMIT 1                       -> ERROR:  permission denied for table assets
+SELECT 1 FROM users LIMIT 1                        -> ERROR:  permission denied for table users
+SELECT 1 FROM documents LIMIT 1                    -> ERROR:  permission denied for table documents
+SELECT 1 FROM lot_participants LIMIT 1             -> ERROR:  permission denied for table lot_participants
+SELECT 1 FROM entities LIMIT 1                     -> ERROR:  permission denied for table entities
+SELECT 1 FROM jobs LIMIT 1                         -> ERROR:  permission denied for table jobs
+SELECT pg_read_file('/etc/passwd')                 -> ERROR:  permission denied for function pg_read_file
+COPY lots TO PROGRAM 'id'                          -> ERROR:  permission denied to COPY to or from an external program
+torgatlas_public_search|t|f|f|f|f|4|{default_transaction_read_only=on,statement_timeout=5s,idle_in_transaction_session_timeout=10s}
