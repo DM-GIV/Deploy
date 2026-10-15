@@ -44,7 +44,7 @@ test('site-owned service rejects invalid JSON, oversized bodies and unrelated ro
     assert.equal(invalid.status, 400);
     assert.equal((await invalid.json()).code, 'INVALID_JSON');
 
-    const oversized = await fetch(`${base}/api/ai-lot-search`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: 'x'.repeat(1600) }) });
+    const oversized = await fetch(`${base}/api/ai-lot-search`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: 'x'.repeat(4200) }) });
     assert.equal(oversized.status, 413);
     assert.equal((await oversized.json()).code, 'BODY_TOO_LARGE');
 

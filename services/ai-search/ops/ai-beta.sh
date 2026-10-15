@@ -47,7 +47,9 @@ nginx_test_staged() {
 }
 
 set_flags() { # $1=search $2=security $3=legal
-  ( umask 077; printf 'AI_LOT_SEARCH_ENABLED=%s\nAI_LOT_SECURITY_APPROVED=%s\nAI_LOT_LEGAL_APPROVED=%s\n' "$1" "$2" "$3" > "$ENV_FILE.new" )
+  # Only the three release gates are rewritten; every other line (ALTCHA key, Core connection) is preserved.
+  ( umask 077; { [ -f "$ENV_FILE" ] && grep -vE '^AI_LOT_(SEARCH_ENABLED|SECURITY_APPROVED|LEGAL_APPROVED)=' "$ENV_FILE" || true
+      printf 'AI_LOT_SEARCH_ENABLED=%s\nAI_LOT_SECURITY_APPROVED=%s\nAI_LOT_LEGAL_APPROVED=%s\n' "$1" "$2" "$3"; } > "$ENV_FILE.new" )
   mv "$ENV_FILE.new" "$ENV_FILE"
 }
 

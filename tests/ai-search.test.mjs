@@ -53,6 +53,51 @@ test('AI search uses one natural-language query, truthful stages and cancellatio
   assert.match(script, /Думаю…/);
   assert.match(script, /Ищу предложения и проверяю первоисточники/);
   assert.match(script, /Формирую результаты/);
-  assert.match(script, /JSON\.stringify\(\{ query \}\)/);
+  assert.match(script, /JSON\.stringify\(\{ query, altcha: proof \}\)/);
   assert.doesNotMatch(script, /yandex\.ru\/search/);
+});
+
+test('«Я человек» check sits before the search button, the field never depends on it, and a missing token blocks only the send', () => {
+  assert.ok(page.indexOf('id="ai-captcha"') > 0 && page.indexOf('id="ai-captcha"') < page.indexOf('id="ai-submit"'));
+  assert.doesNotMatch(page, /<textarea[^>]*disabled/);
+  assert.match(script, /if \(!captchaToken\)/);
+  assert.match(script, /challengeurl', CAPTCHA_URL/);
+  assert.match(script, /CAPTCHA_URL = '\/api\/ai-lot-search\?altcha=1'/);
+  assert.match(script, /credentials', 'omit'/);
+  // the token is single use: the widget is reset after every request, whatever its outcome
+  assert.match(script, /resetCaptcha\(\);[^\n]*one proof of work = one request/);
+  // the check can never change the text the visitor typed
+  assert.doesNotMatch(script, /q\.value\s*=\s*''/);
+  assert.match(script, /q\.disabled = false;/);
+});
+
+test('page states the five-result cap and offers an inactive catalogue link marked «Скоро»', () => {
+  assert.match(page, /<p class="ai-limit">До 5 результатов<\/p>/);
+  assert.match(page, /Посмотреть больше лотов в каталоге ТоргАтлас/);
+  const cta = page.match(/<p class="ai-catalog-cta"[\s\S]*?<\/p>/)[0];
+  assert.match(cta, />Скоро</);
+  assert.doesNotMatch(cta, /<a\b|href=/);
+  assert.match(cta, /aria-disabled="true"/);
+  assert.match(cta, /hidden/);
+  assert.match(script, /catalogCta\.hidden = incomplete;/);
+  assert.match(script, /data\.lots\.slice\(0, 5\)/);
+});
+
+test('result cards show price meaning, procedure, status, deadline, last-check date and a validated primary-source link', () => {
+  for (const needle of ["lot.price_meaning", "Процедура:", "Приём заявок до:", "Последняя проверка данных", "ai-card-status", "Открыть карточку лота"]) assert.ok(script.includes(needle), needle);
+  assert.match(script, /url\.protocol !== 'https:' \|\| url\.username \|\| url\.password \|\| url\.port/);
+  assert.match(script, /el\('h3', lot\.title\.slice/); // text nodes only, never innerHTML
+  assert.doesNotMatch(script, /innerHTML/);
+});
+
+test('clarification and interpretation are rendered as text, and the typed query is kept', () => {
+  assert.match(script, /NEEDS_CLARIFICATION/);
+  assert.match(script, /Как понят запрос/);
+  assert.match(script, /Не учтено в поиске/);
+  assert.match(page, /id="ai-understood"/);
+});
+
+test('no stale result-count claim remains on the page', () => {
+  assert.doesNotMatch(page, /До 10 результатов|10 результатов/);
+  assert.equal((page.match(/До 5 результатов/g) || []).length, 2);
 });

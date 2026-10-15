@@ -19,7 +19,7 @@ test('API preserves content type and body size protections', async () => {
   gates('true');
   const badType=response(); await handler({method:'POST',headers:{origin:'https://torgatlas.ru','content-type':'text/plain'},body:{}},badType);
   assert.equal(badType.code,415);
-  const large=response(); await handler({method:'POST',headers:{origin:'https://torgatlas.ru','content-type':'application/json'},body:{query:'x'.repeat(1500)}},large);
+  const large=response(); await handler({method:'POST',headers:{origin:'https://torgatlas.ru','content-type':'application/json'},body:{query:'x'.repeat(4000)}},large);
   assert.equal(large.code,413);
   gates('false');
 });

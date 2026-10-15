@@ -2,7 +2,7 @@ import http from 'node:http';
 import { pathToFileURL } from 'node:url';
 import handler from '../../api/ai-lot-search.mjs';
 
-const MAX_BODY_BYTES = 1_500;
+const MAX_BODY_BYTES = 4_096;
 const REQUEST_TIMEOUT_MS = 60_000;
 
 function validForwardedIp(value) {
@@ -53,7 +53,9 @@ export function createAiSearchServer({ trustProxy = process.env.AI_LOT_TRUST_PRO
       response.end(JSON.stringify({ ok: true, feature_enabled: process.env.AI_LOT_SEARCH_ENABLED === 'true' }));
       return;
     }
-    if (request.url !== '/api/ai-lot-search') {
+    const target = new URL(request.url || '/', 'http://internal');
+    request.query = Object.fromEntries([...target.searchParams].slice(0, 4));
+    if (target.pathname !== '/api/ai-lot-search') {
       response.statusCode = 404;
       response.end('not found');
       return;
