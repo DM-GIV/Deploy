@@ -9,8 +9,22 @@ test('AI search starts fail-closed and explains that input is not sent', () => {
   assert.match(page, /id="ai-query"[^>]*disabled/);
   assert.doesNotMatch(page, /id="ai-source"/);
   assert.doesNotMatch(page, /id="ai-limit"/);
-  assert.match(page, /Текст запроса не отправляется до его включения/);
+  assert.match(page, /Текст запроса отправляется только при нажатии «Найти лоты»/);
   assert.doesNotMatch(page, /Поиск по .* в Яндексе/);
+});
+
+test('public description lists only the sources enabled in the registry and never a disabled one as active', () => {
+  const registry = JSON.parse(fs.readFileSync('config/ai-sources.registry.json', 'utf8'));
+  const enabled = registry.sources.filter(source => source.edge_enabled === true).map(source => source.id).sort();
+  assert.deepEqual(enabled, ['centerr-bankrupt', 'etpu', 'utpl']);
+  const note = page.match(/<p class="ai-beta-note">(.*?)<\/p>/s)[1];
+  const description = page.match(/<meta name="description" content="([^"]*)"/)[1];
+  for (const text of [note.split('ГИС Торги пока не подключены')[0], description]) {
+    assert.doesNotMatch(text, /ГИС|torgi\.gov|ЕФРСБ|МЭТС/);
+  }
+  assert.match(note, /УТПЛ[\s\S]*УЭТП[\s\S]*Центр реализации/);
+  assert.match(note, /ГИС Торги пока не подключены/);
+  assert.match(description, /УТПЛ, УЭТП и Центр реализации/);
 });
 
 test('AI search checks status with GET before it permits a POST query', () => {

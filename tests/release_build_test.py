@@ -29,6 +29,16 @@ class StaticReleaseBuildTest(unittest.TestCase):
             self.assertEqual(stored, manifest)
             self.assertTrue(all(len(row["sha256"]) == 64 for row in manifest["files"]))
 
+    def test_release_directories_are_traversable_by_other_users(self):
+        # Regression: mkdtemp() made the release root 0700 and the web server answered 403 for every page.
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "release"
+            MODULE.build_release(ROOT, target, allow_dirty=True)
+            for path in [target, *[d for d in target.rglob("*") if d.is_dir()]]:
+                self.assertEqual(path.stat().st_mode & 0o755, 0o755, str(path))
+            for path in [d for d in target.rglob("*") if d.is_file()]:
+                self.assertTrue(path.stat().st_mode & 0o004, str(path))
+
 
 if __name__ == "__main__":
     unittest.main()
