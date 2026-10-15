@@ -48,10 +48,12 @@ class UxHotfix(unittest.TestCase):
         html = (ROOT / "index.html").read_text(encoding="utf-8")
         h1 = re.search(r"<h1>(.*?)</h1>", html, re.S).group(1)
         text = re.sub(r"<[^>]+>", "", h1).replace("&nbsp;", " ")
-        self.assertEqual(text, "От интересного лота до уверенного решения")
-        self.assertIn("Помогаем найти имущество на торгах, разобраться в его стоимости, документах и условиях продажи, чтобы вы могли принять обоснованное решение о покупке", html)
+        self.assertEqual(text, "Торги по банкротству: от интересного лота до уверенного решения")
+        self.assertIn("Помогаем найти и проверить имущество, разобраться в его стоимости, документах и условиях продажи, чтобы вы могли принять обоснованное решение о покупке", html)
         self.assertNotIn("без покупки вслепую", html)
         self.assertNotIn("с анализом цены и рисков", html)
+        self.assertNotRegex(h1 + re.search(r'<p class="hero-text">(.*?)</p>', html, re.S).group(1), "[—–]")
+        self.assertIn("h1-a", h1)
         self.assertIn("hero-buttons", html)
 
     def test_social_cards_identical(self):
