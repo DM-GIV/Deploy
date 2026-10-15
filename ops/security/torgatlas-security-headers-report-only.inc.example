@@ -1,0 +1,9 @@
+# REVIEWED TEMPLATE ONLY — not active in production.
+# Deploy first as Report-Only and inspect violations before enforcement.
+add_header Content-Security-Policy-Report-Only "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://cloud.umami.is; connect-src 'self' https://cloud.umami.is; img-src 'self' data: https://images.unsplash.com; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-src 'self'; upgrade-insecure-requests" always;
+add_header Cross-Origin-Opener-Policy-Report-Only "same-origin" always;
+
+# Keep the current short HSTS policy while app.torgatlas.ru and every other
+# subdomain are not independently verified. Do not add includeSubDomains/preload.
+# Trusted Types are an enforcement option only after a browser compatibility
+# review; this static site does not depend on them for the current XSS boundary.

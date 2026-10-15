@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TorgAtlas editorial item",
+  "type": "object",
+  "required": ["id", "route", "status", "title"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "route": {"type": "string", "pattern": "^/blog/[a-z0-9-]+/$"},
+    "status": {"enum": ["DRAFT", "DRAFT_FOR_OWNER_APPROVAL", "OWNER_APPROVED", "PUBLISHED", "FAILED"]},
+    "title": {"type": "string", "minLength": 20},
+    "video_url": {"type": ["string", "null"], "format": "uri"},
+    "video_provider": {"type": ["string", "null"], "enum": ["youtube", "rutube", "vk-video", "self-hosted", null]},
+    "thumbnail": {"type": ["string", "null"]},
+    "duration": {"type": ["string", "null"], "pattern": "^PT"},
+    "upload_date": {"type": ["string", "null"], "format": "date"},
+    "transcript": {"type": ["string", "null"]},
+    "captions": {"type": ["string", "null"]},
+    "chapters": {"type": "array", "items": {"type": "object"}},
+    "related_article": {"type": ["string", "null"]}
+  }
+}

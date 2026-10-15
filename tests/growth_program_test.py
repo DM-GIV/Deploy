@@ -49,7 +49,7 @@ class GrowthProgramTests(unittest.TestCase):
 
     def test_owner_approved_requires_every_gate_and_exact_hash(self):
         queue = copy.deepcopy(SCHEDULER.load_queue())
-        item = queue["items"][0]
+        item = next(item for item in queue["items"] if item["id"] == "deposit-guide-v1")
         item["status"] = "OWNER_APPROVED"
         item["owner_approved_by"] = "owner"
         item["owner_approved_at"] = "2026-10-17T12:00:00+03:00"
@@ -62,7 +62,7 @@ class GrowthProgramTests(unittest.TestCase):
 
     def test_owner_approved_rejects_nonofficial_source(self):
         queue = copy.deepcopy(SCHEDULER.load_queue())
-        item = queue["items"][0]
+        item = next(item for item in queue["items"] if item["id"] == "deposit-guide-v1")
         item["status"] = "OWNER_APPROVED"
         item["owner_approved_by"] = "owner"
         item["owner_approved_at"] = "2026-10-17T12:00:00+03:00"

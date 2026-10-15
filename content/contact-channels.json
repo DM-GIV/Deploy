@@ -1,0 +1,11 @@
+{
+  "schema": "torgatlas-contact-channels-v1",
+  "channels": [
+    {"id": "phone", "label": "Позвонить", "confirmed": true, "href": "tel:+79800512327", "copy": "+79800512327"},
+    {"id": "email", "label": "Написать по электронной почте", "confirmed": true, "href": "mailto:dmitry.g.iv@yandex.ru", "copy": "dmitry.g.iv@yandex.ru"},
+    {"id": "telegram", "label": "Открыть Telegram ТоргАтлас", "confirmed": true, "href": "https://t.me/Dmitry_G_Iv"},
+    {"id": "max", "label": "Скопировать номер для MAX", "confirmed": true, "href": null, "copy": "+79800512327"},
+    {"id": "vk", "label": "VK — официальный профиль ещё не подтверждён", "confirmed": false, "href": null},
+    {"id": "dzen", "label": "Яндекс Дзен — официальный канал ещё не подтверждён", "confirmed": false, "href": null}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schema": "torgatlas-social-packages-v1",
+  "statuses": ["DRAFT", "APPROVED", "PUBLISHED", "FAILED"],
+  "packages": [
+    {
+      "id": "intro-blog-v1",
+      "source_article": "/blog/o-chem-budem-pisat-v-torgatlas/",
+      "source_status": "DRAFT_FOR_OWNER_APPROVAL",
+      "canonical_url": "https://torgatlas.ru/blog/o-chem-budem-pisat-v-torgatlas/",
+      "cover": "assets/torgatlas-social.png",
+      "vk": {"status": "DRAFT", "utm": "utm_source=vk&utm_medium=social&utm_campaign=intro_blog", "text": "В блоге ТоргАтлас будем разбирать виды торгов, документы, задатки, полную стоимость покупки и риски. Без обещаний гарантированной выгоды — с первоисточниками и датой проверки. Полная версия будет доступна после редакционного утверждения."},
+      "yandex_dzen": {"status": "DRAFT", "utm": "utm_source=yandex_dzen&utm_medium=social&utm_campaign=intro_blog", "text": "Торги начинаются с проверки, а не с обещания скидки. Готовим вводный материал о темах блога и правилах работы с первоисточниками. Публикация возможна только после одобрения владельца."},
+      "dedupe_key": "intro-blog-v1",
+      "owner_approved_by": null,
+      "owner_approved_at": null
+    }
+  ]
+}

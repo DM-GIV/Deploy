@@ -1,0 +1,8 @@
+{
+  "schema": "torgatlas-social-channels-v1",
+  "canonical_host": "https://torgatlas.ru",
+  "channels": {
+    "vk": {"confirmed": false, "url": null, "api_access": "NOT_CONNECTED", "publishing": "OWNER_APPROVAL_REQUIRED"},
+    "yandex_dzen": {"confirmed": false, "url": null, "api_access": "NOT_CONNECTED", "publishing": "OWNER_APPROVAL_REQUIRED"}
+  }
+}

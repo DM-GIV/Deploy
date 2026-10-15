@@ -749,7 +749,7 @@
     .button-secondary:hover { background:rgba(255,255,255,.12); }
     .hero-highlights span { border-color:rgba(255,255,255,.15); background:rgba(6,22,36,.64); color:#e4ebf1; backdrop-filter:blur(8px); }
     .hero-highlights b { color:var(--orange); }
-    .section-label { color:#f07b17; }
+    .section-label { color:#934500; }
     .services { background:linear-gradient(180deg,#fff 0%,#fff9f1 100%); }
     .card { border:1px solid #e8edf2; border-top:3px solid var(--orange); box-shadow:0 12px 34px rgba(8,29,47,.07); }
     .card:hover { border-color:#ffc06b; box-shadow:0 22px 50px rgba(8,29,47,.13); }
@@ -774,7 +774,7 @@
     .photo-credit { margin-top:18px; color:#8fa0ad; font-size:11px; }
     .photo-credit a { text-decoration:underline; text-underline-offset:2px; }
     @media(max-width:800px){ .hero{min-height:auto;padding:82px 0 72px}.hero::before{background-position:62% center;opacity:.36}.hero::after{background:linear-gradient(90deg,rgba(4,18,31,.98),rgba(4,18,31,.82))}.hero-highlights{gap:8px} }
-  
+
     /* V2 MAIN PAGE */
     .v2-section { padding: 86px 0; }
     .v2-muted { color:#667085; }
@@ -891,7 +891,7 @@
       .handoff-actions .button { width:100%; }
     }
 
-  
+
     /* SEO v3: crawlable service links and content route */
     .seo-service-detail{display:block;margin:10px 0 15px;font-size:14px;font-weight:700;color:#c76200;text-decoration:underline;text-underline-offset:3px}
     .seo-materials{background:#f1f6fa}
@@ -908,7 +908,7 @@
       .seo-material-card{flex-direction:column;align-items:flex-start;padding:22px}
       .seo-material-card .button{width:100%}
     }
-  
+
     /* Evidence-based examples from public auction research */
     .research-case-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
     .research-case-card{overflow:hidden;display:flex;flex-direction:column;border:1px solid #dfe5ec;border-radius:19px;background:#fff;box-shadow:0 15px 34px rgba(10,29,49,.075);transition:transform .2s ease,box-shadow .2s ease}
@@ -965,7 +965,7 @@
     @media(max-width:1000px){.work-formats-grid{grid-template-columns:1fr 1fr}.work-format-audience,.work-format-price{min-height:auto}}
     @media(max-width:690px){.work-formats-grid{grid-template-columns:1fr}.work-format-card{padding:22px 20px}.work-format-footnote{padding:16px}.work-format-footnote a{margin:8px 0 0}}
 
-  
+
     /* CRO: prepared enquiries based on user-generated lot/search briefs */
     .handoff-preview{margin-top:19px;padding:22px;border:1px solid #cfdfe9;border-top:4px solid #f4a32e;border-radius:15px;background:#fff;color:#102235;box-shadow:0 10px 30px rgba(8,30,48,.05)}
     .handoff-preview[hidden]{display:none!important}
@@ -977,4 +977,4 @@
     .handoff-preview .form-status{margin-top:13px}
     @media(max-width:800px){.handoff-preview{padding:18px 14px}.handoff-preview .button{width:100%;text-align:center}.handoff-preview textarea{min-height:220px}}
 
-  
+

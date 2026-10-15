@@ -6,6 +6,18 @@
   "last_published_at": null,
   "items": [
     {
+      "id": "intro-blog-v1",
+      "scheduled_date": "2026-10-18",
+      "route": "/blog/o-chem-budem-pisat-v-torgatlas/",
+      "source_path": "blog/o-chem-budem-pisat-v-torgatlas/index.html",
+      "status": "DRAFT_FOR_OWNER_APPROVAL",
+      "content_sha256": "a55a22177cf1c5ab33b79b88b38f794053c24c8546e8750abd198cc47659e9fc",
+      "sources": [],
+      "gates": {"demand": false, "official_sources": false, "editorial": false, "legal": false, "originality": false, "metadata": true, "interlinking": true, "tests": false},
+      "owner_approved_by": null,
+      "owner_approved_at": null
+    },
+    {
       "id": "deposit-guide-v1",
       "scheduled_date": "2026-10-18",
       "route": "/blog/zadatok-na-torgah-po-bankrotstvu/",
