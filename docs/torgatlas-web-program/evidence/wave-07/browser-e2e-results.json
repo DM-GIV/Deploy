@@ -1,0 +1,128 @@
+{
+ "generated_at": "2026-10-15T01:12:00.769Z",
+ "environment": "TEST_ONLY isolated stack 127.0.0.1:18092; local static server; no production",
+ "results": [
+  {
+   "id": "results-1440px",
+   "status": "PASS",
+   "evidence": {
+    "thinking_visible_ms": 63,
+    "results_ms": 6920,
+    "aria_busy_during": "true",
+    "cards": 6,
+    "hosts": [
+     "bankrupt.utpl.ru",
+     "bankrupt.centerr.ru",
+     "bankrupt.etpu.ru"
+    ],
+    "no_horizontal_scroll": true,
+    "sample": {
+     "title": "Транспортное средство АУДИ А1, 2011 года",
+     "href": "https://bankrupt.utpl.ru/public/auctions/lots/view/127861/",
+     "state": "Источник показывает приём заявок, а опуб"
+    }
+   }
+  },
+  {
+   "id": "results-390px",
+   "status": "PASS",
+   "evidence": {
+    "thinking_visible_ms": 922,
+    "results_ms": 6781,
+    "aria_busy_during": "true",
+    "cards": 6,
+    "hosts": [
+     "bankrupt.utpl.ru",
+     "bankrupt.centerr.ru",
+     "bankrupt.etpu.ru"
+    ],
+    "no_horizontal_scroll": true,
+    "sample": {
+     "title": "Транспортное средство АУДИ А1, 2011 года",
+     "href": "https://bankrupt.utpl.ru/public/auctions/lots/view/127861/",
+     "state": "Источник показывает приём заявок, а опуб"
+    }
+   }
+  },
+  {
+   "id": "results-320px",
+   "status": "PASS",
+   "evidence": {
+    "thinking_visible_ms": 395,
+    "results_ms": 6247,
+    "aria_busy_during": "true",
+    "cards": 6,
+    "hosts": [
+     "bankrupt.utpl.ru",
+     "bankrupt.centerr.ru",
+     "bankrupt.etpu.ru"
+    ],
+    "no_horizontal_scroll": true,
+    "sample": {
+     "title": "Транспортное средство АУДИ А1, 2011 года",
+     "href": "https://bankrupt.utpl.ru/public/auctions/lots/view/127861/",
+     "state": "Источник показывает приём заявок, а опуб"
+    }
+   }
+  },
+  {
+   "id": "empty-result",
+   "status": "PASS",
+   "evidence": {
+    "title": "Подтверждённых совпадений не найдено",
+    "cards": 0,
+    "status": "В проверенной части доступных каталогов актуальные совпадения не подтверждены. Измените формулировку или попробуйте позж"
+   }
+  },
+  {
+   "id": "partial-result-and-link-guard",
+   "status": "PASS",
+   "evidence": {
+    "cards": 1,
+    "coverage": "TEST_ONLY partial: источник ГИС отвечал частично.",
+    "state": "Возможность подать заявку не подтверждена."
+   }
+  },
+  {
+   "id": "error-503-json",
+   "status": "PASS",
+   "evidence": {
+    "status_text": "Поиск временно недоступен. Запрос не сохранён; попробуйте позже.",
+    "button_enabled": true,
+    "raw_error_visible": false
+   }
+  },
+  {
+   "id": "error-429-json",
+   "status": "PASS",
+   "evidence": {
+    "status_text": "Поиск временно недоступен. Запрос не сохранён; попробуйте позже.",
+    "button_enabled": true,
+    "raw_error_visible": false
+   }
+  },
+  {
+   "id": "error-502-html",
+   "status": "PASS",
+   "evidence": {
+    "status_text": "Поиск временно недоступен. Запрос не сохранён; попробуйте позже.",
+    "button_enabled": true,
+    "raw_error_visible": false
+   }
+  },
+  {
+   "id": "cancel-inflight",
+   "status": "PASS",
+   "evidence": {
+    "status": "Поиск отменён или достиг лимита времени. Неполные данные не показаны как подтверждённый ре"
+   }
+  },
+  {
+   "id": "ui-hard-timeout",
+   "status": "PASS",
+   "evidence": {
+    "aborted_after_ms": 24051
+   }
+  }
+ ]
+}

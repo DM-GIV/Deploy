@@ -100,3 +100,21 @@ test('discovered ETPs are stored as non-enabled candidates and bad hosts are ref
   assert.equal(added.status, 'CANDIDATE'); assert.equal(added.edge_enabled, false);
   for (const bad of ['*.ru', 'ru', '127.0.0.1', 'a b.ru', 'x.ru/path']) assert.throws(() => addCandidate(registry, bad, 'x', []), /INVALID_HOST/, bad);
 });
+
+test('forwarder connect timeout does not cut slow (long search) responses', async () => {
+  const upstream = net.createServer(s => s.on('data', () => setTimeout(() => s.end('slow-ok'), 400)));
+  const upPort = await listen(upstream);
+  const fwd = createForwarder({ targetHost: '127.0.0.1', targetPort: upPort, connectTimeoutMs: 100 });
+  const port = await listen(fwd);
+  const out = await new Promise(resolve => { const c = net.connect(port, '127.0.0.1', () => c.write('x')); let b=''; c.on('data', d => b+=d); c.on('close', () => resolve(b)); });
+  assert.equal(out, 'slow-ok');
+  fwd.close(); upstream.close();
+});
+
+test('every edge-enabled registry host can be linked by the UI (no silently dropped result cards)', () => {
+  const ui = fs.readFileSync('assets/ai-search.js', 'utf8');
+  const list = JSON.parse(/const allowedHosts = (\[[^\]]*\]);/.exec(ui)[1].replace(/'/g, '"'));
+  const sources = JSON.parse(fs.readFileSync('config/ai-sources.registry.json', 'utf8')).sources;
+  for (const host of ALLOWED_HOSTS) assert.ok(list.some(h => host === h || host.endsWith(`.${h}`)), `${host} missing in UI allowedHosts`);
+  for (const source of sources.filter(s => ALLOWED_HOSTS.includes(s.host))) assert.match(ui, new RegExp(`['"]?${source.id}['"]?:\\s*'`), `${source.id} missing in UI sourceNames`);
+});

@@ -1,6 +1,6 @@
 # Isolation model: ai-search sits on an internal-only network (no route out, no published port).
 # The edge container is its only neighbour: loopback forwarder 127.0.0.1:18082 -> ai-search:8080 and an
-# allowlist CONNECT gate (4 public hosts, :443, public IPs only). HTTPS_PROXY is deliberately not passed through.
+# allowlist CONNECT gate (registry hosts, :443, public IPs only). No host proxy variables are passed through.
 services:
   ai-search:
     build:
@@ -15,7 +15,7 @@ services:
       HOST: 0.0.0.0
       PORT: 8080
       AI_LOT_TRUST_PROXY: "true"
-      AI_LOT_EGRESS_GATE: http://torgatlas-ai-edge:3128
+      AI_LOT_EGRESS_GATE: http://ai-edge:3128
     networks: [ta_ai_internal]
     read_only: true
     tmpfs:
@@ -38,7 +38,7 @@ services:
     command: ["node", "services/ai-search/edge.mjs"]
     depends_on: [ai-search]
     environment:
-      AI_UPSTREAM_HOST: torgatlas-ai-search
+      AI_UPSTREAM_HOST: ai-search
       AI_UPSTREAM_PORT: "8080"
     ports:
       - "127.0.0.1:18082:8080"

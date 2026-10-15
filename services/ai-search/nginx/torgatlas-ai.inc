@@ -21,6 +21,8 @@ location = /api/ai-lot-search {
     proxy_send_timeout 5s;
     proxy_hide_header X-Powered-By;
     error_page 429 = @ai_busy;
+    error_page 403 = @ai_forbidden;
+    error_page 413 = @ai_too_large;
     error_page 502 503 504 = @ai_unavailable;
     add_header Cache-Control "no-store, max-age=0" always;
     include /etc/nginx/torgatlas.d/torgatlas-headers.inc;
@@ -37,4 +39,16 @@ location @ai_unavailable {
     add_header Cache-Control "no-store, max-age=0" always;
     include /etc/nginx/torgatlas.d/torgatlas-headers.inc;
     return 503 '{"ok":false,"code":"SERVICE_UNAVAILABLE"}';
+}
+location @ai_forbidden {
+    default_type application/json;
+    add_header Cache-Control "no-store, max-age=0" always;
+    include /etc/nginx/torgatlas.d/torgatlas-headers.inc;
+    return 403 '{"ok":false,"code":"METHOD_NOT_ALLOWED"}';
+}
+location @ai_too_large {
+    default_type application/json;
+    add_header Cache-Control "no-store, max-age=0" always;
+    include /etc/nginx/torgatlas.d/torgatlas-headers.inc;
+    return 413 '{"ok":false,"code":"INVALID_BODY"}';
 }

@@ -11,8 +11,8 @@
   const resultCaption = document.getElementById('ai-results-caption');
   const resultCoverage = document.getElementById('ai-results-coverage');
   const cards = document.getElementById('ai-cards');
-  const allowedHosts = ['fedresurs.ru', 'bankrot.fedresurs.ru', 'torgi.gov.ru', 'lot-online.ru', 'm-ets.ru', 'meetings.m-ets.ru', 'bankrupt.utpl.ru'];
-  const sourceNames = { utpl: 'Объединённая торговая площадка', 'gis-torgi': 'ГИС Торги', efrsb: 'ЕФРСБ', mets: 'МЭТС', rad: 'РАД / Lot-online' };
+  const allowedHosts = ['fedresurs.ru', 'bankrot.fedresurs.ru', 'torgi.gov.ru', 'lot-online.ru', 'm-ets.ru', 'meetings.m-ets.ru', 'bankrupt.utpl.ru', 'bankrupt.etpu.ru', 'bankrupt.centerr.ru'];
+  const sourceNames = { utpl: 'Объединённая торговая площадка', etpu: 'Уральская ЭТП (УЭТП)', 'centerr-bankrupt': 'Центр реализации', 'gis-torgi': 'ГИС Торги', efrsb: 'ЕФРСБ', mets: 'МЭТС', rad: 'РАД / Lot-online' };
   let searchReady = false;
   let activeController = null;
   let elapsedTimer = null;
@@ -95,12 +95,14 @@
       count += 1;
     }
     results.hidden = false;
-    resultTitle.textContent = count ? `Проверено актуальных карточек: ${count}` : 'Подтверждённых совпадений не найдено';
+    const incomplete = !count && (['BUSY', 'RATE_LIMITED', 'TIME_BUDGET_EXHAUSTED', 'TIMEOUT'].includes(data.reason) || data.status === 'TIMEOUT');
+    resultTitle.textContent = count ? `Проверено актуальных карточек: ${count}` : incomplete ? 'Поиск не завершён' : 'Подтверждённых совпадений не найдено';
     resultCaption.textContent = `Ответ получен: ${checkedTime(data.retrieved_at)}. Откройте первоисточник перед любым решением.`;
     resultCoverage.textContent = data.coverage_note || '';
     resultCoverage.hidden = !data.coverage_note;
     resultTitle.focus({ preventScroll: true });
     if (count) notice(`Результаты сформированы за ${Math.max(0, Math.round((Date.now() - startedAt) / 1000))} с. Условия нужно перепроверить в первоисточнике.`);
+    else if (['BUSY', 'RATE_LIMITED', 'TIME_BUDGET_EXHAUSTED', 'TIMEOUT'].includes(data.reason) || data.status === 'TIMEOUT') notice('Сервис сейчас занят или время поиска исчерпано. Это не означает, что лотов нет: повторите запрос через минуту.', true);
     else notice('В проверенной части доступных каталогов актуальные совпадения не подтверждены. Измените формулировку или попробуйте позже.');
   }
   for (const example of document.querySelectorAll('.ai-example')) {
@@ -123,9 +125,9 @@
     setBusy(true);
     setPhase('Думаю…');
     elapsedTimer = window.setInterval(updateElapsed, 1000);
-    await Promise.resolve();
-    setPhase('Ищу предложения и проверяю первоисточники');
-    const timeout = window.setTimeout(() => activeController?.abort(), 58_000);
+    // Keep "Думаю…" on screen long enough to be seen before the more specific phase replaces it.
+    const phaseTimer = window.setTimeout(() => { if (activeController) setPhase('Ищу предложения и проверяю первоисточники'); }, 1500);
+    const timeout = window.setTimeout(() => activeController?.abort(), 24_000);
     try {
       const response = await fetch('/api/ai-lot-search', {
         method: 'POST',
@@ -143,6 +145,7 @@
       else notice('Поиск временно недоступен. Запрос не сохранён; попробуйте позже.', true);
     } finally {
       window.clearTimeout(timeout);
+      window.clearTimeout(phaseTimer);
       window.clearInterval(elapsedTimer);
       elapsedTimer = null;
       phase = '';

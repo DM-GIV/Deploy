@@ -72,13 +72,14 @@ export function createGate({ lookupFn = dns.lookup, connectFn = net.connect, lim
   });
 }
 
-export function createForwarder({ targetHost, targetPort, maxConnections = 8 }) {
+export function createForwarder({ targetHost, targetPort, maxConnections = 8, connectTimeoutMs = 3_000 }) {
   const server = net.createServer(client => {
-    const upstream = net.connect({ host: targetHost, port: targetPort, timeout: 3_000 });
+    const upstream = net.connect({ host: targetHost, port: targetPort, timeout: connectTimeoutMs });
     client.setTimeout(70_000, () => client.destroy());
     client.on('error', () => upstream.destroy());
     upstream.on('error', () => client.destroy());
     upstream.on('timeout', () => upstream.destroy());
+    upstream.once('connect', () => upstream.setTimeout(30_000)); // 3 s applies to connecting only, then idle cap
     client.pipe(upstream); upstream.pipe(client);
     client.once('close', () => upstream.destroy());
     upstream.once('close', () => client.destroy());

@@ -30,7 +30,16 @@ import {
   , utplCatalogUrl
   , utplDetailUrl
   , utplMiniSearch
+  , configureSourceRegistry
 } from '../lib/torgatlas-public-web-research.mjs';
+
+// TEST_ONLY registry: all four originals enabled so URL rules and mocked adapters can be exercised.
+configureSourceRegistry({ sources: [
+  { id: 'gis-torgi', host: 'torgi.gov.ru', status: 'VERIFIED_PUBLIC_ACCESS', edge_enabled: true },
+  { id: 'efrsb', host: 'fedresurs.ru', status: 'VERIFIED_PUBLIC_ACCESS', edge_enabled: true },
+  { id: 'mets', host: 'm-ets.ru', status: 'VERIFIED_PUBLIC_ACCESS', edge_enabled: true },
+  { id: 'utpl', host: 'bankrupt.utpl.ru', status: 'LIVE_LOT_VERIFIED', edge_enabled: true, template_family: 'all-torgi' }
+] });
 
 const efrsbList = JSON.parse(fs.readFileSync('tests/fixtures/efrsb-list.test-only.json', 'utf8'));
 const efrsbDetail = JSON.parse(fs.readFileSync('tests/fixtures/efrsb-detail.test-only.json', 'utf8'));

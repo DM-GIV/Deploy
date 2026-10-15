@@ -7,6 +7,7 @@ import { isPrivateIp } from '../lib/torgatlas-public-web-research.mjs';
 
 const registry = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
 const hosts = new Set(registry.sources.map(s => s.host));
+const caByHost = new Map(registry.sources.filter(s => s.tls_ca).map(s => [s.host, s.tls_ca.map(c => fs.readFileSync(new URL('../' + c.path, import.meta.url), 'utf8'))]));
 const probes = process.argv.slice(3).map(arg => { const i = arg.indexOf('/'); return { host: arg.slice(0, i), path: arg.slice(i) }; });
 const targets = probes.length ? probes : registry.sources.map(s => ({ host: s.host, path: '/' }));
 
@@ -21,6 +22,7 @@ async function probe({ host, path }) {
     const pick = rows[0];
     await new Promise(resolve => {
       const req = https.request({ hostname: host, servername: host, path, method: 'GET', timeout: 8000,
+        ...(caByHost.has(host) ? { ca: caByHost.get(host) } : {}),
         headers: { Accept: 'text/html,application/json', 'User-Agent': 'TorgAtlas-Public-Research/1.0 (source verification)' },
         lookup: (_h, o, cb) => (o && o.all) ? cb(null, [{ address: pick.address, family: pick.family }]) : cb(null, pick.address, pick.family) }, res => {
         row.http_status = res.statusCode; row.content_type = res.headers['content-type'] || null; row.location = res.headers.location || null;

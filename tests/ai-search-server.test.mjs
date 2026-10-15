@@ -68,6 +68,13 @@ test('deployment templates stay loopback-only, resource-limited and fail-closed'
   assert.match(nginx, /location = \/api\/ai-lot-search/);
   assert.match(nginx, /proxy_pass http:\/\/127\.0\.0\.1:18082/);
   assert.match(nginx, /limit_req zone=torgatlas_ai_search/);
-  assert.match(zone, /limit_req_zone \$binary_remote_addr/);
+  assert.match(zone, /limit_req_zone \$torgatlas_ai_key zone=torgatlas_ai_search/);
+  assert.match(zone, /POST \$binary_remote_addr/);
+  // Isolation model: search container only on an internal network, no host networking, no inherited proxy variables.
+  assert.match(compose, /ta_ai_internal:\n\s+internal: true/);
+  assert.doesNotMatch(compose, /network_mode:\s*host|HTTPS_PROXY|HTTP_PROXY|claude_proxy|1080/);
+  assert.match(compose, /AI_LOT_EGRESS_GATE: http:\/\/ai-edge:3128/);
+  assert.match(compose, /ai-search:\n[\s\S]*?networks: \[ta_ai_internal\]/);
+  assert.match(fs.readFileSync('services/ai-search/Dockerfile', 'utf8'), /FROM node:24-alpine@sha256:[0-9a-f]{64}/);
   assert.doesNotMatch(`${compose}\n${nginx}`, /auction-analytics|postgres|redis/i);
 });

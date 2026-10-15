@@ -19,11 +19,21 @@
     "rent",
     "arrested"
    ],
-   "status": "RESTRICTED",
+   "status": "VERIFIED_PUBLIC_ACCESS",
    "edge_enabled": true,
-   "notes": "previously approved; TLS chain not trusted by Node 24 (UNABLE_TO_VERIFY_LEAF_SIGNATURE; likely Russian national root CA). Needs owner decision on adding a pinned CA; not auto-added.",
+   "notes": "Runtime 2026-10-15 via isolated gate: pinned Russian Trusted Root+Sub CA (config/trust), TLS verified, API lotcards/search 200 with 10 rows; listing-only lots are PRELIMINARY_SOURCE_DATA (application deadline not confirmed) so not LIVE_LOT_VERIFIED.",
    "verified_at": "2026-10-15",
-   "template_family": null
+   "template_family": null,
+   "tls_ca": [
+    {
+     "path": "config/trust/russian-trusted-root-ca.pem",
+     "sha256": "d26d2d0231b7c39f92cc738512ba54103519e4405d68b5bd703e9788ca8ecf31"
+    },
+    {
+     "path": "config/trust/russian-trusted-sub-ca-2024.pem",
+     "sha256": "2155785036c900dbb5f1bb2a1569c80c55595bd6bf94867a29bbddbc7d88a3f2"
+    }
+   ]
   },
   {
    "id": "efrsb",
@@ -48,7 +58,7 @@
    ],
    "status": "VERIFIED_PUBLIC_ACCESS",
    "edge_enabled": true,
-   "notes": "previously approved; Root 200 text/html, TLS valid (2026-10-15). Card path not re-probed in this run.",
+   "notes": "Feed read through gate in runtime (no matching lot in the test queries); card path covered by historical contract tests only.",
    "verified_at": "2026-10-15",
    "template_family": null
   },
@@ -62,7 +72,7 @@
    ],
    "status": "LIVE_LOT_VERIFIED",
    "edge_enabled": true,
-   "notes": "previously approved; Catalog 200; 10 cards parsed; 2 public-offer cards confirmed accepting applications by status+deadline (2026-10-15).",
+   "notes": "Runtime via gate 2026-10-15: lots 127861, 127862, 127737-127747 confirmed.",
    "verified_at": "2026-10-15",
    "template_family": "all-torgi"
   },
@@ -144,9 +154,9 @@
     "bankruptcy",
     "public-offer"
    ],
-   "status": "VERIFIED_PUBLIC_ACCESS",
-   "edge_enabled": false,
-   "notes": "Same family template; catalog+cards readable and parsed; none of 5 sampled auction cards currently accepting applications.",
+   "status": "LIVE_LOT_VERIFIED",
+   "edge_enabled": true,
+   "notes": "Runtime via gate 2026-10-15: lots 141968, 141973 parsed from cards with \"Прием заявок\" and unexpired deadline.",
    "verified_at": "2026-10-15",
    "template_family": "all-torgi"
   },
@@ -187,8 +197,8 @@
     "public-offer"
    ],
    "status": "LIVE_LOT_VERIFIED",
-   "edge_enabled": false,
-   "notes": "Same \"Все торги\" family template; catalog 200; 5/5 public-offer cards confirmed accepting applications (2026-10-15).",
+   "edge_enabled": true,
+   "notes": "Runtime via gate 2026-10-15: lots 1170959, 1170915, 1170832, 1170901, 1170851, 1170852, 1170853 confirmed.",
    "verified_at": "2026-10-15",
    "template_family": "all-torgi"
   },
