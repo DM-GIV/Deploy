@@ -48,9 +48,10 @@ class UxHotfix(unittest.TestCase):
         html = (ROOT / "index.html").read_text(encoding="utf-8")
         h1 = re.search(r"<h1>(.*?)</h1>", html, re.S).group(1)
         text = re.sub(r"<[^>]+>", "", h1).replace("&nbsp;", " ")
-        self.assertEqual(text, "Покупка имущества с торгов — с анализом цены и рисков")
-        self.assertIn("Помогаю найти и проверить имущество, оценить расходы и возможные риски, чтобы вы могли принять обоснованное решение об участии в торгах", html)
+        self.assertEqual(text, "От интересного лота до уверенного решения")
+        self.assertIn("Помогаем найти имущество на торгах, разобраться в его стоимости, документах и условиях продажи, чтобы вы могли принять обоснованное решение о покупке", html)
         self.assertNotIn("без покупки вслепую", html)
+        self.assertNotIn("с анализом цены и рисков", html)
         self.assertIn("hero-buttons", html)
 
     def test_social_cards_identical(self):
