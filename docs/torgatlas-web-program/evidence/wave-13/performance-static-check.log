@@ -1,0 +1,14 @@
+{
+  "homepage_html_bytes": 27840,
+  "homepage_css_bytes": 17949,
+  "contact_css_bytes": 1289,
+  "stylesheets": [
+    "/assets/home-bundle.css?v=ba317f9bf23c",
+    "/assets/contact-icons.css"
+  ],
+  "css_class_count": 72,
+  "missing_css_classes": [],
+  "hero_preload_count": 2,
+  "passed": true,
+  "errors": []
+}

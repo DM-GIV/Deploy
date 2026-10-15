@@ -94,7 +94,7 @@ rec('REAL', 'query 1 «квартиры … публичном предложе�
 rec('REAL', 'every card: https primary-source link, check date, price meaning, deadline or «не подтверждён»', list.every(c => /^https:\/\//.test(c.href) && /Последняя проверка данных/.test(c.text) && /Начальная цена|Цена текущего периода/.test(c.text) && (/Приём заявок до/.test(c.text) || /не подтвержден/.test(c.text))), list.map(c => c.href));
 rec('REAL', '«Как понят запрос» shows type, district and procedure', /Тип имущества: Квартира/.test(understood) && /Федеральный округ: Южный/.test(understood) && /Процедура: публичное предложение/.test(understood), understood.slice(0, 160));
 const cta = await D.page.evaluate(() => { const p = document.getElementById('ai-catalog-cta'); return { hidden: p.hidden, text: p.textContent, links: p.querySelectorAll('a,[href]').length, disabled: p.querySelector('[aria-disabled=true]') !== null, after: p.compareDocumentPosition(document.getElementById('ai-cards')) & Node.DOCUMENT_POSITION_PRECEDING }; });
-rec('REAL', 'catalogue CTA after the results: «Посмотреть больше лотов в каталоге ТоргАтлас» + «Скоро», not a link', !cta.hidden && /Посмотреть больше лотов в каталоге ТоргАтлас/.test(cta.text) && /Скоро/.test(cta.text) && cta.links === 0 && cta.disabled && !!cta.after, cta);
+rec('REAL', 'catalogue CTA after the results: «Посмотреть больше лотов в каталоге ТоргАтлас» + «В разработке», not a link', !cta.hidden && /Посмотреть больше лотов в каталоге ТоргАтлас/.test(cta.text) && /В разработке/.test(cta.text) && cta.links === 0 && cta.disabled && !!cta.after, cta);
 rec('REAL', 'coverage caveat names no marketplaces', !/УТПЛ|УЭТП|Центр реализации|ГИС|ЕФРСБ|МЭТС|площадк/i.test(await D.page.textContent('#ai-results-coverage')));
 await D.page.screenshot({ path: `${out}/core-desktop-results.png`, fullPage: true });
 const afterHint = await D.page.textContent('#ai-captcha-hint');
@@ -178,7 +178,7 @@ await realClick(M, '#ai-submit');
 await waitResults(M.page);
 const ml = await cards(M.page);
 rec('REAL', 'mobile: touch-verified CAPTCHA, tap submit, 1–5 cards, no horizontal scroll', ml.length >= 1 && ml.length <= 5 && await noHScroll(M.page), { n: ml.length });
-rec('REAL', 'mobile: CTA «Скоро» visible after the results', await M.page.evaluate(() => { const c = document.getElementById('ai-catalog-cta'); const r = c.getBoundingClientRect(); return !c.hidden && r.width > 0 && /Скоро/.test(c.textContent); }));
+rec('REAL', 'mobile: CTA «В разработке» visible after the results', await M.page.evaluate(() => { const c = document.getElementById('ai-catalog-cta'); const r = c.getBoundingClientRect(); return !c.hidden && r.width > 0 && /В разработке/.test(c.textContent); }));
 await M.page.screenshot({ path: `${out}/core-mobile-results.png`, fullPage: true });
 await M.context.close();
 await browser.close(); server.close();

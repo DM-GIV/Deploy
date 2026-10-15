@@ -1,0 +1,82 @@
+PASS sitemap.xml 200 with URLs 17 urls
+PASS sitemap has no duplicates
+PASS sitemap never lists the future catalogue
+PASS https://torgatlas.ru/: 200, canonical self, indexable 200 https://torgatlas.ru/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/: exactly one H1, title and description present
+PASS https://torgatlas.ru/: JSON-LD parses
+PASS https://torgatlas.ru/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/proverka-lota/: 200, canonical self, indexable 200 https://torgatlas.ru/proverka-lota/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/proverka-lota/: exactly one H1, title and description present
+PASS https://torgatlas.ru/proverka-lota/: JSON-LD parses
+PASS https://torgatlas.ru/proverka-lota/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/poisk-imushchestva/: 200, canonical self, indexable 200 https://torgatlas.ru/poisk-imushchestva/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/poisk-imushchestva/: exactly one H1, title and description present
+PASS https://torgatlas.ru/poisk-imushchestva/: JSON-LD parses
+PASS https://torgatlas.ru/poisk-imushchestva/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/soprovozhdenie-torgov/: 200, canonical self, indexable 200 https://torgatlas.ru/soprovozhdenie-torgov/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/soprovozhdenie-torgov/: exactly one H1, title and description present
+PASS https://torgatlas.ru/soprovozhdenie-torgov/: JSON-LD parses
+PASS https://torgatlas.ru/soprovozhdenie-torgov/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/pokupka-imushchestva/: 200, canonical self, indexable 200 https://torgatlas.ru/pokupka-imushchestva/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/pokupka-imushchestva/: exactly one H1, title and description present
+PASS https://torgatlas.ru/pokupka-imushchestva/: JSON-LD parses
+PASS https://torgatlas.ru/pokupka-imushchestva/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/primery-lotov/: 200, canonical self, indexable 200 https://torgatlas.ru/primery-lotov/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/primery-lotov/: exactly one H1, title and description present
+PASS https://torgatlas.ru/primery-lotov/: JSON-LD parses
+PASS https://torgatlas.ru/primery-lotov/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/formaty-raboty/: 200, canonical self, indexable 200 https://torgatlas.ru/formaty-raboty/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/formaty-raboty/: exactly one H1, title and description present
+PASS https://torgatlas.ru/formaty-raboty/: JSON-LD parses
+PASS https://torgatlas.ru/formaty-raboty/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/o-torgatlas/: 200, canonical self, indexable 200 https://torgatlas.ru/o-torgatlas/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/o-torgatlas/: exactly one H1, title and description present
+PASS https://torgatlas.ru/o-torgatlas/: JSON-LD parses
+PASS https://torgatlas.ru/o-torgatlas/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/blog/: 200, canonical self, indexable 200 https://torgatlas.ru/blog/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/blog/: exactly one H1, title and description present
+PASS https://torgatlas.ru/blog/: JSON-LD parses
+PASS https://torgatlas.ru/blog/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/blog/kak-proverit-lot-pered-torgami/: 200, canonical self, indexable 200 https://torgatlas.ru/blog/kak-proverit-lot-pered-torgami/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/blog/kak-proverit-lot-pered-torgami/: exactly one H1, title and description present
+PASS https://torgatlas.ru/blog/kak-proverit-lot-pered-torgami/: JSON-LD parses
+PASS https://torgatlas.ru/blog/kak-proverit-lot-pered-torgami/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/blog/kak-proverit-avtomobil-s-torgov/: 200, canonical self, indexable 200 https://torgatlas.ru/blog/kak-proverit-avtomobil-s-torgov/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/blog/kak-proverit-avtomobil-s-torgov/: exactly one H1, title and description present
+PASS https://torgatlas.ru/blog/kak-proverit-avtomobil-s-torgov/: JSON-LD parses
+PASS https://torgatlas.ru/blog/kak-proverit-avtomobil-s-torgov/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/blog/kak-proverit-zemelnyi-uchastok-s-torgov/: 200, canonical self, indexable 200 https://torgatlas.ru/blog/kak-proverit-zemelnyi-uchastok-s-torgov/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/blog/kak-proverit-zemelnyi-uchastok-s-torgov/: exactly one H1, title and description present
+PASS https://torgatlas.ru/blog/kak-proverit-zemelnyi-uchastok-s-torgov/: JSON-LD parses
+PASS https://torgatlas.ru/blog/kak-proverit-zemelnyi-uchastok-s-torgov/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/privacy/: 200, canonical self, indexable 200 https://torgatlas.ru/privacy/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/privacy/: exactly one H1, title and description present
+PASS https://torgatlas.ru/privacy/: JSON-LD parses
+PASS https://torgatlas.ru/privacy/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/privacy/consent/: 200, canonical self, indexable 200 https://torgatlas.ru/privacy/consent/ index,follow
+PASS https://torgatlas.ru/privacy/consent/: exactly one H1, title and description present
+PASS https://torgatlas.ru/privacy/consent/: JSON-LD parses
+PASS https://torgatlas.ru/privacy/consent/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/blog/kak-uchastvovat-v-torgah-po-bankrotstvu/: 200, canonical self, indexable 200 https://torgatlas.ru/blog/kak-uchastvovat-v-torgah-po-bankrotstvu/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/blog/kak-uchastvovat-v-torgah-po-bankrotstvu/: exactly one H1, title and description present
+PASS https://torgatlas.ru/blog/kak-uchastvovat-v-torgah-po-bankrotstvu/: JSON-LD parses
+PASS https://torgatlas.ru/blog/kak-uchastvovat-v-torgah-po-bankrotstvu/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/blog/publichnoe-predlozhenie-bankrotstvo/: 200, canonical self, indexable 200 https://torgatlas.ru/blog/publichnoe-predlozhenie-bankrotstvo/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/blog/publichnoe-predlozhenie-bankrotstvo/: exactly one H1, title and description present
+PASS https://torgatlas.ru/blog/publichnoe-predlozhenie-bankrotstvo/: JSON-LD parses
+PASS https://torgatlas.ru/blog/publichnoe-predlozhenie-bankrotstvo/: no link to the future catalogue, no «torgatos»
+PASS https://torgatlas.ru/blog/zadatok-na-torgah-po-bankrotstvu/: 200, canonical self, indexable 200 https://torgatlas.ru/blog/zadatok-na-torgah-po-bankrotstvu/ index,follow,max-image-preview:large
+PASS https://torgatlas.ru/blog/zadatok-na-torgah-po-bankrotstvu/: exactly one H1, title and description present
+PASS https://torgatlas.ru/blog/zadatok-na-torgah-po-bankrotstvu/: JSON-LD parses
+PASS https://torgatlas.ru/blog/zadatok-na-torgah-po-bankrotstvu/: no link to the future catalogue, no «torgatos»
+PASS titles are unique
+PASS descriptions are unique
+PASS internal links resolve (18 distinct targets)
+PASS /blog/gosudarstvennye-i-municipalnye-torgi/ (draft) is noindex and absent from the sitemap 200
+PASS /blog/o-chem-budem-pisat-v-torgatlas/ (draft) is noindex and absent from the sitemap 200
+PASS kak-uchastvovat-v-torgah-po-bankrotstvu: 5 sections with their text in the raw GET
+PASS publichnoe-predlozhenie-bankrotstvo: 4 sections with their text in the raw GET
+PASS zadatok-na-torgah-po-bankrotstvu: 5 sections with their text in the raw GET
+PASS robots.txt references the sitemap
+
+SUMMARY pass=80 fail=0

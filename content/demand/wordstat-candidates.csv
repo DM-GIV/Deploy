@@ -1,0 +1,11 @@
+query,intent,cluster,assigned_url,priority,status,frequency,frequency_unit,region,source,observed_on,notes
+торги по банкротству,mixed,bankruptcy_trades_hub,/,P0,UNVERIFIED_WORDSTAT,,,Россия,editorial_candidate,2026-10-15,Broad head term; home page title covers it; no frequency measured
+как участвовать в торгах по банкротству,informational,participation,/blog/kak-uchastvovat-v-torgah-po-bankrotstvu/,P0,UNVERIFIED_WORDSTAT,,,Россия,editorial_candidate,2026-10-15,Article A (approved topic)
+торги по банкротству недвижимость,commercial_informational,real_estate_trades,,P1,UNVERIFIED_WORDSTAT,,,Россия,editorial_candidate,2026-10-15,No URL yet (future guide #14); do not create a page before PAGE_SPEC
+торги по банкротству автомобили,commercial_informational,vehicle_trades,/blog/kak-proverit-avtomobil-s-torgov/,P1,UNVERIFIED_WORDSTAT,,,Россия,editorial_candidate,2026-10-15,Existing guide covers due diligence intent
+публичное предложение торги по банкротству,informational,public_offer,/blog/publichnoe-predlozhenie-bankrotstvo/,P0,UNVERIFIED_WORDSTAT,,,Россия,editorial_candidate,2026-10-15,Article B (approved topic; existing URL reused)
+задаток на торгах по банкротству,informational,deposit,/blog/zadatok-na-torgah-po-bankrotstvu/,P0,UNVERIFIED_WORDSTAT,,,Россия,editorial_candidate,2026-10-15,Article C (approved topic; existing URL reused)
+как купить квартиру с торгов по банкротству,informational,real_estate_trades,,P1,UNVERIFIED_WORDSTAT,,,Россия,editorial_candidate,2026-10-15,Future guide #14; partly served by article A until a dedicated page passes review
+как проверить лот на торгах по банкротству,informational,lot_due_diligence,/blog/kak-proverit-lot-pered-torgami/,P0,UNVERIFIED_WORDSTAT,,,Россия,editorial_candidate,2026-10-15,Existing guide; service landing /proverka-lota/ stays commercial (no cannibalization)
+электронные торговые площадки по банкротству,informational,etp_platforms,,P2,UNVERIFIED_WORDSTAT,,,Россия,editorial_candidate,2026-10-15,No URL yet; would need a source-reviewed page (platform rules vary)
+торги арестованного имущества,informational,seized_property,,P2,UNVERIFIED_WORDSTAT,,,Россия,editorial_candidate,2026-10-15,Future guide #18 (different legal regime than bankruptcy); no page yet

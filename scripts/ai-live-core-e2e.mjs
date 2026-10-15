@@ -48,7 +48,7 @@ let r = await search(D, 'Найди квартиры на торгах в Мос
 rec('REAL', 'Москва: 1–5 apartments, region «Москва» only (no ХМАО/Краснодар/нежилое/дом)', r.cards.length >= 1 && r.cards.length <= 5 && r.cards.every(c => /Вид имущества: Квартира/.test(c.text) && region(c) === 'Москва') && !/Ханты|Краснодар|Нежилое|Жилой дом/.test(r.cards.map(c => c.text).join(' ')), { n: r.cards.length, regions: r.cards.map(region) });
 rec('REAL', 'cards: category, procedure, price with meaning, deadline, check date, status label, https first-source link', r.cards.every(c => /Вид имущества/.test(c.text) && /Процедура:/.test(c.text) && /Начальная цена|Цена текущего периода/.test(c.text) && /Приём заявок до:/.test(c.text) && /Последняя проверка данных/.test(c.text) && /не (?:истёк|подтвержден)|давно не перепроверялись/.test(c.text) && /^https:\/\/fedresurs\.ru\/biddings\/[0-9a-f-]{36}$/.test(c.href)), r.cards.map(c => c.href));
 rec('REAL', 'stale checks are NOT shown as confirmed open (label says actuality not confirmed)', r.cards.every(c => /актуальность не подтверждена/.test(c.text)), r.cards[0]?.text.slice(-160));
-rec('REAL', 'interpretation shown; CTA «Скоро» visible and not a link', /Тип имущества: Квартира/.test(r.understood) && /Регион: Москва/.test(r.understood) && await D.page.evaluate(() => { const c = document.getElementById('ai-catalog-cta'); return !c.hidden && /Скоро/.test(c.textContent) && !c.querySelector('a,[href]'); }));
+rec('REAL', 'interpretation shown; CTA «В разработке» visible and not a link', /Тип имущества: Квартира/.test(r.understood) && /Регион: Москва/.test(r.understood) && await D.page.evaluate(() => { const c = document.getElementById('ai-catalog-cta'); return !c.hidden && /В разработке/.test(c.textContent) && !c.querySelector('a,[href]'); }));
 await D.page.screenshot({ path: `${out}/live-core-moscow-desktop.png`, fullPage: true });
 const apartmentLinks = r.cards.map(c => c.href);
 
@@ -78,7 +78,7 @@ rec('REAL', 'mobile (Android UA, touch): example tap fills the field', (await M.
 await tick(M); await click(M, '#ai-submit');
 await M.page.waitForFunction(() => !document.getElementById('ai-results').hidden && !/Думаю|Ищу|Формирую/.test(document.getElementById('ai-status').textContent), null, { timeout: 40000 });
 const mc = await M.page.$$eval('#ai-cards .ai-card', cs => cs.map(c => c.textContent));
-rec('REAL', 'mobile: results correct, no horizontal scroll, CTA «Скоро» visible', mc.length >= 1 && mc.length <= 5 && mc.every(t => /Процедура: Публичное предложение/.test(t)) && await M.page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1 && !document.getElementById('ai-catalog-cta').hidden), { n: mc.length });
+rec('REAL', 'mobile: results correct, no horizontal scroll, CTA «В разработке» visible', mc.length >= 1 && mc.length <= 5 && mc.every(t => /Процедура: Публичное предложение/.test(t)) && await M.page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1 && !document.getElementById('ai-catalog-cta').hidden), { n: mc.length });
 await M.page.screenshot({ path: `${out}/live-core-mobile.png`, fullPage: true });
 await M.context.close(); await browser.close();
 console.log(`\nSUMMARY pass=${pass} fail=${fail}`); process.exit(fail ? 1 : 0);

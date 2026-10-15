@@ -1,0 +1,23 @@
+section,metric,source,definition,value,previous_week,change,status_note
+search_google,impressions,Google Search Console (sc-domain:torgatlas.ru),Performance > Search results > Impressions for Mon-Sun,,,,fill only from GSC; never estimate
+search_google,clicks,Google Search Console,Clicks,,,,
+search_google,ctr,Google Search Console,Clicks / impressions,,,,
+search_google,average_position,Google Search Console,Average position (weighted by impressions; note the impression count behind it),,,,a position based on <10 impressions is an anecdote
+search_google,indexed_pages,Google Search Console,Pages > Indexed,,,,compare with the sitemap count
+search_google,not_indexed_pages_by_reason,Google Search Console,Pages > Not indexed reasons,,,,
+search_google,sitemap_status,Google Search Console,Sitemaps > sitemap.xml (discovered URLs; last read),,,,
+search_google,core_web_vitals,Google Search Console,Core Web Vitals mobile/desktop groups,,,,no data when traffic is too low
+search_google,top_queries,Google Search Console,Top 10 queries (query; impressions; clicks; position),,,,
+search_google,top_pages,Google Search Console,Top 10 pages,,,,
+search_google,countries_devices,Google Search Console,Impressions/clicks by country and device,,,,
+search_google,cannibalisation_check,Google Search Console,Queries where >1 page of the site gets impressions,,,,expected pairs: /blog/ articles vs /proverka-lota/ and /poisk-imushchestva/
+search_yandex,impressions_clicks_indexed,Yandex Webmaster,Only after the site is connected and verified,NOT_CONNECTED,,,do not report Yandex figures until connected
+funnel_umami,page_views_by_type,Umami (primary funnel),funnel_page_open grouped by page_type (home / ai_lot_search / lot_check / property_search / guide ...),,,,no personal data
+funnel_umami,ai_search_cta_click,Umami,Home -> AI search clicks,,,,
+funnel_umami,article_ai_search_cta_click,Umami,Article -> AI search clicks,,,,
+funnel_umami,article_lot_check_cta_click,Umami,Article -> lot-check map clicks,,,,
+funnel_umami,lot_check_cta_click,Umami,Home hero -> lot-check clicks,,,,
+funnel_umami,lot_search_cta_click,Umami,Home hero -> individual selection clicks,,,,
+funnel_umami,lead_requests,Umami / lead service (counts only),Submitted requests (count only; no contact data in reports),,,,
+content,articles_published,Git,Indexable articles in sitemap.xml with lastmod,,,,
+content,editorial_review_queue,docs/CONTENT_MATRIX.md,Rows with status REVIEW,,,,

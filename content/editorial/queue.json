@@ -13,7 +13,16 @@
       "status": "DRAFT_FOR_OWNER_APPROVAL",
       "content_sha256": "a55a22177cf1c5ab33b79b88b38f794053c24c8546e8750abd198cc47659e9fc",
       "sources": [],
-      "gates": {"demand": false, "official_sources": false, "editorial": false, "legal": false, "originality": false, "metadata": true, "interlinking": true, "tests": false},
+      "gates": {
+        "demand": false,
+        "official_sources": false,
+        "editorial": false,
+        "legal": false,
+        "originality": false,
+        "metadata": true,
+        "interlinking": true,
+        "tests": false
+      },
       "owner_approved_by": null,
       "owner_approved_at": null
     },
@@ -22,24 +31,50 @@
       "scheduled_date": "2026-10-18",
       "route": "/blog/zadatok-na-torgah-po-bankrotstvu/",
       "source_path": "blog/zadatok-na-torgah-po-bankrotstvu/index.html",
-      "status": "DRAFT_REVIEW_REQUIRED",
-      "content_sha256": "e3795905975c8b420195e75b1f8c50d193cddb0ed64c396d66d794fda6c511d1",
-      "sources": ["https://bankrot.fedresurs.ru/"],
-      "gates": {"demand": false, "official_sources": false, "editorial": false, "legal": false, "originality": false, "metadata": false, "interlinking": false, "tests": false},
+      "status": "PUBLISHED",
+      "content_sha256": "fd83087a327d5789252727ba3553f289a9ea37767e601a10ad851aaa4328a082",
+      "sources": [
+        "https://bankrot.fedresurs.ru/"
+      ],
+      "gates": {
+        "demand": false,
+        "official_sources": false,
+        "editorial": false,
+        "legal": false,
+        "originality": false,
+        "metadata": false,
+        "interlinking": false,
+        "tests": false
+      },
       "owner_approved_by": null,
-      "owner_approved_at": null
+      "owner_approved_at": null,
+      "published_at": "2026-10-15",
+      "published_by": "owner-approved manual release (TORGATLAS-WEB-GROWTH-CRO-SEO-GEO-006-ADDENDUM-03)"
     },
     {
       "id": "public-offer-guide-v1",
       "scheduled_date": "2026-10-21",
       "route": "/blog/publichnoe-predlozhenie-bankrotstvo/",
       "source_path": "blog/publichnoe-predlozhenie-bankrotstvo/index.html",
-      "status": "DRAFT_REVIEW_REQUIRED",
-      "content_sha256": "f6f5d41252f9b8f9997f9b017df86ffffb3e2aec3c664877d552222428ef48f0",
-      "sources": ["https://bankrot.fedresurs.ru/"],
-      "gates": {"demand": false, "official_sources": false, "editorial": false, "legal": false, "originality": false, "metadata": false, "interlinking": false, "tests": false},
+      "status": "PUBLISHED",
+      "content_sha256": "7854896a71e216cb24a8d2b072b225a05ac620514e7ae622ec302edfbff34656",
+      "sources": [
+        "https://bankrot.fedresurs.ru/"
+      ],
+      "gates": {
+        "demand": false,
+        "official_sources": false,
+        "editorial": false,
+        "legal": false,
+        "originality": false,
+        "metadata": false,
+        "interlinking": false,
+        "tests": false
+      },
       "owner_approved_by": null,
-      "owner_approved_at": null
+      "owner_approved_at": null,
+      "published_at": "2026-10-15",
+      "published_by": "owner-approved manual release (TORGATLAS-WEB-GROWTH-CRO-SEO-GEO-006-ADDENDUM-03)"
     },
     {
       "id": "public-property-guide-v1",
@@ -48,11 +83,21 @@
       "source_path": "blog/gosudarstvennye-i-municipalnye-torgi/index.html",
       "status": "DRAFT_REVIEW_REQUIRED",
       "content_sha256": "f9c37957396bdb7fbca679b701b44a8aa955b53b212e0e6ce324c16a97197074",
-      "sources": ["https://torgi.gov.ru/"],
-      "gates": {"demand": false, "official_sources": false, "editorial": false, "legal": false, "originality": false, "metadata": false, "interlinking": false, "tests": false},
+      "sources": [
+        "https://torgi.gov.ru/"
+      ],
+      "gates": {
+        "demand": false,
+        "official_sources": false,
+        "editorial": false,
+        "legal": false,
+        "originality": false,
+        "metadata": false,
+        "interlinking": false,
+        "tests": false
+      },
       "owner_approved_by": null,
       "owner_approved_at": null
     }
   ]
 }
-

@@ -37,3 +37,14 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #ff
 #research-lots-note{margin:14px 0}
 @media(max-width:1100px){.rotation-case-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.rotation-case-grid{grid-template-columns:1fr}.rotation-case-body h3{font-size:18px}}
+
+.home-status{padding:20px 0 6px}.home-status-title{font-size:15px;font-weight:700;color:#526579;margin:0 0 10px;letter-spacing:.01em}
+.home-status-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.home-status-card{padding:14px 16px;border:1px solid #dce5ed;border-radius:12px;background:#fff}.home-status-card p{margin:8px 0 0;font-size:14px;line-height:1.5;color:#33495b}
+.home-status-card--soon{background:#fafbfc;border-style:dashed}
+.home-status-badge{display:inline-block;padding:3px 10px;border-radius:999px;background:#e5f4ea;color:#16502a;font-size:12px;font-weight:800}.home-status-badge--soon{background:#ffe9c7;color:#6a4300}
+.home-status-link{display:inline-block;margin-top:8px;min-height:44px;line-height:44px;font-weight:800;color:#ad5a0a;text-decoration:underline;text-underline-offset:3px}
+.home-status-addr{font-weight:700;color:#33495b;white-space:nowrap}
+.home-nav .nav-soon{color:#9fb3c1;font-size:13px;white-space:nowrap}.home-nav .nav-soon small{margin-left:4px;padding:2px 7px;border-radius:999px;background:#ffe9c7;color:#6a4300;font-size:11px;font-weight:800}
+@media(max-width:760px){.home-status-grid{grid-template-columns:1fr}}
+.home-status-card--live{border-color:#bfe0cb;background:#fbfefc}

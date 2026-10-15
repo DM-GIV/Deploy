@@ -13,7 +13,10 @@
     '/pokupka-imushchestva/':'purchase',
     '/primery-lotov/':'examples',
     '/formaty-raboty/':'service_formats',
-    '/blog/kak-proverit-lot-pered-torgami/':'guide'
+    '/blog/kak-proverit-lot-pered-torgami/':'guide',
+    '/blog/kak-uchastvovat-v-torgah-po-bankrotstvu/':'guide',
+    '/blog/publichnoe-predlozhenie-bankrotstvo/':'guide',
+    '/blog/zadatok-na-torgah-po-bankrotstvu/':'guide'
   };
   var stage = routes[window.location.pathname] || 'other';
   var propsAllowed = {

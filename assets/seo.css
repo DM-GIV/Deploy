@@ -70,3 +70,26 @@ main section{padding:58px 0}.subhead{max-width:740px;margin-bottom:24px}h2{font-
 /* Small contextual educational links beneath service tools, without new heavy blocks. */
 .service-guide-links{max-width:1050px;margin:18px auto;padding:14px 20px;border-left:3px solid #f5a22e;border-radius:0 9px 9px 0;background:#fff7eb;color:#435666;font-size:14px;line-height:1.7}
 .service-guide-links a,.case-guide-links a{color:#92500c;text-decoration:underline;text-underline-offset:3px;font-weight:700}
+
+/* Articles: collapsible sections (native <details>), plan, notes, nav marker for the future catalogue */
+.art-answer{max-width:760px;font-size:19px;line-height:1.55}
+.art-toc{margin:0 0 22px;padding:16px 18px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.art-toc-title{font-size:17px;margin:0 0 8px}.art-toc ol{margin:0;padding-left:20px}.art-toc li{margin:5px 0}.art-toc a{color:#17496b}
+.art-tools{margin:12px 0 0}.art-tools button{cursor:pointer;min-height:44px;padding:9px 14px;border:1px solid #809bad;border-radius:9px;background:#fff;font:inherit;font-weight:700;color:#17384f}
+details.art-sec{margin:12px 0;border:1px solid var(--line);border-radius:12px;background:#fff}
+details.art-sec>summary{cursor:pointer;list-style:none;padding:14px 18px;min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+details.art-sec>summary::-webkit-details-marker{display:none}
+details.art-sec>summary h2{margin:0;font-size:20px;line-height:1.3}
+details.art-sec>summary::after{content:"+";flex:none;width:28px;height:28px;border-radius:50%;background:#edf3f9;text-align:center;line-height:28px;font-weight:800;color:#17496b}
+details.art-sec[open]>summary::after{content:"\2212"}
+details.art-sec>summary:focus-visible,.art-tools button:focus-visible{outline:3px solid #d96a00;outline-offset:2px}
+.art-body{padding:0 18px 16px}.art-body p,.art-body li{line-height:1.65}
+.legal-note{padding:10px 12px;border-left:4px solid #386c89;background:#f1f6fa;border-radius:6px;font-size:14px;color:#33495b}
+.art-memo,.art-conclusion,.art-sources{margin:22px 0;padding:16px 18px;border-radius:12px}
+.art-memo{background:#f5f8fb;border:1px solid var(--line)}.art-conclusion{background:#fff7ec;border:1px solid #f1d3a7}.art-sources{border:1px solid var(--line);font-size:15px}
+.art-memo h2,.art-conclusion h2,.art-sources h2{font-size:20px;margin:0 0 8px}
+.nav-soon{color:#9fb3c1;font-size:14px;cursor:default;white-space:nowrap}.nav-soon small{margin-left:4px;padding:2px 7px;border-radius:999px;background:#ffe9c7;color:#6a4300;font-size:11px;font-weight:800;vertical-align:1px}
+.guide-card details.card-more{margin:12px 0 4px}.guide-card details.card-more>summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;min-height:44px;padding:8px 14px;border:1px solid #809bad;border-radius:9px;font-weight:700;color:#17384f;background:#fff}
+.guide-card details.card-more>summary::-webkit-details-marker{display:none}.guide-card details.card-more .when-open{display:none}.guide-card details.card-more[open] .when-open{display:inline}.guide-card details.card-more[open] .when-closed{display:none}
+.guide-card .card-overview{margin:10px 0 0;padding-left:18px;font-size:14px;color:#33495b}.guide-card .card-read{display:inline-block;margin-top:10px;min-height:44px;line-height:44px}
+@media(max-width:760px){details.art-sec>summary h2{font-size:18px}.art-answer{font-size:17px}.nav-soon{font-size:13px}}

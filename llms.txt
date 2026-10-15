@@ -10,6 +10,9 @@
 - [Поиск имущества](https://torgatlas.ru/poisk-imushchestva/): критерии подбора и карта поиска.
 - [Сопровождение торгов](https://torgatlas.ru/soprovozhdenie-torgov/): границы сопровождения.
 - [Материалы](https://torgatlas.ru/blog/): публичные практические статьи.
+- [Как участвовать в торгах по банкротству](https://torgatlas.ru/blog/kak-uchastvovat-v-torgah-po-bankrotstvu/): инструкция для начинающего покупателя.
+- [Публичное предложение при банкротстве](https://torgatlas.ru/blog/publichnoe-predlozhenie-bankrotstvo/): как работает снижение цены и кто получает право купить.
+- [Задаток на торгах по банкротству](https://torgatlas.ru/blog/zadatok-na-torgah-po-bankrotstvu/): проверка реквизитов, возврат и риск потери.
 - [Конфиденциальность](https://torgatlas.ru/privacy/): правила обработки обращений.
 
 Этот файл — дополнительная навигационная справка, а не заявление о специальном ранжировании или обязательной видимости в AI-ответах.

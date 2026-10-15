@@ -1,19 +1,79 @@
 {
   "site_url": "https://torgatlas.ru",
   "pages": [
-    {"path": "/", "source": "index.html"},
-    {"path": "/proverka-lota/", "source": "proverka-lota/index.html"},
-    {"path": "/poisk-imushchestva/", "source": "poisk-imushchestva/index.html"},
-    {"path": "/soprovozhdenie-torgov/", "source": "soprovozhdenie-torgov/index.html"},
-    {"path": "/pokupka-imushchestva/", "source": "pokupka-imushchestva/index.html"},
-    {"path": "/primery-lotov/", "source": "primery-lotov/index.html"},
-    {"path": "/formaty-raboty/", "source": "formaty-raboty/index.html"},
-    {"path": "/o-torgatlas/", "source": "o-torgatlas/index.html"},
-    {"path": "/blog/", "source": "blog/index.html"},
-    {"path": "/blog/kak-proverit-lot-pered-torgami/", "source": "blog/kak-proverit-lot-pered-torgami/index.html"},
-    {"path": "/blog/kak-proverit-avtomobil-s-torgov/", "source": "blog/kak-proverit-avtomobil-s-torgov/index.html"},
-    {"path": "/blog/kak-proverit-zemelnyi-uchastok-s-torgov/", "source": "blog/kak-proverit-zemelnyi-uchastok-s-torgov/index.html"},
-    {"path": "/privacy/", "source": "privacy/index.html", "lastmod": "2026-10-13"},
-    {"path": "/privacy/consent/", "source": "privacy/consent/index.html", "lastmod": "2026-10-12"}
+    {
+      "path": "/",
+      "source": "index.html"
+    },
+    {
+      "path": "/proverka-lota/",
+      "source": "proverka-lota/index.html"
+    },
+    {
+      "path": "/poisk-imushchestva/",
+      "source": "poisk-imushchestva/index.html"
+    },
+    {
+      "path": "/soprovozhdenie-torgov/",
+      "source": "soprovozhdenie-torgov/index.html"
+    },
+    {
+      "path": "/pokupka-imushchestva/",
+      "source": "pokupka-imushchestva/index.html"
+    },
+    {
+      "path": "/primery-lotov/",
+      "source": "primery-lotov/index.html"
+    },
+    {
+      "path": "/formaty-raboty/",
+      "source": "formaty-raboty/index.html"
+    },
+    {
+      "path": "/o-torgatlas/",
+      "source": "o-torgatlas/index.html"
+    },
+    {
+      "path": "/blog/",
+      "source": "blog/index.html",
+      "lastmod": "2026-10-15"
+    },
+    {
+      "path": "/blog/kak-proverit-lot-pered-torgami/",
+      "source": "blog/kak-proverit-lot-pered-torgami/index.html"
+    },
+    {
+      "path": "/blog/kak-proverit-avtomobil-s-torgov/",
+      "source": "blog/kak-proverit-avtomobil-s-torgov/index.html"
+    },
+    {
+      "path": "/blog/kak-proverit-zemelnyi-uchastok-s-torgov/",
+      "source": "blog/kak-proverit-zemelnyi-uchastok-s-torgov/index.html"
+    },
+    {
+      "path": "/privacy/",
+      "source": "privacy/index.html",
+      "lastmod": "2026-10-13"
+    },
+    {
+      "path": "/privacy/consent/",
+      "source": "privacy/consent/index.html",
+      "lastmod": "2026-10-12"
+    },
+    {
+      "path": "/blog/kak-uchastvovat-v-torgah-po-bankrotstvu/",
+      "source": "blog/kak-uchastvovat-v-torgah-po-bankrotstvu/index.html",
+      "lastmod": "2026-10-15"
+    },
+    {
+      "path": "/blog/publichnoe-predlozhenie-bankrotstvo/",
+      "source": "blog/publichnoe-predlozhenie-bankrotstvo/index.html",
+      "lastmod": "2026-10-15"
+    },
+    {
+      "path": "/blog/zadatok-na-torgah-po-bankrotstvu/",
+      "source": "blog/zadatok-na-torgah-po-bankrotstvu/index.html",
+      "lastmod": "2026-10-15"
+    }
   ]
 }

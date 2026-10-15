@@ -35,7 +35,7 @@ const noH = page => page.evaluate(() => document.documentElement.scrollWidth <= 
 
 // published HTML itself
 const html = await (await fetch(`${base}/ai-poisk-lotov/`)).text();
-rec('REAL', 'published HTML: nothing disabled, CAPTCHA before the button, «До 5 результатов», CTA «Скоро» without a link, no marketplace list',
+rec('REAL', 'published HTML: nothing disabled, CAPTCHA before the button, «До 5 результатов», CTA «В разработке» without a link, no marketplace list',
   !/<textarea[^>]*\sdisabled/.test(html) && html.indexOf('id="ai-captcha"') < html.indexOf('id="ai-submit"') && /До 5 результатов/.test(html) && !/До 10 результатов/.test(html)
   && /Посмотреть больше лотов в каталоге ТоргАтлас/.test(html) && !/<p class="ai-catalog-cta"[^>]*>[^]*?<a\b/.test(html.match(/<p class="ai-catalog-cta"[^]*?<\/p>/)[0]) && !/УТПЛ|УЭТП|Центр реализации|ГИС Торги|ЕФРСБ|МЭТС/.test(html), { script: (html.match(/ai-search\.js\?v=\d+/) || [])[0] });
 
@@ -64,7 +64,7 @@ const thinking = await D.page.waitForFunction(() => /Думаю/.test(document.g
 await done(D.page);
 const cardsD = await D.page.$$eval('#ai-cards .ai-card', cs => cs.map(c => ({ href: c.querySelector('a[target=_blank]')?.href, text: c.textContent })));
 rec('REAL', 'desktop: «Думаю…» shown, POST carried a token, response rendered (0–5 cards, links https)', thinking >= 0 && D.posts.length === 1 && typeof D.posts[0].altcha === 'string' && cardsD.length <= 5 && cardsD.every(c => /^https:\/\//.test(c.href)), { thinking, cards: cardsD.length, title: await D.page.textContent('#ai-results-title') });
-rec('REAL', 'desktop: CTA «Скоро» visible after results, inactive, caveat names no marketplaces', await D.page.evaluate(() => { const c = document.getElementById('ai-catalog-cta'); return !c.hidden && /Скоро/.test(c.textContent) && !c.querySelector('a,[href]') && !/УТПЛ|УЭТП|Центр реализации|ГИС|ЕФРСБ|МЭТС/.test(document.getElementById('ai-results-coverage').textContent); }));
+rec('REAL', 'desktop: CTA «В разработке» visible after results, inactive, caveat names no marketplaces', await D.page.evaluate(() => { const c = document.getElementById('ai-catalog-cta'); return !c.hidden && /В разработке/.test(c.textContent) && !c.querySelector('a,[href]') && !/УТПЛ|УЭТП|Центр реализации|ГИС|ЕФРСБ|МЭТС/.test(document.getElementById('ai-results-coverage').textContent); }));
 rec('REAL', 'desktop: CAPTCHA reset after the search and the typed text kept', /снова отметьте/.test(await D.page.textContent('#ai-captcha-hint')) && (await D.page.inputValue('#ai-query')).startsWith('Найди транспорт'));
 rec('REAL', 'desktop: no analytics requests before consent, no page errors', D.analytics.length === 0 && D.errors.length === 0, { analytics: D.analytics, errors: D.errors });
 await D.page.screenshot({ path: `${out}/live-core-desktop.png`, fullPage: true });

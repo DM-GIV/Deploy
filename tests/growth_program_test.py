@@ -49,20 +49,20 @@ class GrowthProgramTests(unittest.TestCase):
 
     def test_owner_approved_requires_every_gate_and_exact_hash(self):
         queue = copy.deepcopy(SCHEDULER.load_queue())
-        item = next(item for item in queue["items"] if item["id"] == "deposit-guide-v1")
+        item = next(item for item in queue["items"] if item["id"] == "public-property-guide-v1")
         item["status"] = "OWNER_APPROVED"
         item["owner_approved_by"] = "owner"
         item["owner_approved_at"] = "2026-10-17T12:00:00+03:00"
-        blocked = SCHEDULER.decision(queue, datetime.fromisoformat("2026-10-18T09:00:00+03:00"))
+        blocked = SCHEDULER.decision(queue, datetime.fromisoformat("2026-10-25T09:00:00+03:00"))
         self.assertEqual(blocked["status"], "BLOCKED")
         item["gates"] = {key: True for key in SCHEDULER.REQUIRED_GATES}
-        ready = SCHEDULER.decision(queue, datetime.fromisoformat("2026-10-18T09:00:00+03:00"))
+        ready = SCHEDULER.decision(queue, datetime.fromisoformat("2026-10-25T09:00:00+03:00"))
         self.assertEqual(ready["status"], "READY")
-        self.assertEqual(ready["article_id"], "deposit-guide-v1")
+        self.assertEqual(ready["article_id"], "public-property-guide-v1")
 
     def test_owner_approved_rejects_nonofficial_source(self):
         queue = copy.deepcopy(SCHEDULER.load_queue())
-        item = next(item for item in queue["items"] if item["id"] == "deposit-guide-v1")
+        item = next(item for item in queue["items"] if item["id"] == "public-property-guide-v1")
         item["status"] = "OWNER_APPROVED"
         item["owner_approved_by"] = "owner"
         item["owner_approved_at"] = "2026-10-17T12:00:00+03:00"

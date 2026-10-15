@@ -1,0 +1,2 @@
+Lighthouse is not installed on this host and cannot be installed from the isolated test containers (no network); it was NOT run and no Lighthouse score is claimed.
+Substitutes that were run: scripts/check-performance.mjs (static budget/CSS coverage, passed), tests/accessibility-static-test.py (in the Python suite), real-browser acceptance with 44 px tap-target and horizontal-overflow checks, SEO crawl of every sitemap URL.

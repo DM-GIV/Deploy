@@ -1,0 +1,78 @@
+PASS REAL DESKTOP 1440 home menu: simplified, one inactive «Каталог Скоро» marker, no «Поиск» ["AI-поиск лотов","Проверка лота","Сопровождение","Покупка","Примеры","Материалы","Контакты","Каталог Скоро"]
+PASS REAL DESKTOP 1440 home explains AI-search vs catalogue ""
+PASS REAL DESKTOP 1440 catalogue card has no link and no click target ""
+PASS REAL DESKTOP 1440 primary actions still visible: «Проверить лот», «Подобрать объект» ""
+PASS REAL DESKTOP 1440 home: no horizontal scroll, no JS errors []
+PASS REAL DESKTOP 1440 clicking the catalogue marker/card does not navigate "http://127.0.0.1:33525/"
+PASS REAL DESKTOP 1440 menu «AI-поиск лотов» opens the AI page with a usable field ""
+PASS REAL DESKTOP 1440 AI page: catalogue CTA says «В разработке» with the address as text, hidden before a search, no link ""
+PASS REAL DESKTOP 1440 AI page: ALTCHA container and cap «До 5 результатов» present ""
+PASS REAL DESKTOP 1440 menu «Проверка лота» opens the check page with its form ""
+PASS REAL DESKTOP 1440 services page: menu without «Поиск», footer reaches «Индивидуальный подбор» ""
+PASS REAL DESKTOP 1440 individual selection page preserved with its form ""
+PASS REAL DESKTOP 1440 blog: 6 compact cards, three new with «Развернуть» ""
+PASS REAL DESKTOP 1440 «Развернуть» shows the short overview and the label becomes «Свернуть» ""
+PASS REAL DESKTOP 1440 «Свернуть» returns the compact card ""
+PASS REAL DESKTOP 1440 /blog/ does not duplicate the full article ""
+PASS REAL DESKTOP 1440 «Читать полную статью» opens the standalone article ""
+PASS REAL DESKTOP 1440 kak-uchastvovat-v-torgah-po-bankrotstvu: H1, visible direct answer, sections, first open, expand/collapse toolbar {"h1":"Как участвовать в торгах по банкротству: инструкция для начинающего покупателя","answerVisible":true,"sections":5,"first":true,"toolsVisible":true}
+PASS REAL DESKTOP 1440 kak-uchastvovat-v-torgah-po-bankrotstvu: summary opens by pointer and toggles by keyboard ""
+PASS REAL DESKTOP 1440 kak-uchastvovat-v-torgah-po-bankrotstvu: «Развернуть все» / «Свернуть все» ""
+PASS REAL DESKTOP 1440 kak-uchastvovat-v-torgah-po-bankrotstvu: plan link opens its section ""
+PASS REAL DESKTOP 1440 kak-uchastvovat-v-torgah-po-bankrotstvu: no horizontal scroll, summary tap target >= 44px ""
+PASS REAL DESKTOP 1440 kak-uchastvovat-v-torgah-po-bankrotstvu: CTA «AI-поиск» and «карта проверки» work ""
+PASS REAL DESKTOP 1440 publichnoe-predlozhenie-bankrotstvo: H1, visible direct answer, sections, first open, expand/collapse toolbar {"h1":"Публичное предложение на торгах по банкротству: как купить имущество при снижении цены","answerVisible":true,"sections":4,"first":true,"toolsVisible":true}
+PASS REAL DESKTOP 1440 publichnoe-predlozhenie-bankrotstvo: summary opens by pointer and toggles by keyboard ""
+PASS REAL DESKTOP 1440 publichnoe-predlozhenie-bankrotstvo: «Развернуть все» / «Свернуть все» ""
+PASS REAL DESKTOP 1440 publichnoe-predlozhenie-bankrotstvo: plan link opens its section ""
+PASS REAL DESKTOP 1440 publichnoe-predlozhenie-bankrotstvo: no horizontal scroll, summary tap target >= 44px ""
+PASS REAL DESKTOP 1440 publichnoe-predlozhenie-bankrotstvo: CTA «AI-поиск» and «карта проверки» work ""
+PASS REAL DESKTOP 1440 zadatok-na-torgah-po-bankrotstvu: H1, visible direct answer, sections, first open, expand/collapse toolbar {"h1":"Задаток на торгах по банкротству: как внести, вернуть и не потерять деньги","answerVisible":true,"sections":5,"first":true,"toolsVisible":true}
+PASS REAL DESKTOP 1440 zadatok-na-torgah-po-bankrotstvu: summary opens by pointer and toggles by keyboard ""
+PASS REAL DESKTOP 1440 zadatok-na-torgah-po-bankrotstvu: «Развернуть все» / «Свернуть все» ""
+PASS REAL DESKTOP 1440 zadatok-na-torgah-po-bankrotstvu: plan link opens its section ""
+PASS REAL DESKTOP 1440 zadatok-na-torgah-po-bankrotstvu: no horizontal scroll, summary tap target >= 44px ""
+PASS REAL DESKTOP 1440 zadatok-na-torgah-po-bankrotstvu: CTA «AI-поиск» and «карта проверки» work ""
+PASS REAL DESKTOP 1440 never requested the future catalogue host []
+PASS REAL ANDROID 412 home menu: simplified, one inactive «Каталог Скоро» marker, no «Поиск» ["AI-поиск лотов","Проверка лота","Сопровождение","Покупка","Примеры","Материалы","Контакты","Каталог Скоро"]
+PASS REAL ANDROID 412 home explains AI-search vs catalogue ""
+PASS REAL ANDROID 412 catalogue card has no link and no click target ""
+PASS REAL ANDROID 412 primary actions still visible: «Проверить лот», «Подобрать объект» ""
+PASS REAL ANDROID 412 home: no horizontal scroll, no JS errors []
+PASS REAL ANDROID 412 clicking the catalogue marker/card does not navigate "http://127.0.0.1:33525/"
+PASS REAL ANDROID 412 menu «AI-поиск лотов» opens the AI page with a usable field ""
+PASS REAL ANDROID 412 AI page: catalogue CTA says «В разработке» with the address as text, hidden before a search, no link ""
+PASS REAL ANDROID 412 AI page: ALTCHA container and cap «До 5 результатов» present ""
+PASS REAL ANDROID 412 menu «Проверка лота» opens the check page with its form ""
+PASS REAL ANDROID 412 services page: menu without «Поиск», footer reaches «Индивидуальный подбор» ""
+PASS REAL ANDROID 412 individual selection page preserved with its form ""
+PASS REAL ANDROID 412 blog: 6 compact cards, three new with «Развернуть» ""
+PASS REAL ANDROID 412 «Развернуть» shows the short overview and the label becomes «Свернуть» ""
+PASS REAL ANDROID 412 «Свернуть» returns the compact card ""
+PASS REAL ANDROID 412 /blog/ does not duplicate the full article ""
+PASS REAL ANDROID 412 «Читать полную статью» opens the standalone article ""
+PASS REAL ANDROID 412 kak-uchastvovat-v-torgah-po-bankrotstvu: H1, visible direct answer, sections, first open, expand/collapse toolbar {"h1":"Как участвовать в торгах по банкротству: инструкция для начинающего покупателя","answerVisible":true,"sections":5,"first":true,"toolsVisible":true}
+PASS REAL ANDROID 412 kak-uchastvovat-v-torgah-po-bankrotstvu: summary opens by pointer and toggles by keyboard ""
+PASS REAL ANDROID 412 kak-uchastvovat-v-torgah-po-bankrotstvu: «Развернуть все» / «Свернуть все» ""
+PASS REAL ANDROID 412 kak-uchastvovat-v-torgah-po-bankrotstvu: plan link opens its section ""
+PASS REAL ANDROID 412 kak-uchastvovat-v-torgah-po-bankrotstvu: no horizontal scroll, summary tap target >= 44px ""
+PASS REAL ANDROID 412 kak-uchastvovat-v-torgah-po-bankrotstvu: CTA «AI-поиск» and «карта проверки» work ""
+PASS REAL ANDROID 412 publichnoe-predlozhenie-bankrotstvo: H1, visible direct answer, sections, first open, expand/collapse toolbar {"h1":"Публичное предложение на торгах по банкротству: как купить имущество при снижении цены","answerVisible":true,"sections":4,"first":true,"toolsVisible":true}
+PASS REAL ANDROID 412 publichnoe-predlozhenie-bankrotstvo: summary opens by pointer and toggles by keyboard ""
+PASS REAL ANDROID 412 publichnoe-predlozhenie-bankrotstvo: «Развернуть все» / «Свернуть все» ""
+PASS REAL ANDROID 412 publichnoe-predlozhenie-bankrotstvo: plan link opens its section ""
+PASS REAL ANDROID 412 publichnoe-predlozhenie-bankrotstvo: no horizontal scroll, summary tap target >= 44px ""
+PASS REAL ANDROID 412 publichnoe-predlozhenie-bankrotstvo: CTA «AI-поиск» and «карта проверки» work ""
+PASS REAL ANDROID 412 zadatok-na-torgah-po-bankrotstvu: H1, visible direct answer, sections, first open, expand/collapse toolbar {"h1":"Задаток на торгах по банкротству: как внести, вернуть и не потерять деньги","answerVisible":true,"sections":5,"first":true,"toolsVisible":true}
+PASS REAL ANDROID 412 zadatok-na-torgah-po-bankrotstvu: summary opens by pointer and toggles by keyboard ""
+PASS REAL ANDROID 412 zadatok-na-torgah-po-bankrotstvu: «Развернуть все» / «Свернуть все» ""
+PASS REAL ANDROID 412 zadatok-na-torgah-po-bankrotstvu: plan link opens its section ""
+PASS REAL ANDROID 412 zadatok-na-torgah-po-bankrotstvu: no horizontal scroll, summary tap target >= 44px ""
+PASS REAL ANDROID 412 zadatok-na-torgah-po-bankrotstvu: CTA «AI-поиск» and «карта проверки» work ""
+PASS REAL ANDROID 412 never requested the future catalogue host []
+PASS REAL NO-JS kak-uchastvovat-v-torgah-po-bankrotstvu: text present, toolbar stays hidden, sections open natively {"text":456,"tools":true,"sections":5}
+PASS REAL NO-JS publichnoe-predlozhenie-bankrotstvo: text present, toolbar stays hidden, sections open natively {"text":994,"tools":true,"sections":4}
+PASS REAL NO-JS zadatok-na-torgah-po-bankrotstvu: text present, toolbar stays hidden, sections open natively {"text":649,"tools":true,"sections":5}
+PASS REAL NO-JS blog card expands natively ""
+
+SUMMARY pass=76 fail=0

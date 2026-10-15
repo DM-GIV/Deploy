@@ -71,11 +71,12 @@ test('«Я человек» check sits before the search button, the field never
   assert.match(script, /q\.disabled = false;/);
 });
 
-test('page states the five-result cap and offers an inactive catalogue link marked «Скоро»', () => {
+test('page states the five-result cap and offers an inactive catalogue link marked «В разработке»', () => {
   assert.match(page, /<p class="ai-limit">До 5 результатов<\/p>/);
   assert.match(page, /Посмотреть больше лотов в каталоге ТоргАтлас/);
   const cta = page.match(/<p class="ai-catalog-cta"[\s\S]*?<\/p>/)[0];
-  assert.match(cta, />Скоро</);
+  assert.match(cta, />В разработке</);
+  assert.match(cta, /app\.torgatlas\.ru/);
   assert.doesNotMatch(cta, /<a\b|href=/);
   assert.match(cta, /aria-disabled="true"/);
   assert.match(cta, /hidden/);

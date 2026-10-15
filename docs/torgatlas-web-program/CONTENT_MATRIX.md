@@ -7,8 +7,8 @@
 |1|Проверка лота, info|P0|`/blog/kak-proverit-lot-pered-torgami/` → карта|ЕФРСБ/ЭТП; READY; low|
 |2|Проверка авто, info|P0|`/blog/kak-proverit-avtomobil-s-torgov/` → карта|ГИБДД/ЭТП; READY; low|
 |3|Проверка земли, info|P0|`/blog/kak-proverit-zemelnyi-uchastok-s-torgov/` → карта|Росреестр/ЭТП; READY; low|
-|4|Задаток, info|P1|draft → карта|ЕФРСБ+положение; REVIEW; medium|
-|5|Публичное предложение, info|P1|draft → карта|127-ФЗ+положение; REVIEW; medium|
+|4|Задаток, info|P1|`/blog/zadatok-na-torgah-po-bankrotstvu/` → карта|ст. 110, 139 127-ФЗ (проверено 15.10.2026) + положение; READY; medium|
+|5|Публичное предложение, info|P1|`/blog/publichnoe-predlozhenie-bankrotstvo/` → поиск + карта|ст. 139 127-ФЗ (проверено 15.10.2026); READY; medium|
 |6|Гос/муниципальные торги, info|P1|draft → поиск|ГИС Торги+извещение; REVIEW; medium|
 |7|Поиск имущества, commercial|P0|`/poisk-imushchestva/` → карта|criteria; READY; low|
 |8|Проверка лота, commercial|P0|`/proverka-lota/` → карта|documents; READY; low|
@@ -36,3 +36,5 @@
 |30|Реализация после покупки|P2|future guide → purchase|economics; REVIEW; medium|
 
 Каннибализация: темы 1–3 закреплены за действующими guides; 4–6 сохранены как noindex drafts; 14–30 не получают URL до PAGE_SPEC и source review.
+
+|31|Как участвовать в торгах, info|P0|`/blog/kak-uchastvovat-v-torgah-po-bankrotstvu/` → поиск + карта|ЕФРСБ/ЭТП; READY (15.10.2026); low|
