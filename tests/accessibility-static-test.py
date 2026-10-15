@@ -24,7 +24,8 @@ class AccessibilityStaticTests(unittest.TestCase):
 
     def test_internal_pages_keep_visible_focus(self) -> None:
         css = (ROOT / "assets/seo.css").read_text(encoding="utf-8")
-        self.assertIn("a:focus-visible,summary:focus-visible", css)
+        # seo.css already styles links, buttons and summaries (superset of the former a/summary-only check).
+        self.assertIn("a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #fa9318;outline-offset:3px}", css)
 
 
 if __name__ == "__main__":

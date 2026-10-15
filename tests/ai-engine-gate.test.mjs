@@ -97,3 +97,33 @@ test('registry listing exposes ids and statuses only', () => {
   configureSourceRegistry({ sources: base });
   assert.ok(SOURCE_REGISTRY.every(row => Object.keys(row).sort().join() === 'id,status'));
 });
+
+test('robots Crawl-delay is honoured: per-host pacing, over-limit requests are skipped not sent', async () => {
+  const stamps = [];
+  const gate = http.createServer();
+  gate.on('connect', (req, socket) => { stamps.push([req.url, Date.now()]); socket.end('HTTP/1.1 403 Forbidden\r\n\r\n'); });
+  await new Promise(r => gate.listen(0, '127.0.0.1', r));
+  const prev = process.env.AI_LOT_EGRESS_GATE;
+  process.env.AI_LOT_EGRESS_GATE = `http://localhost:${gate.address().port}`;
+  configureSourceRegistry({ sources: [
+    { id: 'utpl', host: 'bankrupt.utpl.ru', status: 'LIVE_LOT_VERIFIED', edge_enabled: true, template_family: 'all-torgi', min_interval_ms: 3000 },
+    { id: 'gis-torgi', host: 'torgi.gov.ru', status: 'VERIFIED_PUBLIC_ACCESS', edge_enabled: true, min_interval_ms: 60000 },
+    { id: 'etpu', host: 'bankrupt.etpu.ru', status: 'VERIFIED_PUBLIC_ACCESS', edge_enabled: true, template_family: 'all-torgi' }] });
+  try {
+    const u = 'https://bankrupt.utpl.ru/public/auctions-all/';
+    await assert.rejects(safePublicGet(u, { expectedType: 'html' }), /PROXY_CONNECT_DENIED/);
+    await assert.rejects(safePublicGet(u, { expectedType: 'html' }), /PROXY_CONNECT_DENIED/);
+    assert.ok(stamps[1][1] - stamps[0][1] >= 2900, `second UTPL request waited ${stamps[1][1] - stamps[0][1]} ms`);
+    const other = Date.now();
+    await assert.rejects(safePublicGet('https://bankrupt.etpu.ru/public/auctions-all/', { expectedType: 'html' }), /PROXY_CONNECT_DENIED/);
+    assert.ok(Date.now() - other < 1500, 'a different host is not delayed by UTPL pacing');
+    const gis = 'https://torgi.gov.ru/new/api/public/lotcards/abc';
+    await assert.rejects(safePublicGet(gis, { expectedType: 'json' }), /PROXY_CONNECT_DENIED|TLS|SOURCE/);
+    const before = stamps.length;
+    await assert.rejects(safePublicGet(gis, { expectedType: 'json' }), /SOURCE_PACING_BUSY/);
+    assert.equal(stamps.length, before, 'GIS request inside the 60 s window is never sent');
+  } finally {
+    if (prev === undefined) delete process.env.AI_LOT_EGRESS_GATE; else process.env.AI_LOT_EGRESS_GATE = prev;
+    configureSourceRegistry({ sources: base }); gate.close();
+  }
+});
