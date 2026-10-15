@@ -20,8 +20,8 @@
     "arrested"
    ],
    "status": "VERIFIED_PUBLIC_ACCESS",
-   "edge_enabled": true,
-   "notes": "Runtime 2026-10-15 via isolated gate: pinned Russian Trusted Root+Sub CA (config/trust), TLS verified, API lotcards/search 200 with 10 rows; listing-only lots are PRELIMINARY_SOURCE_DATA (application deadline not confirmed) so not LIVE_LOT_VERIFIED.; robots.txt \"Crawl-delay: 60\" honoured: at most one request per 60 s process-wide, extra requests skipped (listing-only PRELIMINARY data).",
+   "edge_enabled": false,
+   "notes": "Runtime 2026-10-15 via isolated gate: pinned Russian Trusted Root+Sub CA (config/trust), TLS verified, API lotcards/search 200 with 10 rows; listing-only lots are PRELIMINARY_SOURCE_DATA (application deadline not confirmed) so not LIVE_LOT_VERIFIED.; robots.txt \"Crawl-delay: 60\" honoured: at most one request per 60 s process-wide, extra requests skipped (listing-only PRELIMINARY data).; DISABLED 2026-10-15 by owner rule \"terms undetermined => off\": no explicit terms for automated API access found (site Regulation guarantees free equal access; robots Allow /new/, Crawl-delay 60). Pinned CA kept for a later reviewed re-enable.",
    "verified_at": "2026-10-15",
    "template_family": null,
    "tls_ca": [

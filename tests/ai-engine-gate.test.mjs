@@ -127,3 +127,33 @@ test('robots Crawl-delay is honoured: per-host pacing, over-limit requests are s
     configureSourceRegistry({ sources: base }); gate.close();
   }
 });
+
+test('beta privacy: natural-person names and identifiers are redacted, property facts survive', async () => {
+  const { redactPersonalData, publicResearchMiniSearch } = await import('../lib/torgatlas-public-web-research.mjs');
+  const cases = [
+    ['Красова Елена Николаевна, приговор Нововоронежского суда', 'Красова', '[ФИО скрыто]'],
+    ['Имущество должника Иван Петров', 'Петров', '[ФИО скрыто]'],
+    ['Принадлежит Сидорову А.Б.', 'А.Б.', '[ФИО скрыто]'],
+    ['А.Б. Сидоров, автомобиль', 'Сидоров', '[ФИО скрыто]'],
+    ['ИВАНОВ ИВАН ИВАНОВИЧ квартира', 'ИВАНОВИЧ', '[ФИО скрыто]'],
+    ['ИП Мамедов Фарид оглы, оборудование', 'Мамедов', '[ФИО скрыто]'],
+    ['контакт +7 916 123-45-67 или a.b@mail.ru', '916', '[телефон скрыт]'],
+    ['паспорт 45 12 345678', '345678', '[документ скрыт]'],
+    ['Права требования (дебиторская задолженность) к Харитонову Илье Юрьевичу (ИНН 772', 'Юрьевичу', '[ФИО скрыто]'],
+    ['Квартира Николаевой Анны Сергеевны', 'Сергеевны', '[ФИО скрыто]'],
+    ['залог Петрова Петра Петровича', 'Петровича', '[ФИО скрыто]']
+  ];
+  for (const [input, leaked, marker] of cases) {
+    const out = redactPersonalData(input);
+    assert.ok(!out.includes(leaked), `${input} -> ${out}`);
+    assert.ok(out.includes(marker), `${input} -> ${out}`);
+  }
+  for (const keep of ['Транспортное средство МИЦУБИСИ АУТЛЕНДЕР 2.0, 2011 года, VIN XTA', 'Земельный участок 59:12:0010417:476, Пермский край', 'Нежилое здание, 10 кв. метров, ООО «Просервис»', 'Вальцы (ИБ 2220) б/у, 1шт.', 'Автомобиль Mitsubishi Lancer 2007']) {
+    assert.equal(redactPersonalData(keep), keep, keep);
+  }
+  // End to end: a source card whose title contains a person's name never reaches the API result or the cache.
+  configureSourceRegistry({ sources: base });
+  const catalog = '<table><tr class="gridRow"><td>П-1</td><td></td><td>1</td><td></td><td>1 000,00</td><td></td><td>01.12.2099 10:00</td><td></td><td>Прием заявок</td><td><a class="tip-lot" href="/public/auctions/lots/view/777/">Автомобиль должника Петров Пётр Петрович</a></td></tr></table>';
+  const out = await publicResearchMiniSearch('автомобиль должника торги банкротство', { cacheEnabled: false, rateKey: 'pii-test', requestHtml: async () => catalog, requestJson: async () => ({}) });
+  assert.ok(!JSON.stringify(out).includes('Петрович'));
+});
