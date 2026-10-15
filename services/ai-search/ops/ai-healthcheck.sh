@@ -35,10 +35,13 @@ cstate() { # container -> healthy | grace | unhealthy | missing
   esac
 }
 
-probe() { # sets: S_SEARCH S_EDGE API ENABLED HOME LEAD UMAMI MEM AI_OK SITE_OK GRACE
+probe() { # sets: S_SEARCH S_EDGE S_CORE CORE_MODE API ENABLED HOME LEAD UMAMI MEM AI_OK SITE_OK GRACE
   S_SEARCH=$(cstate torgatlas-ai-search); S_EDGE=$(cstate torgatlas-ai-edge)
   local tmp; tmp=$(mktemp); API=$(get /api/ai-lot-search "$tmp")
-  ENABLED=$(python3 -c "import json;print(str(json.load(open('$tmp')).get('enabled')).lower())" 2>/dev/null || echo unknown); rm -f "$tmp"
+  ENABLED=$(python3 -c "import json;print(str(json.load(open('$tmp')).get('enabled')).lower())" 2>/dev/null || echo unknown)
+  # Core search container (informational: logged, never counted toward the kill switch - disabling AI cannot repair Core, and search is fail-closed anyway)
+  CORE_MODE=$(python3 -c "import json;print(json.load(open('$tmp')).get('mode','unknown'))" 2>/dev/null || echo unknown)
+  S_CORE=$(cstate torgatlas-ai-core-search); rm -f "$tmp"
   HOME_C=$(get /); LEAD=$(get /api/lead-config); UMAMI=$(get /ta/s.js)
   MEM=$(docker stats --no-stream --format '{{.MemPerc}}' torgatlas-ai-search 2>/dev/null | tr -d '%'); MEM=${MEM:-0}
   GRACE=0; { [ "$S_SEARCH" = grace ] || [ "$S_EDGE" = grace ]; } && GRACE=1
@@ -53,8 +56,8 @@ probe() { # sets: S_SEARCH S_EDGE API ENABLED HOME LEAD UMAMI MEM AI_OK SITE_OK 
   SITE_OK=1; [ "$HOME_C" = 200 ] && [ "$LEAD" = 200 ] && [ "$UMAMI" = 200 ] || SITE_OK=0
 }
 logline() { # extra
-  printf '{"ts":"%s","search":"%s","edge":"%s","api":%s,"enabled":"%s","home":%s,"lead":%s,"umami":%s,"mem_pct":"%s","grace":%s,"ai_ok":%s,"site_ok":%s%s}\n' \
-    "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$S_SEARCH" "$S_EDGE" "$API" "$ENABLED" "$HOME_C" "$LEAD" "$UMAMI" "$MEM" "$GRACE" "$AI_OK" "$SITE_OK" "${1:-}" >> "$LOG"
+  printf '{"ts":"%s","search":"%s","edge":"%s","api":%s,"enabled":"%s","home":%s,"lead":%s,"umami":%s,"mem_pct":"%s","grace":%s,"ai_ok":%s,"site_ok":%s,"core":"%s","core_c":"%s"%s}\n' \
+    "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$S_SEARCH" "$S_EDGE" "$API" "$ENABLED" "$HOME_C" "$LEAD" "$UMAMI" "$MEM" "$GRACE" "$AI_OK" "$SITE_OK" "$CORE_MODE" "$S_CORE" "${1:-}" >> "$LOG"
 }
 trim_log() { [ "$(wc -l < "$LOG" 2>/dev/null || echo 0)" -gt "$LOG_MAX_LINES" ] && { tail -n $((LOG_MAX_LINES/2)) "$LOG" > "$LOG.tmp" && mv "$LOG.tmp" "$LOG"; }; return 0; }
 touch "$LOG" "$STATE"; chmod 600 "$LOG" "$STATE" 2>/dev/null

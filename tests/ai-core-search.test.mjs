@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash, createHmac } from 'node:crypto';
 import { createChallenge, verifyPayload, ReplayStore, IssueLimiter, ALTCHA } from '../lib/torgatlas-altcha.mjs';
 import { createAiLotSearchHandler } from '../api/ai-lot-search.mjs';
-import { mapCard, safeSourceUrl, searchCore, CoreSearchError } from '../lib/torgatlas-core-search.mjs';
+import { mapCard, safeSourceUrl, searchCore, CoreSearchError, createCoreProbe } from '../lib/torgatlas-core-search.mjs';
 
 const KEY = 'K'.repeat(8) + '0123456789abcdefghijklmnopqrstuvwxyz';
 const NOW = 1_800_000_000;
@@ -91,13 +91,14 @@ test('challenge issuing is rate limited per client', () => {
 // ---------- handler -----------------------------------------------------------------------------------------------
 const GATES = { AI_LOT_SEARCH_ENABLED: 'true', AI_LOT_SECURITY_APPROVED: 'true', AI_LOT_LEGAL_APPROVED: 'true' };
 function response() { return { headers: {}, code: 0, body: null, setHeader(k, v) { this.headers[k] = v; }, status(c) { this.code = c; return this; }, json(b) { this.body = b; return b; } }; }
-function build({ env = {}, clock = { now: NOW }, core, web } = {}) {
+function build({ env = {}, clock = { now: NOW }, core, web, probe } = {}) {
   const calls = { core: [], web: [] };
   const environment = { ...GATES, AI_LOT_ALTCHA_REQUIRED: 'true', AI_LOT_ALTCHA_HMAC_KEY: KEY, AI_LOT_CORE_URL: 'http://core.invalid/api/v1/public-search', AI_LOT_CORE_TOKEN: 'x'.repeat(32), ...env };
   const handler = createAiLotSearchHandler({
     env: environment, nowSeconds: () => clock.now,
     core: core || (async filters => { calls.core.push(filters); return { lots: [], meta: {} }; }),
-    web: web || (async query => { calls.web.push(query); return { ok: true, lots: [], status: 'PARTIAL_NO_VERIFIED_SOURCE' }; })
+    web: web || (async query => { calls.web.push(query); return { ok: true, lots: [], status: 'PARTIAL_NO_VERIFIED_SOURCE' }; }),
+    probe: probe || (async () => true)
   });
   const post = async (body, headers = {}) => {
     const res = response();
@@ -287,4 +288,22 @@ test('lots that share one publication link are marked, so one publication is nev
   const other = { ...GOOD_CARD, title: 'Квартира', source_url: 'https://fedresurs.ru/biddings/aaaaaaaa-0000-0000-0000-000000000000' };
   const result = await searchCore({}, { config: CONFIG, fetchImpl: async () => new Response(JSON.stringify({ results: [...same, other] })) });
   assert.deepEqual(result.lots.map(l => l.same_publication_count), [2, 2, 2, 0]);
+});
+
+test('GET mode reflects the LIVE state of Core (cached probe of the unauthenticated /health only)', async () => {
+  let healthy = true; const urls = []; let t = 0;
+  const probe = createCoreProbe({ now: () => t, fetchImpl: async (url, init) => { urls.push([url, init.method, init.headers]); if (!healthy) throw new TypeError('down'); return new Response(JSON.stringify({ ok: true })); } });
+  const t1 = build({ probe });
+  assert.equal((await t1.get()).body.mode, 'CORE_SEARCH');
+  assert.deepEqual(urls[0].slice(0, 2), ['http://core.invalid/health', 'GET']);
+  assert.equal(urls[0][2], undefined);                       // no Authorization header on the probe
+  await t1.get(); assert.equal(urls.length, 1);              // cached
+  healthy = false; t = 11_000;
+  assert.equal((await t1.get()).body.mode, 'CORE_UNAVAILABLE');
+  t = 12_000; healthy = true; assert.equal((await t1.get()).body.mode, 'CORE_UNAVAILABLE'); // failure cached briefly
+  t = 20_000; assert.equal((await t1.get()).body.mode, 'CORE_SEARCH');
+  // a 200 that is not {ok:true}, or a non-200, is unhealthy
+  const bad = createCoreProbe({ fetchImpl: async () => new Response('x', { status: 200 }) });
+  assert.equal(await bad({ AI_LOT_CORE_URL: 'http://core.invalid/api', AI_LOT_CORE_TOKEN: 'x'.repeat(32) }), false);
+  assert.equal(await bad({}), null);
 });

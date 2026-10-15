@@ -117,3 +117,8 @@ test('catalogue cards show the honest status label and the shared-publication no
   assert.match(script, /same_publication_count/);
   assert.match(script, /один источник, а не несколько независимых/);
 });
+
+test('UI announces a Core outage from the live status', () => {
+  assert.match(script, /data\.mode === 'CORE_UNAVAILABLE'/);
+  assert.match(script, /Мы не подменяем его неточным поиском/);
+});

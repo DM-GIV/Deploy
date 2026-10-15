@@ -1,7 +1,7 @@
 import { normalizeQuery, publicResearchMiniSearch } from '../lib/torgatlas-public-web-research.mjs';
 import { createChallenge, verifyPayload, strongKey, ReplayStore, IssueLimiter } from '../lib/torgatlas-altcha.mjs';
 import { parseIntent } from '../lib/torgatlas-intent.mjs';
-import { coreConfig, searchCore, CoreSearchError } from '../lib/torgatlas-core-search.mjs';
+import { coreConfig, searchCore, CoreSearchError, createCoreProbe } from '../lib/torgatlas-core-search.mjs';
 
 export const maxDuration = 60;
 export const MAX_RESULTS = 5;
@@ -16,7 +16,7 @@ function send(res, code, data) {
 }
 
 // Factory so tests can inject time, env and the Core transport; the default export below is what the daemon uses.
-export function createAiLotSearchHandler({ env = process.env, nowSeconds = () => Math.floor(Date.now() / 1000), core = searchCore, web = publicResearchMiniSearch } = {}) {
+export function createAiLotSearchHandler({ env = process.env, nowSeconds = () => Math.floor(Date.now() / 1000), core = searchCore, web = publicResearchMiniSearch, probe = createCoreProbe() } = {}) {
   const replay = new ReplayStore();
   const issueLimiter = new IssueLimiter();
   const startedAt = nowSeconds();   // challenges issued before this process started carry no replay memory and are refused
@@ -35,7 +35,8 @@ export function createAiLotSearchHandler({ env = process.env, nowSeconds = () =>
         if (!issueLimiter.allow(clientKey)) { res.setHeader('Retry-After', '30'); return send(res, 429, { ok: false, code: 'RATE_LIMITED' }); }
         return send(res, 200, createChallenge(key, nowSeconds()));
       }
-      const mode = coreConfig(env) ? 'CORE_SEARCH' : requireCore() ? 'UNAVAILABLE_CORE_REQUIRED' : 'PUBLIC_WEB_RESEARCH_MINI';
+      // CORE_SEARCH only while the Core container really answers; otherwise the status says so instead of reporting a mere configuration.
+      const mode = coreConfig(env) ? ((await probe(env)) ? 'CORE_SEARCH' : 'CORE_UNAVAILABLE') : requireCore() ? 'UNAVAILABLE_CORE_REQUIRED' : 'PUBLIC_WEB_RESEARCH_MINI';
       return send(res, 200, { enabled: enabled(env), max_results: MAX_RESULTS, mode, captcha: { required: captchaRequired() } });
     }
     if (req.method !== 'POST') return send(res, 405, { ok: false, code: 'METHOD_NOT_ALLOWED' });

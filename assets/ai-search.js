@@ -306,6 +306,7 @@
       const modeNote = document.getElementById('ai-mode-note');
       if (data.mode === 'CORE_SEARCH' && eyebrow) eyebrow.textContent = 'Поиск по каталогу ТоргАтлас';
       if (data.mode === 'PUBLIC_WEB_RESEARCH_MINI' && modeNote) { modeNote.textContent = 'Упрощённый режим: быстрый просмотр открытых страниц. Точность по региону и типу имущества ограничена, часть результатов может не соответствовать запросу — проверяйте каждую карточку.'; modeNote.hidden = false; }
+      if (data.mode === 'CORE_UNAVAILABLE' && modeNote) { modeNote.textContent = 'Сервис каталога сейчас недоступен, поиск временно не работает. Мы не подменяем его неточным поиском; текст запроса можно ввести и отправить позже.'; modeNote.hidden = false; }
       if (data.mode === 'UNAVAILABLE_CORE_REQUIRED' && modeNote) { modeNote.textContent = 'Поиск временно недоступен: сервис каталога не подключён. Мы не подменяем его неточным поиском.'; modeNote.hidden = false; }
       if (data.enabled === false && !activeController) notice('Поиск сейчас может быть отключён администратором: запрос будет принят, когда сервис включится.');
     } catch { /* Ignored on purpose: the form stays usable. */ }
