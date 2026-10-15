@@ -1,0 +1,4 @@
+[2026-10-15T11:35:17Z] publish start sha=e040171 previous=releases/0f8af5c499106f5a9804c0962c00e76d1e7b1f6c check_only=0
+[2026-10-15T11:35:23Z] publish start sha=e040171f7db299ba21514151a0a3a9b7a02ab176 previous=releases/0f8af5c499106f5a9804c0962c00e76d1e7b1f6c check_only=0
+[2026-10-15T11:35:25Z] preflight OK (all dirs traversable and all files read+hash-verified as nginx user)
+[2026-10-15T11:35:28Z] publish OK: current -> releases/e040171f7db299ba21514151a0a3a9b7a02ab176 (previous releases/0f8af5c499106f5a9804c0962c00e76d1e7b1f6c)

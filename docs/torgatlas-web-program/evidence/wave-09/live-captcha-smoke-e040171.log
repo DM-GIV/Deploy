@@ -1,0 +1,16 @@
+PASS REAL published HTML: nothing disabled, CAPTCHA before the button, «До 5 результатов», CTA «Скоро» without a link, no marketplace list {"script":"ai-search.js?v=3"}
+PASS API-PROBE POST without a token is refused 403 CAPTCHA_REQUIRED (before any search work) 403
+PASS API-PROBE POST with a garbage token is refused 403 CAPTCHA_INVALID 403
+PASS API-PROBE challenge endpoint answers with a signed challenge ""
+PASS REAL desktop: field and button not disabled on load ""
+PASS REAL desktop: keyboard typing reaches the field ""
+PASS REAL desktop: submit without «Я человек» -> clear message, text kept, no POST "Сначала пройдите проверку «Я человек» — она над кнопкой «Найти лоты». Текст запр"
+PASS REAL desktop: real click on the checkbox solved the proof of work ""
+PASS REAL desktop: «Думаю…» shown, POST carried a token, response rendered (0–5 cards, links https) {"thinking":206,"cards":2,"title":"Подходящих предложений: 2 (до 5)"}
+PASS REAL desktop: CTA «Скоро» visible after results, inactive, caveat names no marketplaces ""
+PASS REAL desktop: CAPTCHA reset after the search and the typed text kept ""
+PASS REAL desktop: no analytics requests before consent, no page errors {"analytics":[],"errors":[]}
+PASS REAL mobile: example button (tap) fills the field ""
+PASS REAL mobile: tap-verified CAPTCHA, tap submit, response rendered, no horizontal scroll {"cards":0,"title":"Подходящих предложений не найдено"}
+
+SUMMARY pass=14 fail=0
