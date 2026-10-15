@@ -124,7 +124,7 @@ test('a valid token reaches Core with the structured filter; the same token cann
   t.clock.now = NOW + 3;
   const first = await t.post({ query: Q, altcha });
   assert.equal(first.code, 200); assert.equal(first.body.status, 'CORE_NO_MATCHES');
-  assert.deepEqual(t.calls.core[0], { limit: 5, asset_subtypes: ['APARTMENT'], federal_districts: ['Южный федеральный округ'], procedures: ['PUBLIC_OFFER'] });
+  assert.deepEqual(t.calls.core[0], { limit: 10, asset_subtypes: ['APARTMENT'], federal_districts: ['Южный федеральный округ'], procedures: ['PUBLIC_OFFER'] });
   const second = await t.post({ query: Q, altcha });
   assert.equal(second.code, 403); assert.equal(second.body.code, 'CAPTCHA_REPLAY');
   assert.equal(t.calls.core.length, 1);
@@ -210,17 +210,17 @@ test('Core failures become clear errors, never "no lots found"', async () => {
   }
 });
 
-test('without a Core connection the existing web-research path is used and capped at five cards', async () => {
-  const lots = Array.from({ length: 9 }, (_, i) => ({ title: `lot ${i}`, url: 'https://bankrupt.utpl.ru/x' }));
+test('without a Core connection the existing web-research path is used and capped at ten cards', async () => {
+  const lots = Array.from({ length: 14 }, (_, i) => ({ title: `lot ${i}`, url: 'https://bankrupt.utpl.ru/x' }));
   const t = build({ env: { AI_LOT_CORE_URL: '', AI_LOT_CORE_TOKEN: '' }, web: async () => ({ ok: true, lots, status: 'OK' }) });
   t.clock.now = NOW + 1;
   const res = await t.post({ query: Q, altcha: token() });
-  assert.equal(res.code, 200); assert.equal(res.body.lots.length, 5);
+  assert.equal(res.code, 200); assert.equal(res.body.lots.length, 10);
 });
 
-test('GET status never lists marketplaces and states the five-result cap', async () => {
+test('GET status never lists marketplaces and states the ten-result cap', async () => {
   const res = await build().get();
-  assert.equal(res.body.max_results, 5);
+  assert.equal(res.body.max_results, 10);
   assert.equal(res.body.sources, undefined);
   assert.equal(res.body.captcha.required, true);
   assert.equal(res.body.mode, 'CORE_SEARCH');
@@ -250,7 +250,7 @@ test('Core client: only whitelisted filter keys are sent, with a bearer token, n
   let seen;
   const ok = await searchCore({ asset_subtypes: ['APARTMENT'], evil: 'x', limit: 99 }, { config: CONFIG, fetchImpl: async (url, init) => { seen = { url, init }; return new Response(JSON.stringify({ results: [GOOD_CARD, { ...GOOD_CARD, source_url: 'http://bad' }], meta: { candidates: 7 } })); } });
   assert.equal(ok.lots.length, 1);
-  assert.deepEqual(JSON.parse(seen.init.body), { asset_subtypes: ['APARTMENT'], limit: 5 });
+  assert.deepEqual(JSON.parse(seen.init.body), { asset_subtypes: ['APARTMENT'], limit: 10 });
   assert.equal(seen.init.redirect, 'error');
   assert.match(seen.init.headers.Authorization, /^Bearer /);
   const expectations = [[503, 'CORE_BUSY'], [504, 'CORE_TIMEOUT'], [401, 'CORE_AUTH'], [422, 'CORE_REJECTED_FILTER'], [500, 'CORE_ERROR']];

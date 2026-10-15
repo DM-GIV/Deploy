@@ -71,8 +71,9 @@ test('«Я человек» check sits before the search button, the field never
   assert.match(script, /q\.disabled = false;/);
 });
 
-test('page states the five-result cap and offers an inactive catalogue link marked «В разработке»', () => {
-  assert.match(page, /<p class="ai-limit">До 5 результатов<\/p>/);
+test('page states the ten-result cap and offers an inactive catalogue link marked «В разработке»', () => {
+  assert.match(page, /покажет до 10 подходящих лотов/);
+  assert.doesNotMatch(page, /До 5 результатов|покажет до 5/);
   assert.match(page, /Посмотреть больше лотов в каталоге ТоргАтлас/);
   const cta = page.match(/<p class="ai-catalog-cta"[\s\S]*?<\/p>/)[0];
   assert.match(cta, />В разработке</);
@@ -81,7 +82,9 @@ test('page states the five-result cap and offers an inactive catalogue link mark
   assert.match(cta, /aria-disabled="true"/);
   assert.match(cta, /hidden/);
   assert.match(script, /catalogCta\.hidden = incomplete;/);
-  assert.match(script, /data\.lots\.slice\(0, 5\)/);
+  assert.match(script, /data\.lots\.slice\(0, MAX_CARDS\)/);
+  assert.match(script, /const INITIAL_VISIBLE = 5;/);
+  assert.match(script, /const MAX_CARDS = 10;/);
 });
 
 test('result cards show price meaning, procedure, status, deadline, last-check date and a validated primary-source link', () => {
@@ -99,13 +102,13 @@ test('clarification and interpretation are rendered as text, and the typed query
 });
 
 test('no stale result-count claim remains on the page', () => {
-  assert.doesNotMatch(page, /До 10 результатов|10 результатов/);
-  assert.equal((page.match(/До 5 результатов/g) || []).length, 2);
+  assert.doesNotMatch(page, /До 5 результатов|до 5 (?:лотов|предложений|результатов)/);
+  assert.equal((page.match(/до 10 подходящих лотов/g) || []).length, 1);
 });
 
 test('page never claims a catalogue search statically; the mode label comes from the real engine mode', () => {
   assert.doesNotMatch(page, /Поиск по каталогу(?! ТоргАтлас)/);
-  assert.match(page, /id="ai-eyebrow">Бета-версия</);
+  assert.match(page, /id="ai-eyebrow">AI-поиск лотов</);
   assert.match(script, /data\.mode === 'CORE_SEARCH'/);
   assert.match(script, /data\.mode === 'PUBLIC_WEB_RESEARCH_MINI'/);
   assert.match(script, /UNAVAILABLE_CORE_REQUIRED/);
@@ -122,4 +125,43 @@ test('catalogue cards show the honest status label and the shared-publication no
 test('UI announces a Core outage from the live status', () => {
   assert.match(script, /data\.mode === 'CORE_UNAVAILABLE'/);
   assert.match(script, /Мы не подменяем его неточным поиском/);
+});
+
+test('«Показать ещё N лотов»: extra cards already sit in the DOM, the button makes no request and needs no new CAPTCHA', () => {
+  const handler = script.match(/moreButton\.addEventListener\('click'[\s\S]*?\n  \}\);/)[0];
+  assert.doesNotMatch(handler, /fetch\(|XMLHttpRequest|captcha|resetCaptcha/i);
+  assert.match(script, /if \(count >= INITIAL_VISIBLE\) card\.hidden = true;/);
+  assert.match(script, /Показать ещё \$\{extra\}/);
+  assert.match(script, /aria-expanded/);
+  assert.match(page, /id="ai-more"[^>]*aria-controls="ai-cards"/);
+  assert.match(script, /moreWrap\.hidden = true;/);                                  // 0-5 cards: no button
+});
+
+test('card CTA hands the picked lot to the check form through a same-origin session hint, never through analytics or the URL', () => {
+  assert.match(script, /sessionStorage\.setItem\('ta_prefill_lot'/);
+  assert.match(script, /verify\.dataset\.track = 'ai_check_card_click'/);
+  assert.doesNotMatch(script, /track\([^)]*(?:url|query|lot\.)/);                  // events carry names only
+  const prefill = fs.readFileSync('assets/lot-prefill.js', 'utf8');
+  assert.match(prefill, /u\.protocol !== 'https:'/);
+  assert.match(prefill, /\.value = url/);
+  assert.doesNotMatch(prefill, /innerHTML|location\.(?:href|assign|replace)|fetch\(/);
+});
+
+test('the AI page is compact: one beta line, short «Важно знать», no technical or legal wall', () => {
+  assert.equal((page.match(/Бета/g) || []).length, 1);
+  assert.match(page, /<p class="ai-beta-line"><strong>Бета:<\/strong> каталог пополняется, актуальность лотов проверяйте в первоисточнике\.<\/p>/);
+  assert.doesNotMatch(page, /Как проверяется результат|ai-beta-note|ai-layout/);
+  const know = page.match(/<aside class="ai-know"[\s\S]*?<\/aside>/)[0];
+  assert.ok((know.replace(/<[^>]+>/g, '').match(/[.!?]/g) || []).length <= 3);
+  assert.match(know, /href="\/privacy\/"/);
+  assert.doesNotMatch(page, /PostgreSQL|SQL|контейнер|Core|токен|CORE_SEARCH|API/i);
+  assert.ok(page.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ').split(/\s+/).length < 520);
+});
+
+test('the AI page is indexable and its SEO text is in the static HTML', () => {
+  assert.match(page, /<meta name="robots" content="index,follow,max-image-preview:large">/);
+  assert.doesNotMatch(page, /noindex/);
+  assert.match(page, /<section class="ai-seo">[\s\S]*Как сформулировать запрос[\s\S]*Нашли лот — что дальше/);
+  assert.ok(page.indexOf('id="ai-lot-form"') < page.indexOf('class="ai-seo"'));      // the form is not pushed down by the text
+  assert.match(page, /<link rel="canonical" href="https:\/\/torgatlas\.ru\/ai-poisk-lotov\/">/);
 });

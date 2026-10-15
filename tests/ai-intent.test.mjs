@@ -10,12 +10,12 @@ const Y = 'Южный федеральный округ', P = 'Приволжс�
 test('«Квартиры в ЮФО»: only apartments, only the Southern district, no procedure condition', () => {
   const r = parse('Квартиры в ЮФО');
   assert.equal(r.clarification, null);
-  assert.deepEqual(r.filters, { limit: 5, asset_subtypes: ['APARTMENT'], federal_districts: [Y] });
+  assert.deepEqual(r.filters, { limit: 10, asset_subtypes: ['APARTMENT'], federal_districts: [Y] });
 });
 
 test('«Квартиры в Южном федеральном округе на публичном предложении» adds the strict PUBLIC_OFFER procedure', () => {
   const r = parse('Квартиры в Южном федеральном округе на публичном предложении');
-  assert.deepEqual(r.filters, { limit: 5, asset_subtypes: ['APARTMENT'], federal_districts: [Y], procedures: ['PUBLIC_OFFER'] });
+  assert.deepEqual(r.filters, { limit: 10, asset_subtypes: ['APARTMENT'], federal_districts: [Y], procedures: ['PUBLIC_OFFER'] });
   assert.ok(r.interpretation.some(i => i.label === 'Процедура'));
 });
 
@@ -45,8 +45,8 @@ test('«Поволжье» is NOT the Volga Federal District: an explicit, displ
 });
 
 test('regions in any case form: Самарская область, Татарстан, Москва vs Московская область', () => {
-  assert.deepEqual(parse('нежилые помещения в Самарской области').filters, { limit: 5, asset_subtypes: ['NONRESIDENTIAL_PREMISE'], regions: ['Самарская область'] });
-  assert.deepEqual(parse('грузовые автомобили в Татарстане').filters, { limit: 5, asset_subtypes: ['TRUCK'], regions: ['Республика Татарстан'] });
+  assert.deepEqual(parse('нежилые помещения в Самарской области').filters, { limit: 10, asset_subtypes: ['NONRESIDENTIAL_PREMISE'], regions: ['Самарская область'] });
+  assert.deepEqual(parse('грузовые автомобили в Татарстане').filters, { limit: 10, asset_subtypes: ['TRUCK'], regions: ['Республика Татарстан'] });
   assert.deepEqual(parse('квартиры в Москве').filters.regions, ['Москва']);
   assert.deepEqual(parse('квартиры в Московской области').filters.regions, ['Московская область']);
   assert.deepEqual(parse('земельные участки в Краснодарском крае').filters.regions, ['Краснодарский край']);

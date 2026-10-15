@@ -27,6 +27,18 @@
   const WIDGET_VERSION = '2.3.0';
   const CAPTCHA_URL = '/api/ai-lot-search?altcha=1';
   const CAPTCHA_STRINGS = JSON.stringify({ label: 'Я человек', verifying: 'Проверка…', verified: 'Проверка пройдена', error: 'Проверка не удалась. Нажмите ещё раз.', expired: 'Проверка устарела. Нажмите ещё раз.', waitAlert: 'Идёт проверка, подождите.', footer: 'Проверка выполняется на сайте, без внешних сервисов.', loading: 'Загрузка…', reload: 'Обновить', verify: 'Проверить', enterCode: 'Введите код', enterCodeAria: 'Введите код', getAudioChallenge: 'Аудио-проверка', ariaLinkLabel: 'ALTCHA' });
+  const INITIAL_VISIBLE = 5;
+  const MAX_CARDS = 10;
+  const moreWrap = document.getElementById('ai-more-wrap');
+  const moreButton = document.getElementById('ai-more');
+  const emptyHelp = document.getElementById('ai-empty-help');
+  // Analytics: event names only, never the query text, a lot URL, identifiers or counts.
+  function track(name, props) { if (typeof window.auctionCROTrack === 'function') window.auctionCROTrack(name, props || {}); }
+  // The «карта проверки» page pre-fills the lot link from this same-origin, session-only hint (validated again on arrival).
+  const PREFILL_TYPES = { 'Квартира': 'Недвижимость', 'Комната': 'Недвижимость', 'Жилой дом': 'Недвижимость', 'Земельный участок': 'Недвижимость', 'Нежилое помещение': 'Недвижимость', 'Гараж / машиноместо': 'Недвижимость', 'Склад': 'Недвижимость', 'Офис': 'Недвижимость', 'Здание': 'Недвижимость', 'Сооружение': 'Недвижимость', 'Коммерческая недвижимость': 'Недвижимость', 'Легковой автомобиль': 'Автомобиль', 'Грузовой автомобиль': 'Автомобиль', 'Автобус': 'Автомобиль', 'Мотоцикл': 'Автомобиль', 'Спецтехника': 'Спецтехника', 'Сельхозтехника': 'Спецтехника', 'Оборудование': 'Оборудование' };
+  function rememberLotForCheck(lotUrl, category) {
+    try { window.sessionStorage.setItem('ta_prefill_lot', JSON.stringify({ u: lotUrl, t: PREFILL_TYPES[category] || '' })); } catch { /* storage may be blocked: the link still works */ }
+  }
   let captchaToken = '';
   let captchaWidget = null;
   let captchaLoading = null;
@@ -104,8 +116,11 @@
     sourceLink.target = '_blank';
     sourceLink.rel = 'noopener noreferrer';
     sourceLink.setAttribute('aria-label', `Открыть первоисточник: ${lot.title.slice(0, 100)}`);
+    sourceLink.dataset.track = 'ai_source_click';
     const verify = el('a', 'Получить карту проверки');
     verify.href = '/proverka-lota/#lot-check-form';
+    verify.dataset.track = 'ai_check_card_click';
+    verify.addEventListener('click', () => rememberLotForCheck(url, lot.category));
     actions.append(sourceLink, verify);
     card.append(actions);
     return card;
@@ -130,15 +145,20 @@
     cards.replaceChildren();
     const catalogue = typeof data.status === 'string' && data.status.startsWith('CORE_');
     let count = 0;
-    for (const lot of data.lots.slice(0, 5)) {
+    moreWrap.hidden = true; emptyHelp.hidden = true; moreButton.setAttribute('aria-expanded', 'false');
+    for (const lot of data.lots.slice(0, MAX_CARDS)) {
       const card = renderLot(lot, catalogue);
       if (!card) continue;
+      if (count >= INITIAL_VISIBLE) card.hidden = true;            // already in the DOM: showing them needs no request and no new CAPTCHA
       cards.append(card);
       count += 1;
     }
+    const extra = Math.max(0, count - INITIAL_VISIBLE);
+    if (extra > 0) { moreButton.textContent = `Показать ещё ${extra} ${extra === 1 ? 'лот' : (extra % 10 >= 2 && extra % 10 <= 4 && (extra < 10 || extra > 20)) ? 'лота' : 'лотов'}`; moreWrap.hidden = false; }
     results.hidden = false;
     renderUnderstood(data);
     if (data.status === 'NEEDS_CLARIFICATION') {
+      track('ai_search_clarify');
       resultTitle.textContent = 'Уточните запрос';
       resultCaption.textContent = String(data.clarification || 'Не удалось однозначно понять запрос.').slice(0, 400);
       resultCoverage.hidden = true;
@@ -148,17 +168,29 @@
       return;
     }
     const incomplete = !count && (INCOMPLETE.includes(data.reason) || data.status === 'TIMEOUT');
-    resultTitle.textContent = count ? `Подходящих предложений: ${count} (до 5)` : incomplete ? 'Поиск не завершён' : 'Подходящих предложений не найдено';
+    resultTitle.textContent = count ? `Подходящих предложений: ${count}` : incomplete ? 'Поиск не завершён' : 'Подходящих предложений не найдено';
     resultCaption.textContent = `Ответ получен: ${checkedTime(data.retrieved_at)}. Откройте первоисточник перед любым решением.`;
     // Only a fixed, source-neutral caveat is shown; the API's technical coverage_note is not rendered.
     resultCoverage.textContent = catalogue ? CATALOGUE_COVERAGE : DEFAULT_COVERAGE;
     resultCoverage.hidden = false;
     catalogCta.hidden = incomplete;
+    emptyHelp.hidden = !(catalogue && !count && !incomplete);
+    track(count ? 'ai_search_results' : incomplete ? 'ai_search_incomplete' : 'ai_search_empty');
     resultTitle.focus({ preventScroll: true });
     if (count) notice(`Результаты сформированы за ${Math.max(0, Math.round((Date.now() - startedAt) / 1000))} с. Условия нужно перепроверить в первоисточнике.`);
     else if (incomplete) notice('Сервис сейчас занят или время поиска исчерпано. Это не означает, что лотов нет: повторите запрос через минуту.', true);
     else notice('Подходящих предложений с подтверждённым приёмом заявок не найдено. Измените условия (регион, цену, тип) или попробуйте позже.');
   }
+  moreButton.addEventListener('click', () => {
+    const expanded = moreButton.getAttribute('aria-expanded') === 'true';
+    const extras = [...cards.children].slice(INITIAL_VISIBLE);
+    for (const card of extras) card.hidden = expanded;
+    moreButton.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+    if (expanded) {
+      const n = extras.length;
+      moreButton.textContent = `Показать ещё ${n} ${n === 1 ? 'лот' : (n % 10 >= 2 && n % 10 <= 4 && (n < 10 || n > 20)) ? 'лота' : 'лотов'}`;
+    } else { moreButton.textContent = 'Свернуть'; track('ai_search_show_more'); }
+  });
   for (const example of document.querySelectorAll('.ai-example')) {
     example.addEventListener('click', () => {
       q.value = String(example.dataset.query || '').slice(0, 400);
@@ -252,7 +284,10 @@
       return;
     }
     const proof = captchaToken;
+    track('ai_search_start');
     results.hidden = true;
+    moreWrap.hidden = true;
+    emptyHelp.hidden = true;
     understood.hidden = true;
     catalogCta.hidden = true;
     cards.replaceChildren();

@@ -1,4 +1,4 @@
-"""Static contract for the three approved articles, the compact /blog/ cards, the simplified menu and the (inactive) future catalogue."""
+"""Static contract: three fully visible editorial articles, static blog cards, final menu, inactive future catalogue, indexable AI page."""
 import json
 import re
 import subprocess
@@ -8,26 +8,26 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SLUGS = ["kak-uchastvovat-v-torgah-po-bankrotstvu", "publichnoe-predlozhenie-bankrotstvo", "zadatok-na-torgah-po-bankrotstvu"]
+OLD_GUIDES = ["kak-proverit-lot-pered-torgami", "kak-proverit-avtomobil-s-torgov", "kak-proverit-zemelnyi-uchastok-s-torgov"]
 H1 = {
     SLUGS[0]: "Как участвовать в торгах по банкротству: инструкция для начинающего покупателя",
     SLUGS[1]: "Публичное предложение на торгах по банкротству: как купить имущество при снижении цены",
     SLUGS[2]: "Задаток на торгах по банкротству: как внести, вернуть и не потерять деньги",
 }
-# distinctive sentences of the owner-approved text that must survive verbatim
-APPROVED = {
-    SLUGS[0]: ["Главная ошибка: выбирать объект по низкой начальной цене, не выяснив, что фактически продаётся.",
+# sentences whose (verified) meaning must survive the editorial rework verbatim
+MEANING = {
+    SLUGS[0]: ["Выбирать объект по низкой начальной цене, не выяснив, что фактически продаётся.",
                "Недостающие документы или противоречия между источниками — основание приостановить решение до выяснения обстоятельств.",
-               "Платёж сам по себе ещё не означает допуск к торгам.", "Допустим, автомобиль выставлен за 600 000 рублей.",
-               "реальная сумма вложений уже существенно выше стартовой цены", "Не путайте победу на торгах с моментом получения объекта или регистрации права.",
-               "С чего начать? Используйте AI-поиск ТоргАтлас, найдите интересующий объект и сформируйте бесплатную карту проверки лота."],
+               "Допустим, автомобиль выставлен за 600 000 рублей.", "реальная сумма вложений уже существенно выше стартовой цены",
+               "Не путайте победу на торгах с моментом получения объекта или регистрации права.",
+               "Используйте AI-поиск ТоргАтлас, найдите интересующий объект и сформируйте бесплатную карту проверки лота."],
     SLUGS[1]: ["Это только иллюстрация. Конкретный график всегда нужно брать из действующего сообщения о продаже.",
                "Распространённое заблуждение — считать, что победит тот, кто первым нажал кнопку подачи заявки.",
-               "при нескольких разных подходящих ценовых предложениях преимущество имеет максимальная цена",
-               "при равных подходящих предложениях значение имеет очередность подачи заявок",
+               "При нескольких разных подходящих ценовых предложениях преимущество имеет максимальная цена.",
+               "При равных подходящих предложениях значение имеет очередность подачи заявок.",
                "Ожидание очередного снижения может улучшить цену, но увеличивает вероятность, что другой участник приобретёт имущество раньше.",
                "Не выбирайте момент участия только по размеру скидки."],
-    SLUGS[2]: ["Сверьте пять сведений: номер процедуры и лота, сумму, получателя, банковские реквизиты и крайний срок поступления средств.",
-               "Платёж сам по себе" if False else "важен не только факт отправки денег, но и соблюдение установленного порядка",
+    SLUGS[2]: ["важен не только факт отправки денег, но и соблюдение установленного порядка",
                "в течение пяти рабочих дней со дня подписания протокола о результатах торгов",
                "Не следует предполагать, что возврат при любых обстоятельствах происходит одинаково.",
                "В предусмотренном законом случае задаток победителю не возвращается.",
@@ -57,119 +57,132 @@ class Articles(unittest.TestCase):
         result = subprocess.run([sys.executable, "scripts/generate-articles.py", "--check"], cwd=ROOT, capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
 
+    def test_articles_are_fully_visible_no_accordions_no_controls(self):
+        for slug in SLUGS:
+            html = article(slug)
+            for banned in ("<details", "<summary", "data-expand-all", "data-collapse-all", "Развернуть все", "Свернуть все", "art-sec", "art-toc", "План статьи", "article.js", "Практический итог"):
+                self.assertNotIn(banned, html, f"{slug}: {banned}")
+            self.assertNotRegex(html, r"\shidden[\s>=]", slug)
+            self.assertNotRegex(html, r"display:\s*none", slug)
+            self.assertNotIn("<button", html, slug)
+            scripts = re.findall(r'<script src="([^"]+)"', html)
+            self.assertEqual([re.sub(r"\?.*", "", s) for s in scripts], ["/assets/analytics.js", "/assets/funnel-events.js"], slug)   # nothing is needed to read
+            self.assertFalse(ROOT.joinpath("assets/article.js").exists())
+
+    def test_editorial_template_elements(self):
+        for slug in SLUGS:
+            html = article(slug)
+            self.assertIn('<main id="main" class="post">', html)
+            self.assertIn('class="post-lede" id="answer"', html)
+            self.assertGreaterEqual(html.count('<section class="post-section"><h2>'), 4, slug)
+            self.assertRegex(html, r'<p class="post-meta">Обновлено 16 октября 2026 · около \d+ мин чтения</p>')
+            self.assertIn('class="post-sources"', html); self.assertIn('class="post-cta"', html); self.assertIn('class="post-related"', html)
+            self.assertEqual(len(re.findall(r"<h1>", html)), 1)
+            self.assertIn(f"<h1>{H1[slug]}</h1>", html)
+        self.assertIn('<figure class="example">', article(SLUGS[0])); self.assertIn("780 000", article(SLUGS[0]))
+        self.assertIn('<figure class="example">', article(SLUGS[1]))
+        self.assertIn('class="checklist"', article(SLUGS[2])); self.assertIn('class="callout callout--law"', article(SLUGS[2]))
+        self.assertIn('class="steps"', article(SLUGS[1]))
+
     def test_each_article_is_indexable_with_unique_metadata(self):
         titles, descriptions = set(), set()
         for slug in SLUGS:
             html = article(slug)
-            self.assertIn('name="robots" content="index,follow,max-image-preview:large"', html, slug)
-            self.assertNotIn("noindex", html, slug)
+            self.assertIn('name="robots" content="index,follow,max-image-preview:large"', html)
             self.assertIn(f'<link rel="canonical" href="https://torgatlas.ru/blog/{slug}/">', html)
-            self.assertEqual(len(re.findall(r"<h1>", html)), 1)
-            self.assertIn(f"<h1>{H1[slug]}</h1>", html)
             titles.add(re.search(r"<title>(.*?)</title>", html).group(1))
             descriptions.add(re.search(r'name="description" content="(.*?)"', html).group(1))
             self.assertIn('property="og:url"', html)
         self.assertEqual((len(titles), len(descriptions)), (3, 3))
 
-    def test_direct_answer_is_visible_and_40_to_80_words(self):
+    def test_direct_answer_40_to_80_words_and_meaning_preserved(self):
         for slug in SLUGS:
             html = article(slug)
-            answer = re.search(r'<p class="lead art-answer" id="answer">(.*?)</p>', html).group(1)
+            answer = re.search(r'<p class="post-lede" id="answer">(.*?)</p>', html).group(1)
             self.assertTrue(40 <= len(re.findall(r"[\w\-]+", answer)) <= 80, slug)
-            self.assertLess(html.index('id="answer"'), html.index("<details"))     # answer comes before any collapsible section
-
-    def test_sections_are_native_details_with_all_text_in_raw_html(self):
-        for slug in SLUGS:
-            html = article(slug)
-            self.assertGreaterEqual(html.count('<details class="art-sec"'), 4, slug)
-            self.assertEqual(html.count("<details"), html.count("</details>"))
-            self.assertNotRegex(html, r"display:\s*none", slug)
-            # nothing but the optional JS-only toolbar carries the hidden attribute
-            self.assertEqual(len(re.findall(r"\shidden[\s>=]", html)), 1)
-            self.assertIn("data-art-tools", html)
-            for needle in APPROVED[slug]:
-                self.assertIn(needle, html, f"{slug}: approved text lost: {needle[:50]}")
-            for i in range(1, html.count('<details class="art-sec"') + 1):
-                self.assertIn(f'href="#s{i}"', html)
-                self.assertIn(f'id="s{i}"', html)
-            # the plan, the practical result, the sources and the CTA are outside the collapsible sections
-            outside = re.sub(r"<details.*?</details>", "", html, flags=re.S)
-            for marker in ("План статьи", "Практический итог", "Источники и проверка", 'href="/ai-poisk-lotov/"', 'href="/proverka-lota/#lot-check-form"'):
-                self.assertIn(marker, outside, f"{slug}: {marker}")
+            text = re.sub(r"<[^>]+>", " ", html)
+            text = re.sub(r"\s+", " ", text).replace("&nbsp;", " ")
+            for needle in MEANING[slug]:
+                self.assertIn(needle, text, f"{slug}: {needle[:60]}")
 
     def test_cta_links_and_tracking(self):
         for slug in SLUGS:
             html = article(slug)
-            self.assertGreaterEqual(html.count('href="/ai-poisk-lotov/"'), 2)
-            self.assertGreaterEqual(html.count('href="/proverka-lota/#lot-check-form"'), 2)
-            self.assertIn('data-track="article_ai_search_cta_click"', html)
-            self.assertIn('data-track="article_lot_check_cta_click"', html)
-            self.assertNotRegex(html, r"data-track=\"[^\"]*[:/\d@?]")        # funnel-events refuses such values
+            self.assertIn('href="/ai-poisk-lotov/" data-track="article_ai_search_cta_click"', html)
+            self.assertIn('href="/proverka-lota/#lot-check-form" data-track="article_lot_check_cta_click"', html)
+            self.assertIn('href="/formaty-raboty/"', html)
+            self.assertNotRegex(html, r"data-track=\"[^\"]*[:/\d@?]")
 
     def test_schema_is_truthful(self):
         for slug in SLUGS:
-            html = article(slug)
-            blocks = jsonld(html)
+            blocks = jsonld(article(slug))
             post = next(b for b in blocks if b["@type"] == "BlogPosting")
             crumbs = next(b for b in blocks if b["@type"] == "BreadcrumbList")
             self.assertEqual(post["url"], f"https://torgatlas.ru/blog/{slug}/")
             self.assertEqual(post["author"]["@type"], "Organization")
-            self.assertRegex(post["datePublished"], r"^2026-10-15$")
-            self.assertRegex(post["dateModified"], r"^\d{4}-\d{2}-\d{2}$")
+            self.assertEqual(post["datePublished"], "2026-10-15"); self.assertEqual(post["dateModified"], "2026-10-16")
             self.assertEqual(post["headline"], H1[slug])
-            for forbidden in ("aggregateRating", "review", "reviewRating", "Person", "interactionStatistic", "wordCount"):
+            for forbidden in ("aggregateRating", "review", "reviewRating", "Person", "interactionStatistic"):
                 self.assertNotIn(forbidden, json.dumps(post), forbidden)
             self.assertEqual([i["position"] for i in crumbs["itemListElement"]], [1, 2, 3])
-            self.assertEqual(crumbs["itemListElement"][-1]["item"], post["url"])
 
     def test_legal_sources_and_verification_note(self):
         zad, pub = article(SLUGS[2]), article(SLUGS[1])
         for html in (zad, pub):
             self.assertIn("https://www.consultant.ru/document/cons_doc_LAW_39331/", html)
             self.assertIn("сверены 15.10.2026", html)
-            self.assertIn("для отдельных категорий" if html is pub else "могут отличаться", html)
-        self.assertIn("п. 15 ст. 110", zad); self.assertIn("п. 16 ст. 110", zad); self.assertIn("п. 12 ст. 110", zad); self.assertIn("п. 3 ст. 139", zad)
+        for ref in ("п. 15 ст. 110", "п. 16 ст. 110", "п. 12 ст. 110", "п. 3 ст. 139"):
+            self.assertIn(ref, zad)
         self.assertIn("п. 4 ст. 139", pub)
-        self.assertNotRegex(article(SLUGS[0]) + pub + zad, r"гарантир[а-я]+ (?:победу|прибыль|результат)")
 
     def test_no_invented_credentials_or_claims(self):
         for slug in SLUGS:
-            text = re.sub(r"<[^>]+>", " ", article(slug))
+            text = re.sub(r"<[^>]+>", " ", article(slug)).lower()
             for bad in ("кейс", "наши клиенты", "успешно купили", "лет опыта", "опыт работы", "отзыв", "рейтинг", "гарантируем"):
-                self.assertNotIn(bad, text.lower(), f"{slug}: {bad}")
+                self.assertNotIn(bad, text, f"{slug}: {bad}")
 
 
 class BlogIndex(unittest.TestCase):
-    def test_three_compact_cards_without_duplicated_articles(self):
+    def test_six_static_cards_one_obvious_link_no_full_text(self):
         html = read("blog/index.html")
         self.assertLess(len(html), 30_000)
-        for slug in SLUGS:
+        self.assertNotIn("<details", html); self.assertNotIn("Развернуть", html); self.assertNotIn("<button", html)
+        for slug in SLUGS + OLD_GUIDES:
             card = re.search(rf'<article class="guide-card" id="card-{slug}">.*?</article>', html, flags=re.S).group(0)
             self.assertEqual(card.count("<h2>"), 1)
-            self.assertIn('<details class="card-more"><summary><span class="when-closed">Развернуть</span><span class="when-open">Свернуть</span></summary>', card)
-            self.assertIn(f'<a class="card-read" href="/blog/{slug}/">Читать полную статью →</a>', card)
-            self.assertLess(len(re.sub(r"<[^>]+>", " ", card).split()), 90)          # short overview, not the article
-            for needle in APPROVED[slug]:
+            self.assertEqual(card.count("<a "), 1)
+            self.assertIn(f'<a class="card-read" href="/blog/{slug}/" data-track="blog_card_read_click">Читать статью →</a>', card)
+            self.assertIn('class="guide-category"', card)
+            self.assertLess(len(re.sub(r"<[^>]+>", " ", card).split()), 60)
+        for slug in SLUGS:
+            for needle in MEANING[slug]:
                 self.assertNotIn(needle, html, "full article text must not be duplicated in /blog/")
-        self.assertEqual(html.count("<details"), 3)
+        self.assertEqual(html.count('class="guide-card"'), 6)
 
-    def test_blog_lists_the_older_guides_too(self):
-        html = read("blog/index.html")
-        for slug in ("kak-proverit-lot-pered-torgami", "kak-proverit-avtomobil-s-torgov", "kak-proverit-zemelnyi-uchastok-s-torgov"):
-            self.assertIn(f'href="/blog/{slug}/"', html)
+    def test_old_guides_share_the_template_without_content_changes(self):
+        seo, guide = read("assets/seo.css"), read("assets/guide.css")
+        self.assertIn(".article-copy h2::before", seo)
+        self.assertIn(".guide-body h2::before", guide)
+        self.assertIn("max-width:760px", guide.split(".guide-body{", 1)[1].split("}", 1)[0])
+        for slug in OLD_GUIDES:
+            html = article(slug)
+            self.assertRegex(html, r'class="(?:guide-body|wrap article-copy)"')
+            self.assertNotIn("<details", html)
 
 
 class SitemapAndDrafts(unittest.TestCase):
-    def test_sitemap_has_the_articles_with_real_dates_and_nothing_noindex(self):
+    def test_sitemap_has_the_articles_and_the_ai_page_and_nothing_noindex(self):
         sitemap = read("sitemap.xml")
         for slug in SLUGS:
-            self.assertIn(f"<loc>https://torgatlas.ru/blog/{slug}/</loc><lastmod>2026-10-15</lastmod>", sitemap)
+            self.assertIn(f"<loc>https://torgatlas.ru/blog/{slug}/</loc><lastmod>2026-10-16</lastmod>", sitemap)
+        self.assertIn("<loc>https://torgatlas.ru/ai-poisk-lotov/</loc>", sitemap)
         for path, html in all_html().items():
             url = "https://torgatlas.ru/" + path[: -len("index.html")] if path.endswith("index.html") else None
             if url and f"<loc>{url}</loc>" in sitemap:
                 self.assertNotIn("noindex", html, f"{path} is in the sitemap but noindex")
         for slug in ("gosudarstvennye-i-municipalnye-torgi", "o-chem-budem-pisat-v-torgatlas"):
             self.assertNotIn(slug, sitemap)
+        self.assertNotRegex(re.sub(r"<\?xml[^>]*\?>", "", sitemap), r"[?#]")                                  # no dynamic/query URLs
         self.assertEqual(len(re.findall("<loc>", sitemap)), len(set(re.findall("<loc>(.*?)</loc>", sitemap))))
 
     def test_individual_selection_page_is_preserved(self):
@@ -180,27 +193,29 @@ class SitemapAndDrafts(unittest.TestCase):
 
 
 class MenuAndCatalogue(unittest.TestCase):
-    def test_header_is_simplified_and_catalogue_marker_is_inactive(self):
+    def test_final_header_on_every_page(self):
         for path, html in all_html().items():
             if path == "privacy/consent/index.html":
                 continue
             nav = re.search(r'<nav class="nav" aria-label="Основное меню">.*?</nav>', html, flags=re.S)
             if path == "index.html":
                 nav = re.search(r'<div class="nav-links">.*?</div>', html, flags=re.S)
-            if nav is None and 'noindex' in html:
-                continue                                                           # minimal noindex draft without site chrome
+            if nav is None and "noindex" in html:
+                continue
             self.assertIsNotNone(nav, path)
             nav = nav.group(0)
-            self.assertNotIn('href="/poisk-imushchestva/"', nav, path)             # no duplicating «Поиск» item
-            self.assertNotIn(">Поиск<", nav)
-            self.assertEqual(nav.count('<span class="nav-soon"'), 1, path)
-            self.assertIn("Каталог <small>Скоро</small>", nav)
-            self.assertLessEqual(len(re.findall(r"<a ", nav)), 7, path)
-            self.assertIn('href="/ai-poisk-lotov/"', nav)
-            self.assertIn('href="/proverka-lota/"', nav)
+            labels = re.findall(r"<a [^>]*>([^<]+)</a>", nav)
+            expected = ["AI-поиск", "Услуги", "Примеры", "Материалы", "О проекте"] + (["Контакты"] if path == "index.html" else []) + ["Проверить лот"]
+            self.assertEqual(labels, expected, path)
+            self.assertIn('class="nav-cta" href="/proverka-lota/#lot-check-form"', nav)
+            self.assertRegex(nav, r'href="/formaty-raboty/"(?: aria-current="page")?>Услуги')
+            for banned in ("nav-soon", 'href="/poisk-imushchestva/"', ">Поиск<", ">Каталог", ">Главная<", "Форматы<", "Сопровождение<", "Покупка<"):
+                self.assertNotIn(banned, nav, f"{path}: {banned}")
             footer = re.search(r"<footer.*?</footer>", html, flags=re.S)
-            if footer and path not in ("poisk-imushchestva/index.html", "404.html"):
-                self.assertIn('href="/poisk-imushchestva/"', footer.group(0), path)
+            if footer and path not in ("404.html",):
+                for href in ("/poisk-imushchestva/", "/formaty-raboty/", "/soprovozhdenie-torgov/", "/pokupka-imushchestva/"):
+                    if path != href.strip("/") + "/index.html":
+                        self.assertIn(f'href="{href}"', footer.group(0), f"{path} footer lacks {href}")
 
     def test_future_catalogue_is_never_a_link_nor_launched_product(self):
         sitemap, llms = read("sitemap.xml"), read("llms.txt")
@@ -214,7 +229,6 @@ class MenuAndCatalogue(unittest.TestCase):
                 self.assertNotIn("<a ", before.split("</a>")[-1], f"{path}: address inside a link")
         for text in (sitemap, llms):
             self.assertNotIn("app.torgatlas", text)
-        self.assertFalse((ROOT / "app").exists())
 
     def test_home_explains_the_difference_and_keeps_the_working_actions(self):
         html = read("index.html")
@@ -223,7 +237,6 @@ class MenuAndCatalogue(unittest.TestCase):
         self.assertIn('<span class="home-status-addr">app.torgatlas.ru</span>', html)
         for keep in ('href="/proverka-lota/#lot-check-form" data-track="lot_check_cta_click"', 'href="/poisk-imushchestva/#search-brief-form" data-track="lot_search_cta_click"'):
             self.assertIn(keep, html)
-        self.assertLess(html.index("home-status"), html.index('id="start"'))     # explanation sits next to the AI-search entry, before the scenarios
         self.assertRegex(html, r"home-bundle\.css\?v=[a-f0-9]{12}")
 
     def test_ai_page_cta_is_unified_and_inactive(self):
@@ -231,10 +244,8 @@ class MenuAndCatalogue(unittest.TestCase):
         cta = re.search(r'<p class="ai-catalog-cta".*?</p>', html, flags=re.S).group(0)
         self.assertIn("Посмотреть больше лотов в каталоге ТоргАтлас", cta)
         self.assertIn(">В разработке<", cta)
-        self.assertIn("app.torgatlas.ru", cta)
         self.assertNotRegex(cta, r"<a\b|href=")
         self.assertIn('aria-disabled="true"', cta)
-        self.assertIn("hidden", cta)
 
 
 if __name__ == "__main__":

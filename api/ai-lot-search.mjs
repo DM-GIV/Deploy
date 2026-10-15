@@ -4,7 +4,7 @@ import { parseIntent } from '../lib/torgatlas-intent.mjs';
 import { coreConfig, searchCore, CoreSearchError, createCoreProbe } from '../lib/torgatlas-core-search.mjs';
 
 export const maxDuration = 60;
-export const MAX_RESULTS = 5;
+export const MAX_RESULTS = 10;
 const BODY_LIMIT = 3600;           // JSON characters: query (<=400) + ALTCHA payload (<=2048)
 const ALLOWED_BODY_KEYS = new Set(['query', 'altcha']);
 const enabled = env => env.AI_LOT_SEARCH_ENABLED === 'true' && env.AI_LOT_SECURITY_APPROVED === 'true' && env.AI_LOT_LEGAL_APPROVED === 'true';

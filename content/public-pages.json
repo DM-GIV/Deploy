@@ -10,6 +10,11 @@
       "source": "proverka-lota/index.html"
     },
     {
+      "path": "/ai-poisk-lotov/",
+      "source": "ai-poisk-lotov/index.html",
+      "lastmod": "2026-10-16"
+    },
+    {
       "path": "/poisk-imushchestva/",
       "source": "poisk-imushchestva/index.html"
     },
@@ -36,7 +41,7 @@
     {
       "path": "/blog/",
       "source": "blog/index.html",
-      "lastmod": "2026-10-15"
+      "lastmod": "2026-10-16"
     },
     {
       "path": "/blog/kak-proverit-lot-pered-torgami/",
@@ -63,17 +68,17 @@
     {
       "path": "/blog/kak-uchastvovat-v-torgah-po-bankrotstvu/",
       "source": "blog/kak-uchastvovat-v-torgah-po-bankrotstvu/index.html",
-      "lastmod": "2026-10-15"
+      "lastmod": "2026-10-16"
     },
     {
       "path": "/blog/publichnoe-predlozhenie-bankrotstvo/",
       "source": "blog/publichnoe-predlozhenie-bankrotstvo/index.html",
-      "lastmod": "2026-10-15"
+      "lastmod": "2026-10-16"
     },
     {
       "path": "/blog/zadatok-na-torgah-po-bankrotstvu/",
       "source": "blog/zadatok-na-torgah-po-bankrotstvu/index.html",
-      "lastmod": "2026-10-15"
+      "lastmod": "2026-10-16"
     }
   ]
 }

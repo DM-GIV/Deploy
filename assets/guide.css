@@ -7,21 +7,23 @@
 .guide-card h2{font-size:23px;line-height:1.25;margin:14px 0}
 .guide-card p{color:#526478;font-size:14px;flex:1}
 .guide-card a{display:inline-block;padding-top:12px;color:#a55708;text-decoration:underline;text-underline-offset:3px;font-weight:800}
-.guide-body{max-width:820px;margin:0 auto}
-.guide-body p{margin:0 0 17px;color:#394b5a}
-.guide-body h2{font-size:clamp(24px,2.8vw,31px);margin:40px 0 16px}
+.guide-body{max-width:760px;margin:0 auto;font-size:18px;line-height:1.75;color:#17293b}
+.guide-body p{margin:0 0 18px;color:#24384a}
+.guide-body h2{font-size:clamp(23px,2.8vw,29px);line-height:1.25;letter-spacing:-.4px;margin:44px 0 14px}
+.guide-body h2::before{content:"";display:block;width:34px;height:4px;border-radius:2px;background:#ff9a21;margin-bottom:12px}
 .guide-body h3{font-size:20px;margin:24px 0 12px}
 .guide-body li{color:#394b5a}
 .guide-body a{color:#98500b}
-.guide-body .guide-intro{font-size:18px;color:#354e60}
+.guide-body .guide-intro{font-size:clamp(19px,2.2vw,22px);line-height:1.6;color:#0d2640;font-weight:500;padding-bottom:26px;border-bottom:1px solid #dce5ed}
 .guide-body .guide-tip{background:#eff6fc;padding:20px;border-left:4px solid #3e8eaa;border-radius:0 11px 11px 0;margin:25px 0}
 .guide-body .guide-warning{background:#fff5e5;padding:19px;border-left:4px solid #f5a22e;border-radius:0 11px 11px 0;margin:27px 0}
 .guide-body .guide-checklist{background:#fff;border:1px solid #dce6ef;border-radius:14px;padding:23px 28px;margin:20px 0}
 .guide-body .guide-checklist h3{margin-top:0}
 .guide-body .guide-checklist li{padding-left:2px}
+.guide-body .guide-checklist ul{list-style:none;padding:0}.guide-body .guide-checklist li{position:relative;padding-left:34px}.guide-body .guide-checklist li::before{content:"\2713";position:absolute;left:0;top:3px;width:24px;height:24px;border-radius:7px;background:#e3f3e9;color:#15502a;font-weight:800;font-size:14px;line-height:24px;text-align:center}
 .guide-related{border-top:1px solid #dce4ed;padding:26px 0 0;margin-top:38px}
 .guide-related a{display:inline-block;margin:0 16px 12px 0;font-weight:700}
 .guide-main-cta{padding:42px 0 55px;background:#0c273e;color:#fff}
 .guide-main-cta p{color:#dbe6ef;max-width:730px}
 .guide-main-cta .btn{margin-top:16px}
-@media(max-width:800px){.guide-grid{grid-template-columns:1fr}.guide-card{padding:23px}.guide-body .guide-checklist{padding:20px}.guide-body{max-width:100%}}
+@media(max-width:800px){.guide-grid{grid-template-columns:1fr}.guide-card{padding:23px}.guide-body .guide-checklist{padding:20px}.guide-body{max-width:100%;font-size:17px}}
