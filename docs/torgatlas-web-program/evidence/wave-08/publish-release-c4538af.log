@@ -1,0 +1,8 @@
+[2026-10-15T08:31:19Z] publish start sha=testbad700 previous=releases/7a4b67b0e3117e7ebdcc624fdbc13ad3d5b686cd check_only=0
+[2026-10-15T08:31:21Z] preflight OK (all dirs traversable and all files read+hash-verified as nginx user)
+[2026-10-15T08:31:24Z] FAIL post-switch: not every control route returned HTTP 200
+[2026-10-15T08:31:24Z] ROLLBACK to releases/7a4b67b0e3117e7ebdcc624fdbc13ad3d5b686cd
+[2026-10-15T08:31:26Z] rollback verified: all control routes 200
+[2026-10-15T08:35:49Z] publish start sha=c4538af495f631c0043487d8af2b35e552cf0857 previous=releases/7a4b67b0e3117e7ebdcc624fdbc13ad3d5b686cd check_only=0
+[2026-10-15T08:35:51Z] preflight OK (all dirs traversable and all files read+hash-verified as nginx user)
+[2026-10-15T08:35:54Z] publish OK: current -> releases/c4538af495f631c0043487d8af2b35e552cf0857 (previous releases/7a4b67b0e3117e7ebdcc624fdbc13ad3d5b686cd)

@@ -4,6 +4,8 @@
 import fs from 'node:fs';
 import playwright from '/pw/playwright/driver/package/index.js';
 
+// SMOKE_LITE=1: skip the empty/cancel/429-burst real probes (keeps only the real queries + simulated UI states) to spare the sources.
+const LITE = process.env.SMOKE_LITE === '1';
 const [base = 'https://torgatlas.ru', mode = 'all', out = '/out'] = process.argv.slice(2);
 const results = [];
 const rec = (id, ok, kind, evidence) => { results.push({ id, status: ok ? 'PASS' : 'FAIL', kind, evidence }); console.log(ok ? 'PASS' : 'FAIL', kind, id, JSON.stringify(evidence).slice(0, 260)); };
@@ -98,7 +100,7 @@ if (mode === 'ai' || mode === 'all') {
     } catch (e) { rec(`ai real query: ${name} @${width}`, false, 'REAL', { error: String(e.message).slice(0, 160) }); }
     await context.close(); await sleep(36000);
   }
-  { // REAL empty result
+  if (!LITE) { // REAL empty result
     const { context, page } = await open(390);
     try {
       await run(page, 'подводная лодка атомная торги');
@@ -108,7 +110,7 @@ if (mode === 'ai' || mode === 'all') {
     } catch (e) { rec('ai real empty result', false, 'REAL', { error: String(e.message).slice(0, 160) }); }
     await context.close(); await sleep(36000);
   }
-  { // REAL cancel
+  if (!LITE) { // REAL cancel
     const { context, page } = await open(390);
     try {
       await run(page, 'найди автомобиль грузовой на торгах банкротов');
@@ -118,7 +120,7 @@ if (mode === 'ai' || mode === 'all') {
     } catch (e) { rec('ai real cancel', false, 'REAL', { error: String(e.message).slice(0, 160) }); }
     await context.close(); await sleep(36000);
   }
-  { // REAL 429 / BUSY at the public edge: burst of POSTs from one IP (same page context)
+  if (!LITE) { // REAL 429 / BUSY at the public edge: burst of POSTs from one IP (same page context)
     const { context, page } = await open(1440);
     const codes = await page.evaluate(async () => { const out = []; for (let i = 0; i < 6; i += 1) { const r = await fetch('/api/ai-lot-search', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: 'нагрузочный запрос на торги ' + i + ' транспорт' }) }); const j = await r.json().catch(() => ({})); out.push([r.status, j.code || j.reason || j.status]); } return out; });
     rec('ai real rate limit 429 / BUSY at public edge', codes.some(c => c[0] === 429) && codes.every(c => c[0] === 200 || c[0] === 429), 'REAL', { responses: codes });
