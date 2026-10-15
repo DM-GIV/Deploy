@@ -14,6 +14,7 @@ from pathlib import Path
 
 ROOT_FILES = {"index.html", "404.html", "favicon.ico", "robots.txt", "sitemap.xml", "llms.txt"}
 EXCLUDED_ROUTE_ROOTS = {"docs", "services", "tests", "scripts", "api", "lib", "content", ".github"}
+RELEASE_EXCLUSIONS = Path("content/editorial/release-exclusions.json")
 
 
 def tracked_files(root: Path) -> list[Path]:
@@ -45,7 +46,9 @@ def build_release(root: Path, output: Path, *, allow_dirty: bool = False) -> dic
         dirty = subprocess.check_output(["git", "status", "--porcelain"], cwd=root, text=True).strip()
         if dirty:
             raise RuntimeError("refusing to build a release from a dirty worktree")
-    files = sorted(path for path in tracked_files(root) if is_static_payload(path))
+    exclusion_data = json.loads((root / RELEASE_EXCLUSIONS).read_text(encoding="utf-8"))
+    excluded = {Path(value) for value in exclusion_data.get("paths", [])}
+    files = sorted(path for path in tracked_files(root) if is_static_payload(path) and path not in excluded)
     required = {Path(name) for name in ROOT_FILES}
     if not required.issubset(files):
         raise RuntimeError(f"missing required tracked files: {sorted(str(p) for p in required - set(files))}")
@@ -65,7 +68,7 @@ def build_release(root: Path, output: Path, *, allow_dirty: bool = False) -> dic
             os.chmod(target, 0o644)
             manifest_files.append({"path": relative.as_posix(), "bytes": target.stat().st_size, "sha256": sha256(target)})
         head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
-        manifest = {"schema": "torgatlas-static-release-v1", "source_commit": head, "files": manifest_files}
+        manifest = {"schema": "torgatlas-static-release-v1", "source_commit": head, "excluded_owner_approval_paths": sorted(path.as_posix() for path in excluded), "files": manifest_files}
         manifest_path = temporary / "release-manifest.json"
         manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         os.chmod(manifest_path, 0o644)

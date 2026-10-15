@@ -20,6 +20,8 @@ class StaticReleaseBuildTest(unittest.TestCase):
             self.assertIn("ai-poisk-lotov/index.html", paths)
             self.assertIn("assets/ai-search.js", paths)
             self.assertIn("blog/zadatok-na-torgah-po-bankrotstvu/index.html", paths)
+            self.assertNotIn("blog/o-chem-budem-pisat-v-torgatlas/index.html", paths)
+            self.assertEqual(manifest["excluded_owner_approval_paths"], ["blog/o-chem-budem-pisat-v-torgatlas/index.html"])
             self.assertNotIn("api/ai-lot-search.mjs", paths)
             self.assertNotIn("services/ai-search/server.mjs", paths)
             self.assertFalse(any(path.startswith("docs/") or path.startswith("tests/") for path in paths))

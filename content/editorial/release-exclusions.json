@@ -1,0 +1,7 @@
+{
+  "schema": "torgatlas-static-release-exclusions-v1",
+  "paths": [
+    "blog/o-chem-budem-pisat-v-torgatlas/index.html"
+  ],
+  "reason": "OWNER_APPROVAL_REQUIRED"
+}
