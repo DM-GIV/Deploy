@@ -1,0 +1,4 @@
+narrow: n=24 p50=31 ms p95=58 ms max=75 ms
+broad: n=12 p50=2307 ms p95=2811 ms max=2811 ms
+ALL: n=36 p50=33 ms p95=2370 ms
+6 simultaneous broad: {503: 4, 200: 2} slowest 4014 ms

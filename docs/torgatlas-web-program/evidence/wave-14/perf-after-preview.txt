@@ -1,0 +1,10 @@
+limit 5
+  Москва квартиры            status=[200] returned=[5] p50=    34 ms max=   242 ms
+  прицепы ПФО                status=[200] returned=[4] p50=    21 ms max=    27 ms
+  квартиры ЮФО публичное     status=[200] returned=[5] p50=    43 ms max=   252 ms
+  легковые (широкий)         status=[200] returned=[5] p50=  1643 ms max=  1899 ms
+limit 10
+  Москва квартиры            status=[200] returned=[10] p50=    33 ms max=    38 ms
+  прицепы ПФО                status=[200] returned=[4] p50=    19 ms max=    21 ms
+  квартиры ЮФО публичное     status=[200] returned=[5] p50=    32 ms max=    37 ms
+  легковые (широкий)         status=[200] returned=[10] p50=  1622 ms max=  1676 ms

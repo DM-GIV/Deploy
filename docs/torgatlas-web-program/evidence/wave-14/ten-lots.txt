@@ -1,0 +1,12 @@
+## Москва квартиры: returned=10 candidates=17 dup_dropped=0 distinct_titles=10 distinct_links=10
+   categories {'Квартира'} regions {'Москва'} procedures {'Публичное предложение', 'Аукцион'}
+   snowmobile/moto in titles: False | titles sample: ['Лот № 2 - 2/5 доли в праве общей долевой', 'Квартира площадью 141,4 кв.м, 2 этаж; ра', 'Недвижимое имущество (квартира 105,2 кв.']
+## легковые: returned=10 candidates=38 dup_dropped=0 distinct_titles=10 distinct_links=10
+   categories {'Легковой автомобиль'} regions {None, 'Москва'} procedures {'Публичное предложение'}
+   snowmobile/moto in titles: False | titles sample: ['Автомобиль легковой, марка: Ford , модел', 'Легковой автомобиль, марка: LADA, модель', 'Легковой автомобиль, марка: Мазда, модел']
+## прицепы ПФО: returned=4 candidates=4 dup_dropped=0 distinct_titles=4 distinct_links=1
+   categories {'Прицеп / полуприцеп'} regions {'Оренбургская область'} procedures {'Аукцион'}
+   snowmobile/moto in titles: False | titles sample: ['Полуприцеп - тяжеловоз ЧМЗАП 9906 — лот ', 'Прицеп СЗАП 8357-02 — лот №9', 'Полуприцеп тяжеловоз ТСП 94183-0000010 —']
+## ЮФО публичное: returned=5 candidates=5 dup_dropped=0 distinct_titles=5 distinct_links=5
+   categories {'Квартира'} regions {'Краснодарский край', 'Волгоградская область'} procedures {'Публичное предложение'}
+   snowmobile/moto in titles: False | titles sample: ['Трёхкомнатная квартира, общей площадью 1', 'Квартира, площадью 118,9 кв.м., этаж 10-', 'однокомнатная квартира, площадью: 44,4 к']

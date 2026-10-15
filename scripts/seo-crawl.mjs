@@ -58,12 +58,14 @@ for (const p of ['/blog/gosudarstvennye-i-municipalnye-torgi/', '/blog/o-chem-bu
   const r = await get(`${base}${p}`);
   check(`${p} (draft) is noindex and absent from the sitemap`, !locs.includes(origin + p) && (r.status === 404 || /noindex/.test(r.text)), r.status);
 }
-// The articles: raw HTML (no JS) already contains the text of every collapsed section.
+// The articles: the whole text is visible in the raw GET (no accordion, no script needed).
 for (const slug of ['kak-uchastvovat-v-torgah-po-bankrotstvu', 'publichnoe-predlozhenie-bankrotstvo', 'zadatok-na-torgah-po-bankrotstvu']) {
   const r = await get(`${base}/blog/${slug}/`);
-  const secs = [...r.text.matchAll(/<details class="art-sec"[^>]*>(.*?)<\/details>/gs)];
-  check(`${slug}: ${secs.length} sections with their text in the raw GET`, r.status === 200 && secs.length >= 4 && secs.every(s => s[1].replace(/<[^>]+>/g, '').trim().split(/\s+/).length > 25));
+  const secs = [...r.text.matchAll(/<section class="post-section">(.*?)<\/section>/gs)];
+  check(`${slug}: ${secs.length} sections fully in the raw GET, no <details>/<button>`, r.status === 200 && secs.length >= 4 && secs.every(x => x[1].replace(/<[^>]+>/g, '').trim().split(/\s+/).length > 12) && !/<details|<summary|<button/.test(r.text));
 }
+const ai = await get(`${base}/ai-poisk-lotov/`);
+check('AI page: indexable, canonical, static SEO text in the raw GET before any script', ai.status === 200 && /<meta name="robots" content="index,follow/.test(ai.text) && /Что можно найти через AI-поиск/.test(ai.text) && !/x-robots-tag/i.test([...ai.headers.keys()].join(',')));
 const robots = await get(`${base}/robots.txt`); check('robots.txt references the sitemap', /Sitemap: https:\/\/torgatlas\.ru\/sitemap\.xml/.test(robots.text));
 console.log(`\nSUMMARY pass=${pass} fail=${fail}`);
 if (server) server.close();

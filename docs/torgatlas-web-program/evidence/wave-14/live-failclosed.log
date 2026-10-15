@@ -1,0 +1,2 @@
+{"post_status":[503],"status":"Поиск временно недоступен. Мы не подставляем неточные результаты; повторите позже. Текст запроса сохранён.","cards":0,"results_hidden":true,"kept":"Найди квартиры на торгах в Москве","button_enabled":true}
+PASS fail-closed: clear unavailability, no cards, no fallback, text kept, button usable

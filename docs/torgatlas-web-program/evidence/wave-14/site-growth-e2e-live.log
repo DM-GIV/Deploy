@@ -1,0 +1,104 @@
+PASS REAL 320px home menu: AI-поиск · Услуги · Примеры · Материалы · О проекте · Контакты · Проверить лот; no overflow ["AI-поиск","Услуги","Примеры","Материалы","О проекте","Контакты","Проверить лот"]
+PASS REAL 320px «Проверить лот» is a visible, tappable button (>= 44px high) {"x":164.453125,"y":103.578125,"width":124.859375,"height":39.1875}
+PASS REAL 320px inner-page menu fits without horizontal scroll ""
+PASS REAL 375px home menu: AI-поиск · Услуги · Примеры · Материалы · О проекте · Контакты · Проверить лот; no overflow ["AI-поиск","Услуги","Примеры","Материалы","О проекте","Контакты","Проверить лот"]
+PASS REAL 375px «Проверить лот» is a visible, tappable button (>= 44px high) {"x":89.84375,"y":103.578125,"width":124.859375,"height":39.1875}
+PASS REAL 375px inner-page menu fits without horizontal scroll ""
+PASS REAL 412px home menu: AI-поиск · Услуги · Примеры · Материалы · О проекте · Контакты · Проверить лот; no overflow ["AI-поиск","Услуги","Примеры","Материалы","О проекте","Контакты","Проверить лот"]
+PASS REAL 412px «Проверить лот» is a visible, tappable button (>= 44px high) {"x":89.84375,"y":103.578125,"width":124.859375,"height":39.1875}
+PASS REAL 412px inner-page menu fits without horizontal scroll ""
+PASS REAL 768px home menu: AI-поиск · Услуги · Примеры · Материалы · О проекте · Контакты · Проверить лот; no overflow ["AI-поиск","Услуги","Примеры","Материалы","О проекте","Контакты","Проверить лот"]
+PASS REAL 768px «Проверить лот» is a visible, tappable button (>= 44px high) {"x":440,"y":72.390625,"width":132.25,"height":40.796875}
+PASS REAL 768px inner-page menu fits without horizontal scroll ""
+PASS REAL 1024px home menu: AI-поиск · Услуги · Примеры · Материалы · О проекте · Контакты · Проверить лот; no overflow ["AI-поиск","Услуги","Примеры","Материалы","О проекте","Контакты","Проверить лот"]
+PASS REAL 1024px «Проверить лот» is a visible, tappable button (>= 44px high) {"x":871.75,"y":15.59375,"width":132.25,"height":40.796875}
+PASS REAL 1024px inner-page menu fits without horizontal scroll ""
+PASS REAL 1440px home menu: AI-поиск · Услуги · Примеры · Материалы · О проекте · Контакты · Проверить лот; no overflow ["AI-поиск","Услуги","Примеры","Материалы","О проекте","Контакты","Проверить лот"]
+PASS REAL 1440px «Проверить лот» is a visible, tappable button (>= 44px high) {"x":1147.75,"y":15.59375,"width":132.25,"height":40.796875}
+PASS REAL 1440px inner-page menu fits without horizontal scroll ""
+PASS REAL DESKTOP 1440 home: catalogue only as a plain-text announcement; free/paid/risks block; actions intact ""
+PASS REAL DESKTOP 1440 clicking the catalogue announcement does not navigate ""
+PASS REAL DESKTOP 1440 menu «Услуги» opens the services hub with all service landings ""
+PASS REAL DESKTOP 1440 header action «Проверить лот» opens the form ""
+PASS REAL DESKTOP 1440 blog: six static cards, one link each, no buttons, no accordions ""
+PASS REAL DESKTOP 1440 blog does not hold a full article ""
+PASS REAL DESKTOP 1440 «Читать статью» opens the standalone article ""
+PASS REAL DESKTOP 1440 kak-uchastvovat-v-torgah-po-bankrotstvu: all text visible (no accordion/button/hidden element), readable typography {"details":0,"hiddenEls":0,"fontSize":18,"lineRatio":1.75,"width":760,"ledeVisible":true,"sections":[true,true,true,true,true,true],"h1":158.671875}
+PASS REAL DESKTOP 1440 kak-uchastvovat-v-torgah-po-bankrotstvu: text column 700–800 px 760
+PASS REAL DESKTOP 1440 kak-uchastvovat-v-torgah-po-bankrotstvu: no horizontal scroll ""
+PASS REAL DESKTOP 1440 kak-uchastvovat-v-torgah-po-bankrotstvu: CLS 0.000 < 0.05 0
+PASS REAL DESKTOP 1440 kak-uchastvovat-v-torgah-po-bankrotstvu: CTA → AI search and → free check map work ""
+PASS REAL DESKTOP 1440 publichnoe-predlozhenie-bankrotstvo: all text visible (no accordion/button/hidden element), readable typography {"details":0,"hiddenEls":0,"fontSize":18,"lineRatio":1.75,"width":760,"ledeVisible":true,"sections":[true,true,true,true],"h1":158.671875}
+PASS REAL DESKTOP 1440 publichnoe-predlozhenie-bankrotstvo: text column 700–800 px 760
+PASS REAL DESKTOP 1440 publichnoe-predlozhenie-bankrotstvo: no horizontal scroll ""
+PASS REAL DESKTOP 1440 publichnoe-predlozhenie-bankrotstvo: CLS 0.000 < 0.05 0
+PASS REAL DESKTOP 1440 publichnoe-predlozhenie-bankrotstvo: CTA → AI search and → free check map work ""
+PASS REAL DESKTOP 1440 zadatok-na-torgah-po-bankrotstvu: all text visible (no accordion/button/hidden element), readable typography {"details":0,"hiddenEls":0,"fontSize":18,"lineRatio":1.75,"width":760,"ledeVisible":true,"sections":[true,true,true,true,true],"h1":158.671875}
+PASS REAL DESKTOP 1440 zadatok-na-torgah-po-bankrotstvu: text column 700–800 px 760
+PASS REAL DESKTOP 1440 zadatok-na-torgah-po-bankrotstvu: no horizontal scroll ""
+PASS REAL DESKTOP 1440 zadatok-na-torgah-po-bankrotstvu: CLS 0.000 < 0.05 0
+PASS REAL DESKTOP 1440 zadatok-na-torgah-po-bankrotstvu: CTA → AI search and → free check map work ""
+PASS REAL DESKTOP 1440 never requested the future catalogue host []
+PASS REAL ANDROID 412 home: catalogue only as a plain-text announcement; free/paid/risks block; actions intact ""
+PASS REAL ANDROID 412 clicking the catalogue announcement does not navigate ""
+PASS REAL ANDROID 412 menu «Услуги» opens the services hub with all service landings ""
+PASS REAL ANDROID 412 header action «Проверить лот» opens the form ""
+PASS REAL ANDROID 412 blog: six static cards, one link each, no buttons, no accordions ""
+PASS REAL ANDROID 412 blog does not hold a full article ""
+PASS REAL ANDROID 412 «Читать статью» opens the standalone article ""
+PASS REAL ANDROID 412 kak-uchastvovat-v-torgah-po-bankrotstvu: all text visible (no accordion/button/hidden element), readable typography {"details":0,"hiddenEls":0,"fontSize":17,"lineRatio":1.75,"width":374,"ledeVisible":true,"sections":[true,true,true,true,true,true],"h1":138}
+PASS REAL ANDROID 412 kak-uchastvovat-v-torgah-po-bankrotstvu: no horizontal scroll ""
+PASS REAL ANDROID 412 kak-uchastvovat-v-torgah-po-bankrotstvu: CLS 0.000 < 0.05 0
+PASS REAL ANDROID 412 kak-uchastvovat-v-torgah-po-bankrotstvu: CTA → AI search and → free check map work ""
+PASS REAL ANDROID 412 publichnoe-predlozhenie-bankrotstvo: all text visible (no accordion/button/hidden element), readable typography {"details":0,"hiddenEls":0,"fontSize":17,"lineRatio":1.75,"width":374,"ledeVisible":true,"sections":[true,true,true,true],"h1":138}
+PASS REAL ANDROID 412 publichnoe-predlozhenie-bankrotstvo: no horizontal scroll ""
+PASS REAL ANDROID 412 publichnoe-predlozhenie-bankrotstvo: CLS 0.000 < 0.05 0
+PASS REAL ANDROID 412 publichnoe-predlozhenie-bankrotstvo: CTA → AI search and → free check map work ""
+PASS REAL ANDROID 412 zadatok-na-torgah-po-bankrotstvu: all text visible (no accordion/button/hidden element), readable typography {"details":0,"hiddenEls":0,"fontSize":17,"lineRatio":1.75,"width":374,"ledeVisible":true,"sections":[true,true,true,true,true],"h1":138}
+PASS REAL ANDROID 412 zadatok-na-torgah-po-bankrotstvu: no horizontal scroll ""
+PASS REAL ANDROID 412 zadatok-na-torgah-po-bankrotstvu: CLS 0.000 < 0.05 0
+PASS REAL ANDROID 412 zadatok-na-torgah-po-bankrotstvu: CTA → AI search and → free check map work ""
+PASS REAL ANDROID 412 never requested the future catalogue host []
+PASS REAL keyboard: Tab walks links with a visible focus ring; nav action reachable [{"tag":"A","text":"ТоргАтласВсе имущественны","outline":true},{"tag":"A","text":"AI-поиск","outline":true},{"tag":"A","text":"Услуги","outline":true},{"tag":"A","text":"Примеры","outline":true},{"tag":"A","text":"Материалы","outline":true},{"tag":"A","text":"О проекте","outline":true},{"tag":"A","t
+PASS REAL prefers-reduced-motion: no transitions, no smooth scrolling {"card":"0s","behavior":"auto"}
+PASS REAL NO-JS kak-uchastvovat-v-torgah-po-bankrotstvu: whole article visible ""
+PASS REAL NO-JS publichnoe-predlozhenie-bankrotstvo: whole article visible ""
+PASS REAL NO-JS zadatok-na-torgah-po-bankrotstvu: whole article visible ""
+PASS REAL NO-JS AI page: static SEO text and the noscript notice are visible ""
+PASS REAL DESKTOP 1440 AI page: form on the first screen, one «Бета» line, no «Как проверяется результат», short «Важно знать», indexable {"formTop":612.671875,"vh":900,"beta":1,"hasHowChecked":false,"know":257,"pageHeight":1899,"robots":"index,follow,max-image-preview:large"}
+PASS REAL DESKTOP 1440 AI page: no horizontal scroll ""
+PASS SIMULATED DESKTOP 1440 0 results: honest empty state + individual selection offer, no button {"cards":0,"visible":0,"more":false,"moreText":"","title":"Подходящих предложений не найдено","empty":true,"cta":true}
+PASS SIMULATED DESKTOP 1440 4 results: 4 visible, counter says 4, no button {"cards":4,"visible":4,"more":false,"moreText":"","title":"Подходящих предложений: 4","empty":false,"cta":true}
+PASS SIMULATED DESKTOP 1440 5 results: 5 visible, counter says 5, no button {"cards":5,"visible":5,"more":false,"moreText":"","title":"Подходящих предложений: 5","empty":false,"cta":true}
+PASS SIMULATED DESKTOP 1440 8 results: 5 visible, counter says 8, button «Показать ещё 3» {"cards":8,"visible":5,"more":true,"moreText":"Показать ещё 3 лота","title":"Подходящих предложений: 8","empty":false,"cta":true}
+PASS SIMULATED DESKTOP 1440 10 results: 5 visible, counter says 10, button «Показать ещё 5» {"cards":10,"visible":5,"more":true,"moreText":"Показать ещё 5 лотов","title":"Подходящих предложений: 10","empty":false,"cta":true}
+PASS SIMULATED DESKTOP 1440 «Показать ещё 5 лотов»: all 10 visible, NO new POST, NO new CAPTCHA challenge {"visible":10,"expanded":"true","text":"Свернуть"}
+PASS SIMULATED DESKTOP 1440 «Свернуть» returns the first five ""
+PASS SIMULATED DESKTOP 1440 card carries «Открыть карточку лота», «Получить карту проверки» and the status label ""
+PASS REAL DESKTOP 1440 hand-off: check form is pre-filled with the picked lot link and type, the hint is used once {"url":"https://fedresurs.ru/biddings/test-only-1","type":"Недвижимость","note":true,"key":null}
+PASS REAL DESKTOP 1440 pre-filled link stays editable ""
+PASS REAL DESKTOP 1440 free check map generated without sending anything ""
+PASS REAL DESKTOP 1440 voluntary request is only PREPARED (editable text), not sent ""
+PASS REAL DESKTOP 1440 channel action does not claim a send («скопирован … отправьте самостоятельно») "Текст скопирован. Выберите удобный канал и отправьте его самостоятельно."
+PASS REAL DESKTOP 1440 individual-selection page keeps its form and the AI page offered it for empty results ""
+PASS REAL ANDROID 412 AI page: form on the first screen, one «Бета» line, no «Как проверяется результат», short «Важно знать», indexable {"formTop":588.625,"vh":800,"beta":1,"hasHowChecked":false,"know":257,"pageHeight":2414,"robots":"index,follow,max-image-preview:large"}
+PASS REAL ANDROID 412 AI page: no horizontal scroll ""
+PASS SIMULATED ANDROID 412 0 results: honest empty state + individual selection offer, no button {"cards":0,"visible":0,"more":false,"moreText":"","title":"Подходящих предложений не найдено","empty":true,"cta":true}
+PASS SIMULATED ANDROID 412 4 results: 4 visible, counter says 4, no button {"cards":4,"visible":4,"more":false,"moreText":"","title":"Подходящих предложений: 4","empty":false,"cta":true}
+PASS SIMULATED ANDROID 412 5 results: 5 visible, counter says 5, no button {"cards":5,"visible":5,"more":false,"moreText":"","title":"Подходящих предложений: 5","empty":false,"cta":true}
+PASS SIMULATED ANDROID 412 8 results: 5 visible, counter says 8, button «Показать ещё 3» {"cards":8,"visible":5,"more":true,"moreText":"Показать ещё 3 лота","title":"Подходящих предложений: 8","empty":false,"cta":true}
+PASS SIMULATED ANDROID 412 10 results: 5 visible, counter says 10, button «Показать ещё 5» {"cards":10,"visible":5,"more":true,"moreText":"Показать ещё 5 лотов","title":"Подходящих предложений: 10","empty":false,"cta":true}
+PASS SIMULATED ANDROID 412 «Показать ещё 5 лотов»: all 10 visible, NO new POST, NO new CAPTCHA challenge {"visible":10,"expanded":"true","text":"Свернуть"}
+PASS SIMULATED ANDROID 412 «Свернуть» returns the first five ""
+PASS SIMULATED ANDROID 412 card carries «Открыть карточку лота», «Получить карту проверки» and the status label ""
+PASS REAL ANDROID 412 hand-off: check form is pre-filled with the picked lot link and type, the hint is used once {"url":"https://fedresurs.ru/biddings/test-only-1","type":"Недвижимость","note":true,"key":null}
+PASS REAL ANDROID 412 pre-filled link stays editable ""
+PASS REAL ANDROID 412 free check map generated without sending anything ""
+PASS REAL ANDROID 412 voluntary request is only PREPARED (editable text), not sent ""
+PASS REAL ANDROID 412 channel action does not claim a send («скопирован … отправьте самостоятельно») "Текст скопирован. Выберите удобный канал и отправьте его самостоятельно."
+PASS REAL ANDROID 412 individual-selection page keeps its form and the AI page offered it for empty results ""
+PASS REAL individual selection: indexable landing with its form ""
+PASS REAL individual selection: «карта поиска» generated on the page {"visible":true,"text":1978}
+PASS REAL individual selection: request prepared as editable text, nothing sent ""
+
+SUMMARY pass=102 fail=0

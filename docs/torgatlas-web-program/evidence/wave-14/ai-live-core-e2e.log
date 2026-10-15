@@ -1,0 +1,22 @@
+PASS REAL GET status is reflected on the page: «Поиск по каталогу ТоргАтлас», no legacy-mode warning ""
+PASS REAL field/button usable on load; «до 10 подходящих лотов» shown; CTA hidden before a search ""
+PASS REAL Москва: 6–10 distinct apartments, region «Москва» only (no ХМАО/Краснодар/нежилое/дом) {"n":10,"regions":["Москва","Москва","Москва","Москва","Москва","Москва","Москва","Москва","Москва","Москва"]}
+PASS REAL cards: category, procedure, price with meaning, deadline, check date, status label, https first-source link ["https://fedresurs.ru/biddings/9a3e671f-092d-41f0-961a-ad071ff2c05a","https://fedresurs.ru/biddings/440a0a96-100a-414d-871e-5af5a3132206","https://fedresurs.ru/biddings/16e282db-d258-4c56-bda8-56ea78491941","https://fedresurs.ru/biddings/214e12e3-b7bc-4fee-9fb2-896f73f49066","https://fedresurs.ru/biddings/2d95de95-0e51-4b14-a1c5-be8b031c713d","https://fedre
+PASS REAL stale checks are NOT shown as confirmed open (label says actuality not confirmed) "лога не истёк, но данные давно не перепроверялись: актуальность не подтверждена Проверьте статус в первоисточнике.Открыть карточку лота ↗Получить карту проверки"
+PASS REAL interpretation shown; CTA «В разработке» visible and not a link ""
+PASS REAL first five cards visible; counter equals the real number of cards (max 10); «Показать ещё N лотов» shown {"cards":10,"visible":5,"more":true,"text":"Показать ещё 5 лотов","title":"Подходящих предложений: 10"}
+PASS REAL «Показать ещё»: all cards visible, NO new POST and NO new ALTCHA challenge request {"after":{"visible":10,"text":"Свернуть"},"posts":1}
+PASS REAL прицепы ПФО: only trailers, only ПФО regions, exactly the real records {"n":4,"regions":["Оренбургская область","Оренбургская область","Оренбургская область","Оренбургская область"]}
+PASS REAL four lots of ONE publication are marked as one source (shared link), not as four independent sources {"links":["https://fedresurs.ru/biddings/6e47f89f-5bf4-465d-942d-01fbc32f1205"],"titles":["Полуприцеп - тяжеловоз ЧМЗАП 9906 — лот №11","Прицеп СЗАП 8357-02 — лот №9","Полуприцеп тяжеловоз ТСП 94183-0000010 — лот №7","Полуприцеп бортовой СЗАП 9327 — лот №4"]}
+PASS REAL trailer titles name the property (from the stored description), keep the lot number, expose no VIN/plate/location ["Полуприцеп - тяжеловоз ЧМЗАП 9906 — лот №11","Прицеп СЗАП 8357-02 — лот №9","Полуприцеп тяжеловоз ТСП 94183-0000010 — лот №7","Полуприцеп бортовой СЗАП 9327 — лот №4"]
+PASS REAL легковые: no VIN or registration plate shown in any card ["Автомобиль легковой, марка: Ford , модель: Focus, [VIN скрыт], гос. ре","Легковой автомобиль, марка: LADA, модель: VESTA, год изготовления: 201","Легковой автомобиль, марка: Мазда, модель: Фамилиа, год изготовления: ","Транспортное средство: Honda Orthia Год выпуска: 1997 Идентификационны","Легковой автомобиль, марка: ФОЛЬКСВАГЕН, модель: ПОЛО 75 ВАРИ, год
+PASS REAL легковые (Enter): up to 10 passenger cars, no snowmobile/motorcycle/quad {"n":10,"titles":["Автомобиль легковой, марка: Ford , модел","Легковой автомобиль, марка: LADA, модель","Легковой автомобиль, марка: Мазда, модел","Транспортное средство: Honda Orthia Год ","Легковой автомобиль, марка: ФОЛЬКСВАГЕН,","Автомобиль легковой CHANGAN CS55PLUS;","Легковой автомобиль ОПЕЛЬ АСТРА (A-H), Г","транспортное средство – легковой автомоб","
+PASS REAL квартиры ЮФО на публичном предложении: only ЮФО regions, only «Публичное предложение», no auctions {"n":5,"regions":["Волгоградская область","Краснодарский край","Краснодарский край","Краснодарский край","Краснодарский край"]}
+PASS REAL repeat searches on one page without reload; each POST carried a fresh ALTCHA token; all POST = 200 {"posts":4,"statuses":[200,200,200,200]}
+PASS REAL card «Получить карту проверки» opens the check form PRE-FILLED with that lot's first-source link and type (editable, nothing sent) {"url":"https://fedresurs.ru/biddings/001a1b4d-0214-4032-9499-9fc576630017","type":"Недвижимость","note":true}
+PASS REAL voluntary request only prepared: editable text contains the lot link, no automatic sending ""
+PASS REAL no analytics requests before consent; no page errors {"analytics":[],"errors":[]}
+PASS REAL mobile (Android UA, touch): example tap fills the field ""
+PASS REAL mobile: results correct, no horizontal scroll, CTA «В разработке» visible {"n":5}
+
+SUMMARY pass=20 fail=0

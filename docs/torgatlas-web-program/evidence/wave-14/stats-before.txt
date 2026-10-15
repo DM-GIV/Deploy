@@ -1,0 +1,2 @@
+aa-data004-postgres-1 cpu=0.00% mem=481.4MiB / 768MiB
+torgatlas-ai-core-search cpu=0.22% mem=54.32MiB / 256MiB
