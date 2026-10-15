@@ -5,40 +5,45 @@ import fs from 'node:fs';
 const page = fs.readFileSync('ai-poisk-lotov/index.html', 'utf8');
 const script = fs.readFileSync('assets/ai-search.js', 'utf8');
 
-test('AI search starts fail-closed and explains that input is not sent', () => {
-  assert.match(page, /id="ai-query"[^>]*disabled/);
+test('AI search form is usable immediately: nothing is disabled in the published HTML', () => {
+  assert.doesNotMatch(page, /<textarea[^>]*\bdisabled\b/);
+  assert.doesNotMatch(page, /<button[^>]*id="ai-submit"[^>]*\bdisabled\b/);
+  assert.match(page, /<form id="ai-lot-form" novalidate>/);
   assert.doesNotMatch(page, /id="ai-source"/);
   assert.doesNotMatch(page, /id="ai-limit"/);
-  assert.match(page, /Текст запроса отправляется только при нажатии «Найти лоты»/);
-  assert.doesNotMatch(page, /Поиск по .* в Яндексе/);
+  assert.match(page, /<noscript>[\s\S]*JavaScript[\s\S]*<\/noscript>/);
+  assert.match(page, /__aiSearchReady/);
+  assert.match(page, /ai-search\.js\?v=\d+/);
 });
 
-test('public description lists only the sources enabled in the registry and never a disabled one as active', () => {
-  const registry = JSON.parse(fs.readFileSync('config/ai-sources.registry.json', 'utf8'));
-  const enabled = registry.sources.filter(source => source.edge_enabled === true).map(source => source.id).sort();
-  assert.deepEqual(enabled, ['centerr-bankrupt', 'etpu', 'utpl']);
-  const note = page.match(/<p class="ai-beta-note">(.*?)<\/p>/s)[1];
+test('public page names no marketplaces, source counts or disabled sources; uses the owner-approved wording', () => {
+  const visible = page.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ');
   const description = page.match(/<meta name="description" content="([^"]*)"/)[1];
-  for (const text of [note.split('ГИС Торги пока не подключены')[0], description]) {
-    assert.doesNotMatch(text, /ГИС|torgi\.gov|ЕФРСБ|МЭТС/);
+  for (const text of [visible, description]) {
+    assert.doesNotMatch(text, /УТПЛ|УЭТП|Центр реализации|ГИС|torgi\.gov|ЕФРСБ|МЭТС|Росэлторг|Объединённая торговая|не подключен|отключен|пока не/i);
+    assert.doesNotMatch(text, /(три|3|\d+)\s+(площадк|источник)/i);
   }
-  assert.match(note, /УТПЛ[\s\S]*УЭТП[\s\S]*Центр реализации/);
-  assert.match(note, /ГИС Торги пока не подключены/);
-  assert.match(description, /УТПЛ, УЭТП и Центр реализации/);
+  assert.match(page, /ТоргАтлас использует открытые сведения, опубликованные на электронных торговых площадках, для поиска и отображения предложений об имуществе\. Результаты сопровождаются ссылками на первоисточники\. Актуальность и условия участия необходимо проверить перед покупкой\./);
+  assert.doesNotMatch(script, /coverage_note\s*\|\||data\.coverage_note\b[^;]*textContent|textContent\s*=\s*data\.coverage_note/);
+  const registry = JSON.parse(fs.readFileSync('config/ai-sources.registry.json', 'utf8'));
+  assert.deepEqual(registry.sources.filter(source => source.edge_enabled === true).map(source => source.id).sort(), ['centerr-bankrupt', 'etpu', 'utpl']);
 });
 
-test('AI search checks status with GET before it permits a POST query', () => {
-  assert.match(script, /let searchReady\s*=\s*false/);
-  assert.match(script, /method:\s*'GET'/);
-  assert.match(script, /if \(!searchReady\)/);
+test('AI search never gates typing or sending on the availability GET', () => {
+  assert.doesNotMatch(script, /searchReady/);
+  assert.doesNotMatch(script, /setSearchReady/);
+  assert.doesNotMatch(script, /q\.disabled\s*=\s*(true|!)/);
+  assert.match(script, /q\.disabled = false/);
+  assert.match(script, /method:\s*'GET'[\s\S]*catch \{ \/\* Ignored on purpose/);
   assert.match(script, /method:\s*'POST'/);
-  assert.match(script, /setSearchReady\(false\)/);
+  assert.match(script, /if \(activeController\) return;/);
+  assert.match(script, /event\.key === 'Enter'/);
 });
 
 test('AI search explains coverage and provides real next-step CTAs', () => {
   assert.match(page, /class="ai-example"/);
   assert.match(page, /id="ai-results-coverage"/);
-  assert.match(script, /coverage_note/);
+  assert.match(script, /DEFAULT_COVERAGE/);
   assert.match(script, /Получить карту проверки/);
   assert.match(script, /Возможность подать заявку не подтверждена/);
 });
