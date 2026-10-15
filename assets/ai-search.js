@@ -95,14 +95,14 @@
       count += 1;
     }
     results.hidden = false;
-    const incomplete = !count && (['BUSY', 'RATE_LIMITED', 'TIME_BUDGET_EXHAUSTED', 'TIMEOUT'].includes(data.reason) || data.status === 'TIMEOUT');
+    const incomplete = !count && (['BUSY', 'RATE_LIMITED', 'TIME_BUDGET_EXHAUSTED', 'TIMEOUT', 'SOURCE_PACING_BUSY'].includes(data.reason) || data.status === 'TIMEOUT');
     resultTitle.textContent = count ? `Проверено актуальных карточек: ${count}` : incomplete ? 'Поиск не завершён' : 'Подтверждённых совпадений не найдено';
     resultCaption.textContent = `Ответ получен: ${checkedTime(data.retrieved_at)}. Откройте первоисточник перед любым решением.`;
     resultCoverage.textContent = data.coverage_note || '';
     resultCoverage.hidden = !data.coverage_note;
     resultTitle.focus({ preventScroll: true });
     if (count) notice(`Результаты сформированы за ${Math.max(0, Math.round((Date.now() - startedAt) / 1000))} с. Условия нужно перепроверить в первоисточнике.`);
-    else if (['BUSY', 'RATE_LIMITED', 'TIME_BUDGET_EXHAUSTED', 'TIMEOUT'].includes(data.reason) || data.status === 'TIMEOUT') notice('Сервис сейчас занят или время поиска исчерпано. Это не означает, что лотов нет: повторите запрос через минуту.', true);
+    else if (['BUSY', 'RATE_LIMITED', 'TIME_BUDGET_EXHAUSTED', 'TIMEOUT', 'SOURCE_PACING_BUSY'].includes(data.reason) || data.status === 'TIMEOUT') notice('Сервис сейчас занят или время поиска исчерпано. Это не означает, что лотов нет: повторите запрос через минуту.', true);
     else notice('В проверенной части доступных каталогов актуальные совпадения не подтверждены. Измените формулировку или попробуйте позже.');
   }
   for (const example of document.querySelectorAll('.ai-example')) {

@@ -152,7 +152,7 @@ test('region parser distinguishes Moscow region and recognises Tyumen city', () 
 test('process-local abuse controls have hard memory caps', () => {
   assert.equal(RESEARCH_BUDGET.maxCacheEntries, 500);
   assert.equal(RESEARCH_BUDGET.maxRateEntries, 5000);
-  assert.equal(RESEARCH_BUDGET.maxConcurrentSearches, 2);
+  assert.equal(RESEARCH_BUDGET.maxConcurrentSearches, 1);
   assert.equal(RESEARCH_BUDGET.llmTokens, 0);
 });
 

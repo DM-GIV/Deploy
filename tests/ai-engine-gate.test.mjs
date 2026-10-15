@@ -85,12 +85,13 @@ test('failed gate (connection refused) is a clean error, not a hang or a direct 
 test('overall deadline returns a definite TIMEOUT result before the nginx limit', async () => {
   assert.ok(OVERALL_DEADLINE_MS < 25_000);
   const result = await publicResearchMiniSearch('квартира в Москве торги банкротство', {
-    deadlineMs: 150, cacheEnabled: false, requestHtml: () => new Promise(() => {}), requestJson: () => new Promise(() => {}), rateKey: 'deadline-test'
+    deadlineMs: 150, cacheEnabled: false, requestHtml: () => new Promise((_, reject) => setTimeout(() => reject(new Error('slow source')), 100)), requestJson: () => new Promise((_, reject) => setTimeout(() => reject(new Error('slow source')), 100)), rateKey: 'deadline-test'
   });
   assert.equal(result.ok, true);
   assert.equal(result.status, 'TIMEOUT');
   assert.equal(result.reason, 'TIME_BUDGET_EXHAUSTED');
   assert.deepEqual(result.lots, []);
+  await new Promise(resolve => setTimeout(resolve, 2500)); // let the abandoned background search finish (it has its own request timeouts)
 });
 
 test('registry listing exposes ids and statuses only', () => {
@@ -159,4 +160,16 @@ test('beta privacy: natural-person names and identifiers are redacted, property 
   const catalog = '<table><tr class="gridRow"><td>П-1</td><td></td><td>1</td><td></td><td>1 000,00</td><td></td><td>01.12.2099 10:00</td><td></td><td>Прием заявок</td><td><a class="tip-lot" href="/public/auctions/lots/view/777/">Автомобиль должника Петров Пётр Петрович</a></td></tr></table>';
   const out = await publicResearchMiniSearch('автомобиль должника торги банкротство', { cacheEnabled: false, rateKey: 'pii-test', requestHtml: async () => catalog, requestJson: async () => ({}) });
   assert.ok(!JSON.stringify(out).includes('Петрович'));
+});
+
+test('pacing-skipped sources are reported as incomplete, never as "no matches"', async () => {
+  const { publicResearchMiniSearch } = await import('../lib/torgatlas-public-web-research.mjs');
+  configureSourceRegistry({ sources: base });
+  const out = await publicResearchMiniSearch('автомобиль торги банкротство тест', {
+    cacheEnabled: false, rateKey: 'pace-incomplete', requestJson: async () => ({}),
+    requestHtml: async () => { throw Object.assign(new Error('x'), { code: 'SOURCE_PACING_BUSY' }); }
+  });
+  assert.equal(out.reason, 'SOURCE_PACING_BUSY');
+  assert.equal(out.status, 'PARTIAL_SOURCES_SKIPPED');
+  assert.deepEqual(out.lots, []);
 });
