@@ -4,12 +4,12 @@
 # and the AI-search internal network (so ai-search can call it by name). It publishes no port.
 services:
   ai-core-search:
-    image: ${CORE_PS_IMAGE:?set CORE_PS_IMAGE, e.g. auction-data004:torgatlas-public-search-737e2fd}
+    image: ${CORE_PS_IMAGE:?set CORE_PS_IMAGE to the locally built image tag}
     container_name: torgatlas-ai-core-search
     restart: unless-stopped
     command: ["uvicorn", "public_search_app:app", "--host", "0.0.0.0", "--port", "8000"]
     env_file:
-      - ${CORE_PS_ENV_FILE:?set CORE_PS_ENV_FILE (0600): DATABASE_URL (SELECT-only role), PUBLIC_SEARCH_TOKEN_SHA256}
+      - ${CORE_PS_ENV_FILE:?set CORE_PS_ENV_FILE to the 0600 env file}
     environment:
       PYTHONDONTWRITEBYTECODE: "1"
       PUBLIC_SEARCH_MAX_CONCURRENCY: "2"
