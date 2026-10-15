@@ -1,0 +1,319 @@
+{
+ "schema": 1,
+ "statuses": [
+  "CANDIDATE",
+  "VERIFIED_PUBLIC_ACCESS",
+  "LIVE_LOT_VERIFIED",
+  "RESTRICTED",
+  "BLOCKED"
+ ],
+ "rules": "edge_enabled may be true only for VERIFIED_PUBLIC_ACCESS or LIVE_LOT_VERIFIED, set by a reviewed commit; exact hostnames only, port 443, no wildcards. Generic parsers are per template family (e.g. family=all-torgi: utpl, etpu, centerr), never per ETP.",
+ "sources": [
+  {
+   "id": "gis-torgi",
+   "host": "torgi.gov.ru",
+   "name": "ГИС Торги",
+   "categories": [
+    "state",
+    "municipal",
+    "rent",
+    "arrested"
+   ],
+   "status": "RESTRICTED",
+   "edge_enabled": true,
+   "notes": "previously approved; TLS chain not trusted by Node 24 (UNABLE_TO_VERIFY_LEAF_SIGNATURE; likely Russian national root CA). Needs owner decision on adding a pinned CA; not auto-added.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "efrsb",
+   "host": "fedresurs.ru",
+   "name": "ЕФРСБ",
+   "categories": [
+    "bankruptcy"
+   ],
+   "status": "RESTRICTED",
+   "edge_enabled": true,
+   "notes": "previously approved; Root 401, /backend/biddings without params 403 from nginx on 2026-10-15; no bypass attempted. Engine path with limit/offset not re-probed.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "mets",
+   "host": "m-ets.ru",
+   "name": "МЭТС",
+   "categories": [
+    "bankruptcy",
+    "public-offer"
+   ],
+   "status": "VERIFIED_PUBLIC_ACCESS",
+   "edge_enabled": true,
+   "notes": "previously approved; Root 200 text/html, TLS valid (2026-10-15). Card path not re-probed in this run.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "utpl",
+   "host": "bankrupt.utpl.ru",
+   "name": "ОТП (УТПЛ)",
+   "categories": [
+    "bankruptcy",
+    "public-offer"
+   ],
+   "status": "LIVE_LOT_VERIFIED",
+   "edge_enabled": true,
+   "notes": "previously approved; Catalog 200; 10 cards parsed; 2 public-offer cards confirmed accepting applications by status+deadline (2026-10-15).",
+   "verified_at": "2026-10-15",
+   "template_family": "all-torgi"
+  },
+  {
+   "id": "cdtrf-bankrot",
+   "host": "bankrot.cdtrf.ru",
+   "name": "ЦДТРФ банкротство",
+   "categories": [
+    "bankruptcy",
+    "public-offer"
+   ],
+   "status": "CANDIDATE",
+   "edge_enabled": false,
+   "notes": "Root 200 but only 189 bytes; catalog not mapped.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "cdtrf-torgi",
+   "host": "torgi.cdtrf.ru",
+   "name": "ЦДТРФ торги",
+   "categories": [
+    "commercial",
+    "state"
+   ],
+   "status": "CANDIDATE",
+   "edge_enabled": false,
+   "notes": "Root 200 TLS valid DNS public (2026-10-15); catalog/card path not yet mapped.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "nistp",
+   "host": "www.nistp.ru",
+   "name": "НИСТП",
+   "categories": [
+    "bankruptcy",
+    "public-offer"
+   ],
+   "status": "CANDIDATE",
+   "edge_enabled": false,
+   "notes": "Root 200 TLS valid DNS public (2026-10-15); catalog/card path not yet mapped.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "alfalot-bankrupt",
+   "host": "bankrupt.alfalot.ru",
+   "name": "Алфалот банкротство",
+   "categories": [
+    "bankruptcy",
+    "public-offer"
+   ],
+   "status": "RESTRICTED",
+   "edge_enabled": false,
+   "notes": "HTTP 429 on first root request (2026-10-15); retry only with owner-approved rate.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "alfalot-eco",
+   "host": "ecosystem.alfalot.ru",
+   "name": "Алфалот экосистема",
+   "categories": [
+    "commercial",
+    "state"
+   ],
+   "status": "CANDIDATE",
+   "edge_enabled": false,
+   "notes": "Root 200 TLS valid DNS public (2026-10-15); catalog/card path not yet mapped.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "etpu",
+   "host": "bankrupt.etpu.ru",
+   "name": "ЭТП Урал",
+   "categories": [
+    "bankruptcy",
+    "public-offer"
+   ],
+   "status": "VERIFIED_PUBLIC_ACCESS",
+   "edge_enabled": false,
+   "notes": "Same family template; catalog+cards readable and parsed; none of 5 sampled auction cards currently accepting applications.",
+   "verified_at": "2026-10-15",
+   "template_family": "all-torgi"
+  },
+  {
+   "id": "sibtoptrade",
+   "host": "sibtoptrade.ru",
+   "name": "Сибтоптрейд",
+   "categories": [
+    "bankruptcy"
+   ],
+   "status": "CANDIDATE",
+   "edge_enabled": false,
+   "notes": "Root 200 TLS valid; page text matches captcha/anti-bot pattern (may be a script mention); catalog path not mapped.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "rad",
+   "host": "catalog.lot-online.ru",
+   "name": "РАД каталог",
+   "categories": [
+    "bankruptcy",
+    "state",
+    "commercial"
+   ],
+   "status": "CANDIDATE",
+   "edge_enabled": false,
+   "notes": "previously: exact detail only, no discovery; Root 200 TLS valid DNS public (2026-10-15); catalog/card path not yet mapped.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "centerr-bankrupt",
+   "host": "bankrupt.centerr.ru",
+   "name": "Центр реализации банкротство",
+   "categories": [
+    "bankruptcy",
+    "public-offer"
+   ],
+   "status": "LIVE_LOT_VERIFIED",
+   "edge_enabled": false,
+   "notes": "Same \"Все торги\" family template; catalog 200; 5/5 public-offer cards confirmed accepting applications (2026-10-15).",
+   "verified_at": "2026-10-15",
+   "template_family": "all-torgi"
+  },
+  {
+   "id": "centerr-arrest",
+   "host": "arrest.centerr.ru",
+   "name": "Центр реализации арест",
+   "categories": [
+    "arrested"
+   ],
+   "status": "VERIFIED_PUBLIC_ACCESS",
+   "edge_enabled": false,
+   "notes": "Catalog 200 but lot ids/titles identical to bankrupt.centerr.ru; not a distinct arrested-property source until category evidence found.",
+   "verified_at": "2026-10-15",
+   "template_family": "all-torgi"
+  },
+  {
+   "id": "atctrade",
+   "host": "atctrade.ru",
+   "name": "АТЦ",
+   "categories": [
+    "bankruptcy"
+   ],
+   "status": "CANDIDATE",
+   "edge_enabled": false,
+   "notes": "Root 302 -> /index.html (same host); catalog not mapped.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "vertrades",
+   "host": "bankrot.vertrades.ru",
+   "name": "Вертрейдс",
+   "categories": [
+    "bankruptcy"
+   ],
+   "status": "CANDIDATE",
+   "edge_enabled": false,
+   "notes": "Root 302 -> relative \"bidding\"; catalog not mapped.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "ru-trade24",
+   "host": "ru-trade24.ru",
+   "name": "Ру-Трейд24",
+   "categories": [
+    "bankruptcy"
+   ],
+   "status": "CANDIDATE",
+   "edge_enabled": false,
+   "notes": "Root 200 TLS valid DNS public (2026-10-15); catalog/card path not yet mapped.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "mets-meetings",
+   "host": "meetings.m-ets.ru",
+   "name": "МЭТС собрания",
+   "categories": [
+    "bankruptcy"
+   ],
+   "status": "VERIFIED_PUBLIC_ACCESS",
+   "edge_enabled": false,
+   "notes": "meetings, probably not lots; Root identical to m-ets.ru; meetings page, no lots expected. Not edge-enabled.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "roseltorg-178",
+   "host": "178fz.roseltorg.ru",
+   "name": "Росэлторг 178-ФЗ",
+   "categories": [
+    "state",
+    "municipal",
+    "rent"
+   ],
+   "status": "CANDIDATE",
+   "edge_enabled": false,
+   "notes": "Root 200 TLS valid DNS public (2026-10-15); catalog/card path not yet mapped.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "roseltorg-com",
+   "host": "com.roseltorg.ru",
+   "name": "Росэлторг коммерческие",
+   "categories": [
+    "commercial",
+    "rent"
+   ],
+   "status": "CANDIDATE",
+   "edge_enabled": false,
+   "notes": "Root 200 TLS valid DNS public (2026-10-15); catalog/card path not yet mapped.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "tektorg",
+   "host": "service.tektorg.ru",
+   "name": "ТЭК-Торг",
+   "categories": [
+    "commercial",
+    "state"
+   ],
+   "status": "CANDIDATE",
+   "edge_enabled": false,
+   "notes": "Root 200 TLS valid (\"Комплаенс-сервис\" landing); anti-bot hint; public catalog path not mapped.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  },
+  {
+   "id": "etp-torgi",
+   "host": "www.etp-torgi.ru",
+   "name": "ЭТП Торги",
+   "categories": [
+    "bankruptcy",
+    "commercial"
+   ],
+   "status": "BLOCKED",
+   "edge_enabled": false,
+   "notes": "www.etp-torgi.ru: NXDOMAIN on 2026-10-15; correct hostname unknown.",
+   "verified_at": "2026-10-15",
+   "template_family": null
+  }
+ ],
+ "candidates_discovered": []
+}

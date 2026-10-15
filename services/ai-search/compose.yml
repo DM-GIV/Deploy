@@ -1,8 +1,12 @@
+# Isolation model: ai-search sits on an internal-only network (no route out, no published port).
+# The edge container is its only neighbour: loopback forwarder 127.0.0.1:18082 -> ai-search:8080 and an
+# allowlist CONNECT gate (4 public hosts, :443, public IPs only). HTTPS_PROXY is deliberately not passed through.
 services:
   ai-search:
     build:
       context: ../..
       dockerfile: services/ai-search/Dockerfile
+    image: torgatlas-ai-search:local
     container_name: torgatlas-ai-search
     restart: unless-stopped
     env_file:
@@ -11,18 +15,13 @@ services:
       HOST: 0.0.0.0
       PORT: 8080
       AI_LOT_TRUST_PROXY: "true"
-      HTTPS_PROXY: ${HTTPS_PROXY:-}
-      HTTP_PROXY: ${HTTP_PROXY:-}
-      NO_PROXY: ${NO_PROXY:-127.0.0.1,localhost}
-    ports:
-      - "127.0.0.1:18082:8080"
+      AI_LOT_EGRESS_GATE: http://torgatlas-ai-edge:3128
+    networks: [ta_ai_internal]
     read_only: true
     tmpfs:
       - /tmp:size=16m,noexec,nosuid,nodev
-    cap_drop:
-      - ALL
-    security_opt:
-      - no-new-privileges:true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
     pids_limit: 64
     mem_limit: 192m
     cpus: 0.50
@@ -31,3 +30,34 @@ services:
       interval: 30s
       timeout: 3s
       retries: 3
+
+  ai-edge:
+    image: torgatlas-ai-search:local
+    container_name: torgatlas-ai-edge
+    restart: unless-stopped
+    command: ["node", "services/ai-search/edge.mjs"]
+    depends_on: [ai-search]
+    environment:
+      AI_UPSTREAM_HOST: torgatlas-ai-search
+      AI_UPSTREAM_PORT: "8080"
+    ports:
+      - "127.0.0.1:18082:8080"
+    networks: [ta_ai_internal, ta_ai_front]
+    read_only: true
+    tmpfs:
+      - /tmp:size=4m,noexec,nosuid,nodev
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 32
+    mem_limit: 64m
+    cpus: 0.25
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+networks:
+  ta_ai_internal:
+    internal: true
+  ta_ai_front: {}
