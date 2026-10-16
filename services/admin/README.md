@@ -17,7 +17,7 @@ Add with `register_module(key, title, path)` in `admin_app.py`; only registered 
 3. `mkdir -p -m700 …/isolated/admin/{data,config}`; create `config/admin.env` (0600) from `env.example`.
 4. `export ADMIN_UID=$(id -u) ADMIN_GID=$(id -g) ADMIN_ENV_FILE=… LEADS_DATA_HOST_DIR=…/lead-intake/data ADMIN_DATA_HOST_DIR=…/isolated/admin/data; docker compose up -d --build` in `services/admin`.
 5. Interactive console: `python3 services/admin/adminctl.py --db …/admin/data/admin.sqlite3 create-user owner` (password hidden; TOTP key printed only to that terminal).
-6. Telegram: create bot via @BotFather, put `TELEGRAM_BOT_TOKEN`/`TELEGRAM_CHAT_ID` in `admin.env`, run `adminctl.py telegram-test`.
+6. Telegram (owner action; the token goes only into admin.env, never into chat/Git; the chat id is not a secret but is kept there too): create bot via @BotFather, put `TELEGRAM_BOT_TOKEN`/`TELEGRAM_CHAT_ID` in `admin.env`, run `adminctl.py telegram-test`.
 7. Copy `nginx/torgatlas-admin.conf` + `admin-proxy.inc` to `torgatlas-ops/nginx/torgatlas.d/`, `nginx -t` inside the proxy container, then reload.
 8. Never list the subdomain in sitemap.xml (it is not in this repo's sitemap).
 
