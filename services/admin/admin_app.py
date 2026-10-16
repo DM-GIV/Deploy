@@ -94,7 +94,7 @@ class App:
         session = self.admin.get_session(cookies.get(COOKIE))
         api = path.startswith("/api/")
         if method == "POST" and not self.same_origin(headers):
-            self.admin.audit(session and session["username"], ip, "csrf_origin_rejected", path, ok=False)
+            self.admin.audit(session and session["username"], ip, "csrf_origin_rejected", "%s %s" % (path, self.origin_reason(headers)), ok=False)
             return self.text(403, "forbidden")
         form = self.parse_form(headers, body) if method == "POST" else {}
 
@@ -295,11 +295,19 @@ class App:
         site = headers.get("sec-fetch-site")
         return site in (None, "same-origin")
 
+    def origin_reason(self, headers):
+        """Safe diagnostic for the audit log: classifies Origin / Sec-Fetch-Site, never stores raw header values."""
+        origin = headers.get("origin")
+        kind = "absent" if origin is None else "match" if origin == self.origin else "null" if origin == "null" else "other"
+        site = headers.get("sec-fetch-site")
+        site = "absent" if site is None else site if site in ("same-origin", "same-site", "cross-site", "none") else "other"
+        return "origin=%s sfs=%s" % (kind, site)
+
     def cookie(self, token, max_age):
         return "%s=%s; Path=/; Max-Age=%d; HttpOnly; Secure; SameSite=Strict" % (COOKIE, token, max_age)
 
     SEC = {"Cache-Control": "no-store, max-age=0", "X-Content-Type-Options": "nosniff", "X-Frame-Options": "DENY",
-           "Referrer-Policy": "no-referrer", "X-Robots-Tag": "noindex, nofollow, noarchive", "Cross-Origin-Opener-Policy": "same-origin",
+           "Referrer-Policy": "same-origin", "X-Robots-Tag": "noindex, nofollow, noarchive", "Cross-Origin-Opener-Policy": "same-origin",
            "Content-Security-Policy": "default-src 'none'; style-src 'self'; img-src 'self' data:; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
            "Strict-Transport-Security": "max-age=31536000"}
 

@@ -209,6 +209,17 @@ class Csrf(Base):
         self.assertEqual(s, 403)
         self.assertEqual(self.app.leads.get(lid)["state"], "new")
 
+    def test_origin_null_rejected_with_safe_audit_reason_and_same_origin_policy(self):
+        # Browsers send "Origin: null" on same-origin POST under Referrer-Policy: no-referrer, so the policy must be same-origin.
+        s, h, _ = self.req("GET", "/login")
+        self.assertEqual(h.get("referrer-policy"), "same-origin")
+        s, _, _ = self.req("POST", "/login", form={"username": "owner", "password": PASSWORD, "code": "123456"}, headers={"Origin": "null", "Sec-Fetch-Site": "same-origin"})
+        self.assertEqual(s, 403)
+        rows = [tuple(r) for r in self.app.admin.audit_rows() if "csrf_origin_rejected" in tuple(r)]
+        self.assertTrue(rows)
+        self.assertIn("origin=null sfs=same-origin", str(rows[0]))
+        self.assertNotIn(PASSWORD, str(rows[0]))
+
     def test_get_never_mutates(self):
         token = self.session()
         lid = add_lead(self.leads_path)
