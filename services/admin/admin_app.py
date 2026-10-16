@@ -46,7 +46,7 @@ def page(title, body, nav_active="", user=None, csrf="", counters=None):
                '<form method="post" action="/logout"><input type="hidden" name="csrf" value="%s"><button class="link">Выйти</button></form></header>'
                % ("".join(items), E(csrf)))
     return ('<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-            '<meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">'
+            '<meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="same-origin">'
             '<title>%s — ТоргАтлас админ</title><link rel="stylesheet" href="/static/admin.css?v=1"></head><body>%s<main>%s</main></body></html>'
             % (E(title), nav, body))
 

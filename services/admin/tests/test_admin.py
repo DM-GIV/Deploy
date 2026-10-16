@@ -213,6 +213,9 @@ class Csrf(Base):
         # Browsers send "Origin: null" on same-origin POST under Referrer-Policy: no-referrer, so the policy must be same-origin.
         s, h, _ = self.req("GET", "/login")
         self.assertEqual(h.get("referrer-policy"), "same-origin")
+        # a <meta name=referrer> in the page overrides the header, so it must agree (regression: meta no-referrer made Chrome send Origin: null)
+        self.assertIn('<meta name="referrer" content="same-origin">', _)
+        self.assertNotIn("no-referrer", _.replace("noopener noreferrer", ""))
         s, _, _ = self.req("POST", "/login", form={"username": "owner", "password": PASSWORD, "code": "123456"}, headers={"Origin": "null", "Sec-Fetch-Site": "same-origin"})
         self.assertEqual(s, 403)
         rows = [tuple(r) for r in self.app.admin.audit_rows() if "csrf_origin_rejected" in tuple(r)]
