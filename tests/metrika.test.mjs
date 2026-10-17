@@ -13,13 +13,16 @@ function harness({ code = source, consent = null, gpc = false, dnt = '0', url = 
   if (consent !== null) storage.set('ta_metrika_consent', consent);
   let storageTouched = 0;
   const anchor = { parentNode: { insertBefore(node) { inserted.push(node); } } };
+  const replaced = [];
   const document = {
     referrer, scripts: [],
+    getElementById: id => (id === 'lot-check-form' ? {} : null),
     createElement: tag => ({ tagName: tag.toUpperCase() }),
     getElementsByTagName: () => [anchor]
   };
   const window = {
     location: new URL(url), document,
+    history: { state: null, replaceState(st, title, target) { replaced.push(target); } },
     localStorage: { getItem(k) { storageTouched++; return storage.has(k) ? storage.get(k) : null; }, setItem(k, v) { storageTouched++; storage.set(k, v); } },
     addEventListener(type, fn) { listeners.set(type, fn); }
   };
@@ -27,7 +30,7 @@ function harness({ code = source, consent = null, gpc = false, dnt = '0', url = 
   vm.runInNewContext(code, { window, document, navigator, URL, Object, Date });
   const calls = () => (window.ym && window.ym.a ? window.ym.a.map(a => Array.from(a)) : []);
   const fire = name => listeners.get('auction:funnel')?.({ detail: { event: name, channel: 'email', source: 'x', contact: 'a@b.ru' } });
-  return { window, inserted, storage, calls, fire, listeners, touched: () => storageTouched };
+  return { window, inserted, replaced, storage, calls, fire, listeners, touched: () => storageTouched };
 }
 
 test('disabled by default: no listeners, banner, storage or requests', () => {
@@ -98,4 +101,18 @@ test('goal mapping: exact identifiers, no params, unknown events dropped', () =>
   const goals = h.calls().slice(1);
   assert.equal(JSON.stringify(goals), JSON.stringify(Object.values(map).map(g => [113657048, 'reachGoal', g])));
   assert.ok(goals.every(g => g.length === 3), 'no params / PII');
+});
+
+test('address bar: query and unknown fragment are dropped before the tag starts, known anchors stay', () => {
+  const h = harness({ consent: 'accepted' });
+  assert.equal(h.replaced.length, 1);
+  assert.equal(h.replaced[0], '/proverka-lota/');
+  const a = harness({ consent: 'accepted', url: 'https://torgatlas.ru/proverka-lota/?utm=1#lot-check-form' });
+  assert.equal(a.replaced[0], '/proverka-lota/#lot-check-form');
+  const clean = harness({ consent: 'accepted', url: 'https://torgatlas.ru/blog/' });
+  assert.equal(clean.replaced.length, 0);
+  const tok = harness({ consent: 'accepted', url: 'https://torgatlas.ru/privacy/#token=abc' });
+  assert.equal(tok.replaced[0], '/privacy/');
+  const none = harness({ consent: 'declined', url: 'https://torgatlas.ru/x/?a=1' });
+  assert.equal(none.replaced.length, 0);
 });

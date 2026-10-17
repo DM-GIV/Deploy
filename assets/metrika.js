@@ -3,6 +3,7 @@
  * independent from Umami); no consent, GPC or DNT = zero requests. METRIKA_ENABLED = false is the kill switch (no listeners, no storage reads).
  * Based on the official snippet from the counter settings, adapted for privacy: page URL and referrer are sent without query/hash
  * (lot links and prefilled forms live in the query), link tracking is off, Webvisor and ecommerce are not enabled.
+ * Before the tag starts the address bar loses its query and non-anchor fragment, because click-map and goal hits send the real address.
  * The official <noscript><img> pixel is intentionally NOT used: it would call mc.yandex.ru without consent.
  * Goals are fed only from the site's closed funnel event bus ('auction:funnel'); no parameters, contacts or free text are ever sent.
  */
@@ -42,9 +43,22 @@
     } catch (_) { return window.location.origin + '/'; }
   }
 
+  // The counter reads the real address for click-map and goal hits (page-url / page-ref), ignoring the sanitised init url.
+  // The site itself never reads query parameters, so before the counter starts drop the query and any fragment that is not an
+  // in-page anchor (an element id) from the address bar. Known anchors such as #lot-check-form stay.
+  function sanitizeAddress() {
+    try {
+      var loc = window.location;
+      var hash = loc.hash || '';
+      var keepHash = hash.length > 1 && /^#[A-Za-z0-9_-]{1,64}$/.test(hash) && !!document.getElementById(hash.slice(1));
+      if (loc.search || (hash && !keepHash)) window.history.replaceState(window.history.state, '', loc.pathname + (keepHash ? hash : ''));
+    } catch (_) {}
+  }
+
   function startMetrika() {
     if (started || privacySignalEnabled()) return;
     started = true;
+    sanitizeAddress();
     (function (m, e, t, r, i, k, a) {
       m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments); };
       m[i].l = 1 * new Date();

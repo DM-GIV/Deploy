@@ -144,6 +144,7 @@ def main():
         init = c.calls()[0]
         check("D: tag.js requested exactly once for counter 113657048", len(c.tag) == 1 and c.tag[0].endswith("tag.js?id=113657048"))
         check("D: init for 113657048 with page URL without query/hash", init[0] == 113657048 and init[1] == "init" and init[2]["url"] == "https://torgatlas.ru/proverka-lota/")
+        check("D: address bar sanitised (no query, no non-anchor fragment) once the counter starts", c.page.evaluate("location.search === '' && location.hash === ''"))
         check("D: no webvisor / ecommerce / trackLinks", "webvisor" not in init[2] and "ecommerce" not in init[2] and init[2].get("trackLinks") is False)
         c.page.locator("a[href='/poisk-imushchestva/']").first.click()
         c.page.wait_for_function("location.pathname === '/poisk-imushchestva/'", timeout=10000)
