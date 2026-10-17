@@ -82,7 +82,7 @@ class App:
     def smtp_configured(self):
         e = self.env
         return (all(isinstance(e.get(k), str) and e[k].strip() for k in SMTP_KEYS)
-                and e["SMTP_PORT"] in ("465", "587"))
+                and e["SMTP_PORT"] in ("465", "587", "1126", "1127"))
 
     def ready(self):
         """enabled() plus a real, privately stored, durable, migrated database (cached 5 s)."""
@@ -262,12 +262,12 @@ class App:
         mail.set_content("ID: " + ident + "\nType: " + kind + "\nContact: " + contact +
                          "\nConsent: " + version + "\n\n" + message)
         port = int(env["SMTP_PORT"])
-        if port == 465:
+        if port in (465, 1127):
             smtp = smtplib.SMTP_SSL(env["SMTP_HOST"], port, timeout=7, context=ssl.create_default_context())
         else:
             smtp = smtplib.SMTP(env["SMTP_HOST"], port, timeout=7)
         with smtp:
-            if port == 587:
+            if port in (587, 1126):
                 smtp.ehlo()
                 smtp.starttls(context=ssl.create_default_context())
                 smtp.ehlo()
