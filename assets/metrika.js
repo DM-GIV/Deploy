@@ -53,7 +53,11 @@
       var loc = window.location;
       var hash = loc.hash || '';
       var keepHash = hash.length > 1 && /^#[A-Za-z0-9_-]{1,64}$/.test(hash) && !!document.getElementById(hash.slice(1));
-      if (loc.search || (hash && !keepHash)) window.history.replaceState(window.history.state, '', loc.pathname + (keepHash ? hash : ''));
+      // The official debugger switch (?_ym_debug=1..9, nothing else in the query) carries no data and is needed for verification.
+      var keepQuery = /^\?_ym_debug=\d$/.test(loc.search || '');
+      if ((loc.search && !keepQuery) || (hash && !keepHash)) {
+        window.history.replaceState(window.history.state, '', loc.pathname + (keepQuery ? loc.search : '') + (keepHash ? hash : ''));
+      }
     } catch (_) {}
   }
 

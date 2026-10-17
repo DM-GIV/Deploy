@@ -125,3 +125,14 @@ test('the same goal emitted twice by one click is sent once', () => {
   const goals = h.calls().filter(c => c[1] === 'reachGoal').map(c => c[2]);
   assert.equal(JSON.stringify(goals), JSON.stringify(['contact_click', 'lead_submit_success']));
 });
+
+test('official debug switch ?_ym_debug=N survives, any other query is dropped entirely', () => {
+  const dbg = harness({ consent: 'accepted', url: 'https://torgatlas.ru/ai-poisk-lotov/?_ym_debug=2' });
+  assert.equal(dbg.replaced.length, 0);
+  const mixed = harness({ consent: 'accepted', url: 'https://torgatlas.ru/ai-poisk-lotov/?_ym_debug=2&phone=79990000000' });
+  assert.equal(mixed.replaced[0], '/ai-poisk-lotov/');
+  const anchor = harness({ consent: 'accepted', url: 'https://torgatlas.ru/proverka-lota/?_ym_debug=2#lot-check-form' });
+  assert.equal(anchor.replaced.length, 0);
+  const other = harness({ consent: 'accepted', url: 'https://torgatlas.ru/proverka-lota/?_ym_debug=abc' });
+  assert.equal(other.replaced[0], '/proverka-lota/');
+});

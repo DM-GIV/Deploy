@@ -62,6 +62,8 @@
     if (routes[dest] && dest !== window.location.pathname) {
       track('funnel_page_route', { destination:routes[dest] });
     }
+    // Links with data-copy / data-copy-before-nav are reported by assets/contact-copy.js (it knows the channel, incl. MAX): one click, one event.
+    if (link.closest('[data-copy], [data-copy-before-nav]')) return;
     if (/^mailto:/i.test(href)) track('funnel_contact_open', { channel:'email' });
     else if (/^tel:/i.test(href)) track('funnel_contact_open', { channel:'phone' });
     else if (/^https:\/\/t\.me\//i.test(href)) track('funnel_contact_open', { channel:'telegram' });

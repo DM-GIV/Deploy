@@ -68,6 +68,33 @@ class MetrikaStaticTest(unittest.TestCase):
         strip = lambda h: re.sub(r'<script src="/assets/(?:metrika|analytics)\.js[^"]*" defer></script>', "", h)
         self.assertEqual(strip(now), strip(consent), "consent text of version 2026-10-12.2 must not change")
 
+    def test_banner_contrast_aa_neutral_theme_and_labels(self):
+        js = (ROOT / "assets/analytics.js").read_text(encoding="utf-8")
+
+        def lum(hex_):
+            rgb = [int(hex_[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+            lin = [c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4 for c in rgb]
+            return 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2]
+
+        def ratio(a, b):
+            la, lb = sorted((lum(a), lum(b)), reverse=True)
+            return (la + 0.05) / (lb + 0.05)
+
+        pairs = [("#1f2933", "#f6f7f9"), ("#1f2933", "#ffffff"), ("#3e4c59", "#ffffff"), ("#3e4c59", "#f6f7f9"), ("#ffffff", "#3e5c76"),
+                 ("#ffffff", "#334e68"), ("#2f5d8a", "#f6f7f9"), ("#1f2933", "#e4e7eb"), ("#1d4e89", "#f6f7f9")]
+        for fg, bg in pairs:
+            self.assertGreaterEqual(ratio(fg, bg), 4.5, (fg, bg))
+        for colour in ("#f6f7f9", "#3e5c76", "#2f5d8a", "#1f2933"):
+            self.assertIn(colour, js)
+        for old in ("#071c2e", "#f5b942", "#9fd0ff"):
+            self.assertNotIn(old, js)
+        for label in ("Сохранить выбор", "Принять всё", "Отказаться от всего", ">Umami<", ">Яндекс Метрика<"):
+            self.assertIn(label, js)
+        self.assertNotIn("http", js.split("BANNER_CSS")[1].split("function renderConsentBanner")[0])  # no external fonts/images in the banner CSS
+        self.assertNotIn("data-consent-metrika checked", js)
+        self.assertIn("focus-visible", js)
+        self.assertIn("@media (max-width:480px)", js)
+
 
 if __name__ == "__main__":
     unittest.main()

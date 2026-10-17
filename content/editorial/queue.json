@@ -82,7 +82,7 @@
       "route": "/blog/gosudarstvennye-i-municipalnye-torgi/",
       "source_path": "blog/gosudarstvennye-i-municipalnye-torgi/index.html",
       "status": "DRAFT_REVIEW_REQUIRED",
-      "content_sha256": "448a9617a560c968e5854ce888d727437121a3c05d56b6d8b83fdd1ec1decb2d",
+      "content_sha256": "ddcac28fff9cf709e7c32a4ec9b00bd40c378c1f0d0cebf428f5fb67d02ba5a2",
       "sources": [
         "https://torgi.gov.ru/"
       ],

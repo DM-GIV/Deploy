@@ -154,7 +154,7 @@
   }
 
   // Local record of the choice (what was shown, when). It stays in this browser: it is not a server-side proof of consent.
-  var BANNER_VERSION = '2026-10-17.1';
+  var BANNER_VERSION = '2026-10-17.2';
   function writeRecord(umami, metrika) {
     writeKey('ta_analytics_consent_record', JSON.stringify({ banner: BANNER_VERSION, at: new Date().toISOString(), umami: umami, metrika: metrika }));
   }
@@ -179,23 +179,36 @@
     }
   }
 
+  // Calm, neutral banner. Colours (WCAG AA, checked in tests/metrika_static_test.py): text #1f2933 / #3e4c59 on #f6f7f9 and #fff,
+  // accent #3e5c76 with white text, links #2f5d8a. System fonts only; the stylesheet lives inside the banner node.
+  var BANNER_CSS = '.ta-consent{position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;max-width:620px;margin:0 auto;box-sizing:border-box;background:#f6f7f9;color:#1f2933;border:1px solid #cbd2d9;border-radius:10px;padding:14px 16px;font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;box-shadow:0 2px 12px rgba(31,41,51,.12);max-height:88vh;overflow:auto}' +
+    '.ta-consent *{box-sizing:border-box}.ta-consent p{margin:0 0 10px}.ta-consent a{color:#2f5d8a;text-decoration:underline}' +
+    '.ta-consent label{display:flex;gap:10px;align-items:flex-start;margin:8px 0;padding:8px 10px;border:1px solid #d9dee3;border-radius:8px;background:#fff;cursor:pointer}' +
+    '.ta-consent input[type=checkbox]{flex:none;width:20px;height:20px;margin:1px 0 0;accent-color:#3e5c76}' +
+    '.ta-consent .ta-name{display:block;font-weight:600}.ta-consent .ta-note{display:block;color:#3e4c59}' +
+    '.ta-consent .ta-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}' +
+    '.ta-consent button{min-height:44px;padding:0 16px;border-radius:8px;border:1px solid #52606d;background:#fff;color:#1f2933;font:inherit;cursor:pointer}' +
+    '.ta-consent button:hover{background:#e4e7eb}.ta-consent button.ta-primary{background:#3e5c76;border-color:#3e5c76;color:#fff}.ta-consent button.ta-primary:hover{background:#334e68}' +
+    '.ta-consent :focus-visible{outline:3px solid #1d4e89;outline-offset:2px}' +
+    '@media (max-width:480px){.ta-consent{left:8px;right:8px;bottom:8px;padding:12px;font-size:13px}.ta-consent .ta-actions button{flex:1 1 100%}}';
+
   function renderConsentBanner(force) {
     if (!WEBSITE_ID || privacySignalEnabled() || banner) return;
     if (!force && readKey(CONSENT_KEY) && readKey(METRIKA_KEY)) return;
 
     var box = document.createElement('div');
+    box.className = 'ta-consent';
     box.setAttribute('role', 'dialog');
     box.setAttribute('aria-label', 'Настройки аналитики');
-    box.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;max-width:600px;margin:0 auto;background:#071c2e;color:#fff;padding:14px 16px;border-radius:12px;font:14px/1.45 system-ui,sans-serif;box-shadow:0 8px 30px rgba(0,0,0,.3);max-height:88vh;overflow:auto';
-    var btn = 'min-height:44px;padding:0 16px;border-radius:8px;cursor:pointer;margin:4px 6px 0 0;';
-    box.innerHTML = '<p style="margin:0 0 8px"><strong>Статистика посещений.</strong> Оператор сайта — ИП Иванов Д. Г. Выберите, какие сервисы разрешить: по умолчанию всё выключено, сайт работает и при отказе. Контакты и тексты заявок в статистику не передаём. Выбор можно изменить в любой момент кнопкой «Настройки аналитики» внизу страницы. <a href="/privacy/#analytics" style="color:#9fd0ff">Подробная политика (раздел 9)</a></p>' +
-      '<label style="display:block;margin:6px 0"><input type="checkbox" data-consent-umami> Umami — наша статистика на нашем сервере, без cookie и без передачи третьим лицам</label>' +
-      '<label style="display:block;margin:6px 0"><input type="checkbox" data-consent-metrika> Яндекс Метрика — сервис ООО «Яндекс», обрабатывает данные по поручению оператора: cookie и идентификаторы в браузере, сведения о страницах, источнике перехода и устройстве, IP-адрес; запись экрана (Вебвизор) не ведётся</label>' +
-      '<button type="button" data-analytics-all style="' + btn + 'border:0;background:#f5b942;color:#071c2e;font-weight:700">Принять всё</button>' +
-      '<button type="button" data-analytics-save style="' + btn + 'border:1px solid #9fd0ff;background:transparent;color:#fff">Сохранить выбор</button>' +
-      '<button type="button" data-analytics-none style="' + btn + 'border:1px solid #6b7f92;background:transparent;color:#fff">Отказаться от всего</button>';
-
-    if (window.matchMedia && window.matchMedia('(max-width: 600px)').matches) { box.style.cssText += ';padding:10px 12px;font-size:12px;line-height:1.4;bottom:8px;left:8px;right:8px'; }
+    box.setAttribute('tabindex', '-1');
+    box.innerHTML = '<style>' + BANNER_CSS + '</style>' +
+      '<p><strong>Статистика посещений.</strong> Оператор сайта — ИП Иванов Д. Г. Выберите, какие сервисы разрешить: по умолчанию всё выключено, сайт работает и при отказе. Контакты и тексты заявок в статистику не передаём. Выбор можно изменить в любой момент кнопкой «Настройки аналитики» внизу страницы. <a href="/privacy/#analytics">Подробная политика (раздел 9)</a></p>' +
+      '<label><input type="checkbox" data-consent-umami><span><span class="ta-name">Umami</span><span class="ta-note">Наша статистика на нашем сервере, без cookie и без передачи третьим лицам.</span></span></label>' +
+      '<label><input type="checkbox" data-consent-metrika><span><span class="ta-name">Яндекс Метрика</span><span class="ta-note">Сервис ООО «Яндекс», обрабатывает данные по поручению оператора: cookie и идентификаторы в браузере, сведения о страницах, источнике перехода и устройстве, IP-адрес. Запись экрана (Вебвизор) не ведётся.</span></span></label>' +
+      '<div class="ta-actions">' +
+      '<button type="button" class="ta-primary" data-analytics-save>Сохранить выбор</button>' +
+      '<button type="button" data-analytics-all>Принять всё</button>' +
+      '<button type="button" data-analytics-none>Отказаться от всего</button></div>';
 
     var cu = box.querySelector('[data-consent-umami]');
     var cm = box.querySelector('[data-consent-metrika]');
@@ -204,8 +217,18 @@
     box.querySelector('[data-analytics-all]').addEventListener('click', function () { saveChoice(true, true); });
     box.querySelector('[data-analytics-none]').addEventListener('click', function () { saveChoice(false, false); });
     box.querySelector('[data-analytics-save]').addEventListener('click', function () { saveChoice(cu.checked === true, cm.checked === true); });
+    if (force) {
+      // Opened by the visitor from "Настройки аналитики": move focus into the dialog, Escape closes it without changing the choice.
+      var opener = document.activeElement;
+      box.addEventListener('keydown', function (event) {
+        if (event.key !== 'Escape') return;
+        box.remove(); banner = null;
+        if (opener && typeof opener.focus === 'function') opener.focus();
+      });
+    }
     banner = box;
     document.body.appendChild(box);
+    if (force && typeof box.focus === 'function') box.focus();
   }
 
   function addSettingsLink() {
