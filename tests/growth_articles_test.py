@@ -66,7 +66,7 @@ class Articles(unittest.TestCase):
             self.assertNotRegex(html, r"display:\s*none", slug)
             self.assertNotIn("<button", html, slug)
             scripts = re.findall(r'<script src="([^"]+)"', html)
-            self.assertEqual([re.sub(r"\?.*", "", s) for s in scripts], ["/assets/analytics.js", "/assets/funnel-events.js"], slug)   # nothing is needed to read
+            self.assertEqual([re.sub(r"\?.*", "", s) for s in scripts], ["/assets/metrika.js", "/assets/analytics.js", "/assets/funnel-events.js"], slug)   # nothing is needed to read
             self.assertFalse(ROOT.joinpath("assets/article.js").exists())
 
     def test_editorial_template_elements(self):

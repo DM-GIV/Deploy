@@ -100,6 +100,12 @@
       '</form>';
     preview.appendChild(block);
     var form = block.querySelector('form');
+    var startedTracking = false;
+    form.addEventListener('focusin', function (event) {
+      if (startedTracking || !event.target || (event.target.name !== 'contact' && event.target.name !== 'consent')) return;
+      startedTracking = true;
+      if (typeof window.auctionCROTrack === 'function') window.auctionCROTrack('lead_direct_started', {source:source});
+    });
     var contact = form.elements.namedItem('contact');
     var consent = form.elements.namedItem('consent');
     var prevContact = document.getElementById(kind === 'lot' ? 'contact' : 'search-contact');

@@ -268,7 +268,7 @@ def render(article: dict) -> str:
         f'<meta property="og:title" content="{esc(article["title"])}"><meta property="og:description" content="{esc(article["description"])}"><meta property="og:url" content="{url}">'
         '<meta property="og:image" content="https://torgatlas.ru/assets/torgatlas-social.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">'
         '<meta property="og:image:alt" content="ТоргАтлас — Все имущественные торги России">'
-        f'<script type="application/ld+json">{dump(blogposting)}</script><script type="application/ld+json">{dump(breadcrumbs)}</script></head><body>'
+        f'<script type="application/ld+json">{dump(blogposting)}</script><script type="application/ld+json">{dump(breadcrumbs)}</script><script src="{asset("/assets/metrika.js")}" defer></script></head><body>'
         f'<header class="site-header"><div class="wrap header-inner"><a class="brand" href="/">ТоргАтлас<small>Все имущественные торги России</small></a>{site_nav.inner_nav("/blog/" + slug + "/")}</div></header>'
         '<main id="main" class="post"><div class="intro post-hero"><div class="wrap">'
         f'<nav class="crumbs" aria-label="Навигационная цепочка"><a href="/">Главная</a> / <a href="/blog/">Материалы</a> / {esc(article["crumb"])}</nav>'

@@ -1,6 +1,7 @@
 # REVIEWED TEMPLATE ONLY — not active in production.
+# Yandex.Metrika (counter 113657048) hosts are listed for the consent-gated assets/metrika.js; no 'unsafe-inline' is needed (external script, no noscript pixel, Webvisor off).
 # Deploy first as Report-Only and inspect violations before enforcement.
-add_header Content-Security-Policy-Report-Only "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://cloud.umami.is; connect-src 'self' https://cloud.umami.is; img-src 'self' data: https://images.unsplash.com; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-src 'self'; upgrade-insecure-requests" always;
+add_header Content-Security-Policy-Report-Only "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://cloud.umami.is https://mc.yandex.ru https://yastatic.net; connect-src 'self' https://cloud.umami.is https://mc.yandex.ru; img-src 'self' data: https://images.unsplash.com https://mc.yandex.ru; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-src 'self'; upgrade-insecure-requests" always;
 add_header Cross-Origin-Opener-Policy-Report-Only "same-origin" always;
 
 # Keep the current short HSTS policy while app.torgatlas.ru and every other
