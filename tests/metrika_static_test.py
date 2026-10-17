@@ -88,10 +88,11 @@ class MetrikaStaticTest(unittest.TestCase):
             self.assertIn(colour, js)
         for old in ("#071c2e", "#f5b942", "#9fd0ff"):
             self.assertNotIn(old, js)
-        for label in ("Сохранить выбор", "Принять всё", "Отказаться от всего", ">Umami<", ">Яндекс Метрика<"):
+        for label in ("Принять выбранное", "Принять всё", "Отказаться от всего", ">Umami<", ">Яндекс Метрика<"):
             self.assertIn(label, js)
         self.assertNotIn("http", js.split("BANNER_CSS")[1].split("function renderConsentBanner")[0])  # no external fonts/images in the banner CSS
-        self.assertNotIn("data-consent-metrika checked", js)
+        self.assertIn("cm.checked = readKey(METRIKA_KEY) !== 'declined'", js)
+        self.assertIn("saveChoice(cu.checked === true, cm.checked === true)", js)
         self.assertIn("focus-visible", js)
         self.assertIn("@media (max-width:480px)", js)
 
