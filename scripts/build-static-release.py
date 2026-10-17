@@ -12,7 +12,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-ROOT_FILES = {"index.html", "404.html", "favicon.ico", "robots.txt", "sitemap.xml", "llms.txt"}
+ROOT_FILES = {"index.html", "404.html", "favicon.ico", "robots.txt", "sitemap.xml", "llms.txt", "yandex_dcff75ab84eb360e.html"}
 EXCLUDED_ROUTE_ROOTS = {"docs", "services", "tests", "scripts", "api", "lib", "content", ".github"}
 RELEASE_EXCLUSIONS = Path("content/editorial/release-exclusions.json")
 
