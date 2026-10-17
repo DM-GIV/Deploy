@@ -24,6 +24,8 @@
     funnel_contact_open: 'contact_click'
   };
   var started = false;
+  var lastSent = {};
+  var DEDUPE_MS = 1000; // one click can reach this bus twice (contact-copy.js and funnel-events.js both emit); count a goal once
 
   function privacySignalEnabled() {
     return navigator.globalPrivacyControl === true ||
@@ -82,7 +84,11 @@
     if (!started || privacySignalEnabled() || readConsent() !== 'accepted') return;
     var name = event && event.detail && event.detail.event;
     if (typeof name !== 'string' || !Object.prototype.hasOwnProperty.call(GOALS, name)) return;
-    window.ym(COUNTER_ID, 'reachGoal', GOALS[name]);
+    var goal = GOALS[name];
+    var now = Date.now();
+    if (lastSent[goal] && now - lastSent[goal] < DEDUPE_MS) return;
+    lastSent[goal] = now;
+    window.ym(COUNTER_ID, 'reachGoal', goal);
   }
 
   if (!METRIKA_ENABLED || privacySignalEnabled()) return;

@@ -202,7 +202,7 @@ def main():
         db.close()
         c.page.evaluate("document.addEventListener('click', e => e.preventDefault())")
         c.page.locator("a[href^='mailto:']").first.evaluate("el => el.click()")
-        check("E: contact_click sent for a contact link", "contact_click" in c.goals())
+        check("E: contact_click sent exactly once for one click on a contact link", c.goals().count("contact_click") == 1)
         c.page.evaluate("""() => { const a = document.createElement('a'); a.href = '#x'; a.dataset.track = 'ai_source_click'; a.textContent = 'x'; document.body.appendChild(a); a.click(); }""")
         c.page.evaluate("() => { window.auctionCROTrack('ai_search_start'); window.auctionCROTrack('ai_search_results'); }")
         check("E: source click and AI events map to their goals (simulated UI events)", {"lot_source_click", "ai_search_submit", "ai_search_results"} <= set(c.goals()))

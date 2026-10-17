@@ -116,3 +116,12 @@ test('address bar: query and unknown fragment are dropped before the tag starts,
   const none = harness({ consent: 'declined', url: 'https://torgatlas.ru/x/?a=1' });
   assert.equal(none.replaced.length, 0);
 });
+
+test('the same goal emitted twice by one click is sent once', () => {
+  const h = harness({ consent: 'accepted' });
+  h.fire('funnel_contact_open');
+  h.fire('funnel_contact_open');
+  h.fire('lead_direct_accepted');
+  const goals = h.calls().filter(c => c[1] === 'reachGoal').map(c => c[2]);
+  assert.equal(JSON.stringify(goals), JSON.stringify(['contact_click', 'lead_submit_success']));
+});
