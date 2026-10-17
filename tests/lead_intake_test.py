@@ -406,6 +406,31 @@ class SmtpTests(Base):
                     self.assertLess(client.calls.index("starttls"), client.calls.index("login"))
 
 
+class MailPrivacyTests(Base):
+    def test_smtp_notifications_exclude_contact_and_free_text(self):
+        app = lead.App(dict(self.env, **dict(SMTP_ENV, SMTP_PORT="1127")))
+        captured = []
+
+        class FakeSMTP:
+            def __enter__(self): return self
+            def __exit__(self, *args): return False
+            def login(self, user, password): pass
+            def send_message(self, message):
+                captured.append(message)
+                return {}
+
+        with patch.object(lead.smtplib, "SMTP_SSL", return_value=FakeSMTP()):
+            app.send_email("test-receipt", "lot", "PRIVATE@example.invalid",
+                                "PRIVATE MESSAGE TEXT", "2026-10-12.2")
+        self.assertEqual(len(captured), 1)
+        body = captured[0].get_content()
+        self.assertIn("test-receipt", body)
+        self.assertIn("Type: lot", body)
+        self.assertNotIn("PRIVATE@example.invalid", body)
+        self.assertNotIn("PRIVATE MESSAGE TEXT", body)
+        self.assertNotIn("2026-10-12.2", body)
+
+
 class SmtpConfiguredTests(Base):
     smtp = True
 
