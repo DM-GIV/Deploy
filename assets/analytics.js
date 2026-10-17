@@ -142,15 +142,34 @@
     } catch (_) {}
   }
 
+  function clearMetrikaStorage() {
+    // Identifiers the counter keeps in the visitor's browser on our origin (names per Yandex's cookie-usage description).
+    [window.localStorage, window.sessionStorage].forEach(function (store) {
+      try {
+        Object.keys(store).forEach(function (key) {
+          if (key.indexOf('_ym') === 0 || key.indexOf('ytm_') === 0 || key === 'zz') store.removeItem(key);
+        });
+      } catch (_) {}
+    });
+  }
+
+  // Local record of the choice (what was shown, when). It stays in this browser: it is not a server-side proof of consent.
+  var BANNER_VERSION = '2026-10-17.1';
+  function writeRecord(umami, metrika) {
+    writeKey('ta_analytics_consent_record', JSON.stringify({ banner: BANNER_VERSION, at: new Date().toISOString(), umami: umami, metrika: metrika }));
+  }
+
   function saveChoice(umami, metrika) {
     var hadUmami = readKey(CONSENT_KEY) === 'accepted';
     var hadMetrika = readKey(METRIKA_KEY) === 'accepted';
     writeKey(CONSENT_KEY, umami ? 'accepted' : 'declined');
     writeKey(METRIKA_KEY, metrika ? 'accepted' : 'declined');
+    writeRecord(umami, metrika);
     if (banner) { banner.remove(); banner = null; }
     if ((hadUmami && !umami) || (hadMetrika && !metrika)) {
-      // Withdrawal: tags already running on this page cannot be unloaded, so remove Metrika cookies and reload without them.
-      if (hadMetrika && !metrika) clearMetrikaCookies();
+      // Withdrawal: tags already running on this page cannot be unloaded, so stop further collection: remove the Metrika cookies and
+      // local identifiers reachable from this site and reload without the tag. Data Yandex already received is not deleted by this.
+      if (hadMetrika && !metrika) { clearMetrikaCookies(); clearMetrikaStorage(); }
       try { window.location.reload(); } catch (_) {}
       return;
     }
@@ -169,9 +188,9 @@
     box.setAttribute('aria-label', 'Настройки аналитики');
     box.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;max-width:600px;margin:0 auto;background:#071c2e;color:#fff;padding:14px 16px;border-radius:12px;font:14px/1.45 system-ui,sans-serif;box-shadow:0 8px 30px rgba(0,0,0,.3);max-height:88vh;overflow:auto';
     var btn = 'min-height:44px;padding:0 16px;border-radius:8px;cursor:pointer;margin:4px 6px 0 0;';
-    box.innerHTML = '<p style="margin:0 0 8px"><strong>Статистика посещений.</strong> Выберите, какие сервисы разрешить. Сайт работает и при отказе. Контакты и тексты заявок в статистику не передаём. <a href="/privacy/" style="color:#9fd0ff">Подробнее</a></p>' +
+    box.innerHTML = '<p style="margin:0 0 8px"><strong>Статистика посещений.</strong> Оператор сайта — ИП Иванов Д. Г. Выберите, какие сервисы разрешить: по умолчанию всё выключено, сайт работает и при отказе. Контакты и тексты заявок в статистику не передаём. Выбор можно изменить в любой момент кнопкой «Настройки аналитики» внизу страницы. <a href="/privacy/#analytics" style="color:#9fd0ff">Подробная политика (раздел 9)</a></p>' +
       '<label style="display:block;margin:6px 0"><input type="checkbox" data-consent-umami> Umami — наша статистика на нашем сервере, без cookie и без передачи третьим лицам</label>' +
-      '<label style="display:block;margin:6px 0"><input type="checkbox" data-consent-metrika> Яндекс Метрика — сервис ООО «Яндекс»: cookie и сведения о посещённых страницах и обращениях; запись экрана (Вебвизор) не ведётся</label>' +
+      '<label style="display:block;margin:6px 0"><input type="checkbox" data-consent-metrika> Яндекс Метрика — сервис ООО «Яндекс», обрабатывает данные по поручению оператора: cookie и идентификаторы в браузере, сведения о страницах, источнике перехода и устройстве, IP-адрес; запись экрана (Вебвизор) не ведётся</label>' +
       '<button type="button" data-analytics-all style="' + btn + 'border:0;background:#f5b942;color:#071c2e;font-weight:700">Принять всё</button>' +
       '<button type="button" data-analytics-save style="' + btn + 'border:1px solid #9fd0ff;background:transparent;color:#fff">Сохранить выбор</button>' +
       '<button type="button" data-analytics-none style="' + btn + 'border:1px solid #6b7f92;background:transparent;color:#fff">Отказаться от всего</button>';

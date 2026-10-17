@@ -47,6 +47,22 @@ class MetrikaStaticTest(unittest.TestCase):
         goals = set(re.findall(r":\s*'([a-z_]+)',?\n", js.split("var GOALS")[1].split("};")[0] + "\n"))
         self.assertEqual(goals, {"ai_search_submit", "ai_search_results", "lot_source_click", "lead_form_start", "lead_submit_success", "contact_click"})
 
+    def test_policy_roles_registry_and_consent_version(self):
+        policy = (ROOT / "privacy/index.html").read_text(encoding="utf-8")
+        self.assertIn("лицом, действующим по поручению Оператора", policy)
+        self.assertIn("п. 5.4", policy)
+        self.assertEqual(policy.count("https://yandex.ru/legal/metrica_termsofuse/"), 1)
+        self.assertEqual(policy.count("https://yandex.ru/legal/confidential/"), 1)
+        self.assertIn("https://yandex.ru/support/metrica/ru/general/cookie-usage.html", policy)
+        for banned in ("100456724", "направлено уведомление", "подано изменение", "Яндекс Метрика использует cookie (см. выше)"):
+            self.assertNotIn(banned, policy)
+        self.assertEqual(policy.count("документально не подтвержд"), 3)  # registry (sec.1), registry (footer), Yandex retention (sec.9)
+        self.assertIn("не удаляет данные, которые Яндекс уже получил", policy)
+        consent = subprocess.check_output(["git", "show", "48cd39f:privacy/consent/index.html"], cwd=ROOT, text=True)
+        now = (ROOT / "privacy/consent/index.html").read_text(encoding="utf-8")
+        strip = lambda h: re.sub(r'<script src="/assets/(?:metrika|analytics)\.js[^"]*" defer></script>', "", h)
+        self.assertEqual(strip(now), strip(consent), "consent text of version 2026-10-12.2 must not change")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -138,7 +138,7 @@ def main():
         # D. Metrika accepted: tag requested once, sanitised init, no webvisor, survives navigation
         c = Ctx(browser)
         c.goto()
-        c.page.evaluate("document.cookie='_ym_uid=123; path=/'")
+        c.page.evaluate("document.cookie='_ym_uid=123; path=/'; localStorage.setItem('_ym_uid','1'); localStorage.setItem('_ym113657048_lsid','1'); localStorage.setItem('zz','1'); localStorage.setItem('keep_me','1')")
         choose(c.page, False, True)
         c.page.wait_for_function("window.__tagLoads === 1", timeout=5000)
         init = c.calls()[0]
@@ -158,6 +158,9 @@ def main():
         c.page.wait_for_load_state("domcontentloaded")
         c.page.wait_for_timeout(800)
         check("F: withdrawal stores declined and removes _ym cookies", c.stored() == ["declined", "declined"] and "_ym" not in c.page.evaluate("document.cookie"))
+        check("F: Metrika local identifiers removed, unrelated key kept", c.page.evaluate("[localStorage.getItem('_ym_uid'), localStorage.getItem('_ym113657048_lsid'), localStorage.getItem('zz'), localStorage.getItem('keep_me')]") == [None, None, None, "1"])
+        rec = json.loads(c.page.evaluate("localStorage.getItem('ta_analytics_consent_record')"))
+        check("F: local consent record has banner version and time only", set(rec) == {"banner", "at", "umami", "metrika"} and rec["metrika"] is False)
         check("F: no tag load after withdrawal reload", len(c.tag) == before and c.page.evaluate("window.ym") is None)
         c.close()
 

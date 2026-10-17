@@ -165,8 +165,8 @@ test('before-send keeps only a safe channel in data', () => {
   assert.equal(bs('event', {name:'lot_check_complete', url:'/', data:{channel:'email'}}).data, undefined);
 });
 
-function bannerHarness({umami=null, metrika=null, cookie='_ym_uid=1; other=2'}={}) {
-  const storage = new Map();
+function bannerHarness({umami=null, metrika=null, cookie='_ym_uid=1; other=2', extraStorage={}}={}) {
+  const storage = new Map(Object.entries(extraStorage));
   if (umami !== null) storage.set('ta_analytics_consent', umami);
   if (metrika !== null) storage.set('ta_metrika_consent', metrika);
   const nodes = {};
@@ -184,7 +184,8 @@ function bannerHarness({umami=null, metrika=null, cookie='_ym_uid=1; other=2'}={
   };
   const window = {
     doNotTrack:'0', location:{ origin:'https://torgatlas.ru', hostname:'torgatlas.ru', href:'https://torgatlas.ru/', reload(){ reloads++; } },
-    localStorage:{ getItem:k => storage.has(k) ? storage.get(k) : null, setItem:(k,v) => storage.set(k,String(v)) },
+    localStorage:{ getItem:k => storage.has(k) ? storage.get(k) : null, setItem:(k,v) => storage.set(k,String(v)), removeItem:k => storage.delete(k), ...Object.fromEntries([...storage.keys()].map(k => [k, 1])) },
+    sessionStorage:{ _ym_debugger_state:'1', removeItem(k){ delete this[k]; } },
     addEventListener(){}, dispatchEvent(e){ events.push(e.type); }, matchMedia: () => ({matches:false})
   };
   class CustomEvent { constructor(type){ this.type = type; } }
@@ -249,4 +250,27 @@ test('withdrawal of Metrika clears _ym cookies and reloads the page', () => {
   assert.ok(h.cookieWrites.some(c => c.startsWith('_ym_uid=;') && c.includes('expires=Thu, 01 Jan 1970')));
   assert.ok(!h.cookieWrites.some(c => c.startsWith('other=')));
   assert.equal(h.reloads, 1);
+});
+
+test('withdrawal also clears Metrika local identifiers but keeps unrelated and consent keys', () => {
+  const h = bannerHarness({umami:'accepted', metrika:'accepted', extraStorage:{ _ym_uid:'1', _ym12345_lsid:'x', zz:'z', unrelated:'keep' }});
+  h.docListeners.click({target:{closest: s => s === '[data-analytics-settings]' ? {} : null}});
+  h.mk('[data-consent-umami]').checked = true;
+  h.mk('[data-consent-metrika]').checked = false;
+  h.mk('[data-analytics-save]').handlers.click();
+  for (const k of ['_ym_uid', '_ym12345_lsid', 'zz']) assert.equal(h.storage.has(k), false, k);
+  assert.equal(h.storage.get('unrelated'), 'keep');
+  assert.equal(h.storage.get('ta_metrika_consent'), 'declined');
+});
+
+test('choice is recorded locally with banner version and time, without any personal data', () => {
+  const h = bannerHarness();
+  h.mk('[data-analytics-all]').handlers.click();
+  const rec = JSON.parse(h.storage.get('ta_analytics_consent_record'));
+  assert.deepEqual(Object.keys(rec).sort(), ['at', 'banner', 'metrika', 'umami']);
+  assert.equal(rec.umami, true);
+  assert.equal(rec.metrika, true);
+  assert.match(rec.at, /^\d{4}-\d\d-\d\dT/);
+  assert.match(h.appended[0].innerHTML, /ИП Иванов/);
+  assert.match(h.appended[0].innerHTML, /\/privacy\/#analytics/);
 });
