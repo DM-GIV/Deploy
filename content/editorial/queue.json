@@ -11,7 +11,7 @@
       "route": "/blog/o-chem-budem-pisat-v-torgatlas/",
       "source_path": "blog/o-chem-budem-pisat-v-torgatlas/index.html",
       "status": "DRAFT_FOR_OWNER_APPROVAL",
-      "content_sha256": "a55a22177cf1c5ab33b79b88b38f794053c24c8546e8750abd198cc47659e9fc",
+      "content_sha256": "0f28fa631a9b714e8e93a67bca98dbe880147f542bb82659ece7579451638a06",
       "sources": [],
       "gates": {
         "demand": false,
@@ -32,7 +32,7 @@
       "route": "/blog/zadatok-na-torgah-po-bankrotstvu/",
       "source_path": "blog/zadatok-na-torgah-po-bankrotstvu/index.html",
       "status": "PUBLISHED",
-      "content_sha256": "fd83087a327d5789252727ba3553f289a9ea37767e601a10ad851aaa4328a082",
+      "content_sha256": "d7c69e0a8d93716576465296359cab28f53d5339489dd3b19877c9be37e26f04",
       "sources": [
         "https://bankrot.fedresurs.ru/"
       ],
@@ -57,7 +57,7 @@
       "route": "/blog/publichnoe-predlozhenie-bankrotstvo/",
       "source_path": "blog/publichnoe-predlozhenie-bankrotstvo/index.html",
       "status": "PUBLISHED",
-      "content_sha256": "7854896a71e216cb24a8d2b072b225a05ac620514e7ae622ec302edfbff34656",
+      "content_sha256": "5fbcd304c4699ae467a3bffd1dad23ff7b3909cfd8768d51db396eac2bed0905",
       "sources": [
         "https://bankrot.fedresurs.ru/"
       ],
@@ -82,7 +82,7 @@
       "route": "/blog/gosudarstvennye-i-municipalnye-torgi/",
       "source_path": "blog/gosudarstvennye-i-municipalnye-torgi/index.html",
       "status": "DRAFT_REVIEW_REQUIRED",
-      "content_sha256": "ddcac28fff9cf709e7c32a4ec9b00bd40c378c1f0d0cebf428f5fb67d02ba5a2",
+      "content_sha256": "8df28b68e99e5bfcf1caadf0929be3a87794134e0008907f7c3af37fa0325043",
       "sources": [
         "https://torgi.gov.ru/"
       ],
