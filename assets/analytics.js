@@ -111,7 +111,7 @@
   }
 
   // Single banner for two independent services: Umami (own server) and Yandex.Metrika (third party, cookies).
-  // Nothing is pre-ticked; every service is stored under its own key; assets/metrika.js starts only on 'ta:metrika-consent'.
+  // Metrika is visually preselected if no preference exists, but no tracking starts until a separate affirmative click; each service has its own key.
   var METRIKA_KEY = 'ta_metrika_consent';
   var banner = null;
 
@@ -154,7 +154,7 @@
   }
 
   // Local record of the choice (what was shown, when). It stays in this browser: it is not a server-side proof of consent.
-  var BANNER_VERSION = '2026-10-17.2';
+  var BANNER_VERSION = '2026-10-17.3';
   function writeRecord(umami, metrika) {
     writeKey('ta_analytics_consent_record', JSON.stringify({ banner: BANNER_VERSION, at: new Date().toISOString(), umami: umami, metrika: metrika }));
   }
@@ -202,18 +202,18 @@
     box.setAttribute('aria-label', 'Настройки аналитики');
     box.setAttribute('tabindex', '-1');
     box.innerHTML = '<style>' + BANNER_CSS + '</style>' +
-      '<p><strong>Статистика посещений.</strong> Оператор сайта — ИП Иванов Д. Г. Выберите, какие сервисы разрешить: по умолчанию всё выключено, сайт работает и при отказе. Контакты и тексты заявок в статистику не передаём. Выбор можно изменить в любой момент кнопкой «Настройки аналитики» внизу страницы. <a href="/privacy/#analytics">Подробная политика (раздел 9)</a></p>' +
+      '<p><strong>Статистика посещений.</strong> Оператор сайта — ИП Иванов Д. Г. До подтверждения выбора аналитика не запускается. Яндекс Метрика предварительно отмечена, но вы можете снять галочку либо полностью отказаться; сайт работает и при отказе. Контакты и тексты заявок в статистику не передаём. Выбор можно изменить в любой момент кнопкой «Настройки аналитики» внизу страницы. <a href="/privacy/#analytics">Подробная политика (раздел 9)</a></p>' +
       '<label><input type="checkbox" data-consent-umami><span><span class="ta-name">Umami</span><span class="ta-note">Наша статистика на нашем сервере, без cookie и без передачи третьим лицам.</span></span></label>' +
       '<label><input type="checkbox" data-consent-metrika><span><span class="ta-name">Яндекс Метрика</span><span class="ta-note">Сервис ООО «Яндекс», обрабатывает данные по поручению оператора: cookie и идентификаторы в браузере, сведения о страницах, источнике перехода и устройстве, IP-адрес. Запись экрана (Вебвизор) не ведётся.</span></span></label>' +
       '<div class="ta-actions">' +
-      '<button type="button" class="ta-primary" data-analytics-save>Сохранить выбор</button>' +
+      '<button type="button" class="ta-primary" data-analytics-save>Принять выбранное</button>' +
       '<button type="button" data-analytics-all>Принять всё</button>' +
       '<button type="button" data-analytics-none>Отказаться от всего</button></div>';
 
     var cu = box.querySelector('[data-consent-umami]');
     var cm = box.querySelector('[data-consent-metrika]');
     cu.checked = readKey(CONSENT_KEY) === 'accepted';
-    cm.checked = readKey(METRIKA_KEY) === 'accepted';
+    cm.checked = readKey(METRIKA_KEY) !== 'declined';
     box.querySelector('[data-analytics-all]').addEventListener('click', function () { saveChoice(true, true); });
     box.querySelector('[data-analytics-none]').addEventListener('click', function () { saveChoice(false, false); });
     box.querySelector('[data-analytics-save]').addEventListener('click', function () { saveChoice(cu.checked === true, cm.checked === true); });
