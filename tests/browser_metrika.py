@@ -110,7 +110,7 @@ def main():
         c.goto()
         check("A: banner shown on first visit", banner_visible(c.page))
         box = c.page.locator("[role=dialog][aria-label='Настройки аналитики']")
-        check("A: both switches off by default", not box.locator("[data-consent-umami]").is_checked() and not box.locator("[data-consent-metrika]").is_checked())
+        check("A: Metrika checked visually but Umami off, no granted choice", not box.locator("[data-consent-umami]").is_checked() and box.locator("[data-consent-metrika]").is_checked())
         check("A: banner offers accept-all, save and refuse-all", box.locator("[data-analytics-all]").count() == 1 and box.locator("[data-analytics-save]").count() == 1 and box.locator("[data-analytics-none]").count() == 1)
         check("A: zero requests to Yandex before consent", c.mc == [])
         check("A: no storage or _ym cookies before consent", c.stored() == [None, None] and "_ym" not in c.page.evaluate("document.cookie"))

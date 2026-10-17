@@ -193,18 +193,19 @@ function bannerHarness({umami=null, metrika=null, cookie='_ym_uid=1; other=2', e
   return {storage, mk, appended, cookieWrites, events, scripts, docListeners, get reloads(){ return reloads; }};
 }
 
-test('banner: nothing is pre-ticked and both services start undecided', () => {
+test('banner: Metrika preselected visually but services remain undecided until click', () => {
   const h = bannerHarness();
   assert.equal(h.appended.length, 1);
   assert.match(h.appended[0].innerHTML, /Umami/);
   assert.match(h.appended[0].innerHTML, /Яндекс Метрика/);
-  assert.doesNotMatch(h.appended[0].innerHTML, /checked/);
+  assert.equal(h.mk('[data-consent-metrika]').checked, true);
+  assert.equal(h.mk('[data-consent-umami]').checked, false);
   assert.equal(h.storage.size, 0);
   assert.equal(h.scripts.length, 0);
   assert.deepEqual(h.events, []);
 });
 
-test('banner: accept all stores two independent keys, loads Umami and signals Metrika', () => {
+test('banner: accept-all stores two independent keys, loads Umami and signals Metrika', () => {
   const h = bannerHarness();
   h.mk('[data-analytics-all]').handlers.click();
   assert.equal(h.storage.get('ta_analytics_consent'), 'accepted');

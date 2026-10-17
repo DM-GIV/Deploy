@@ -53,7 +53,7 @@ def main():
             c.goto("https://torgatlas.ru" + path)
             check("pre-consent %s: no Yandex and no foreign request, no storage, no cookies" % path,
                   c.mc == [] and c.foreign == [] and c.stored() == [None, None] and c.context.cookies() == [])
-            check("pre-consent %s: banner shown, both switches off" % path, dialog(c.page).is_visible() and not dialog(c.page).locator("input:checked").count())
+            check("pre-consent %s: visually prechecked Metrika; no tracking" % path, dialog(c.page).is_visible() and dialog(c.page).locator("[data-consent-metrika]").is_checked() and not dialog(c.page).locator("[data-consent-umami]").is_checked())
             c.close()
 
         # 3. keyboard: Tab order, Space toggles, focus ring visible, Enter saves; settings button opens focused dialog, Escape returns focus
@@ -66,15 +66,17 @@ def main():
             names.append(c.page.evaluate("document.activeElement.getAttribute('data-consent-umami') !== null ? 'umami' : document.activeElement.getAttribute('data-consent-metrika') !== null ? 'metrika' : (document.activeElement.textContent || '').trim()"))
             if names[-1] == "Отказаться от всего":
                 break
-        check("keyboard: Tab reaches both switches and all three buttons in order", names[:5] == ["umami", "metrika", "Сохранить выбор", "Принять всё", "Отказаться от всего"])
+        check("keyboard: Tab reaches both switches and all three buttons in order", names[:5] == ["umami", "metrika", "Принять выбранное", "Принять всё", "Отказаться от всего"])
         c.page.locator(DIALOG + " [data-consent-metrika]").focus()
         check("keyboard: visible focus ring on the switch", c.page.evaluate("getComputedStyle(document.activeElement).outlineStyle !== 'none' && parseFloat(getComputedStyle(document.activeElement).outlineWidth) >= 2"))
         c.page.keyboard.press("Space")
-        check("keyboard: Space ticks Metrika, Umami stays off", dialog(c.page).locator("[data-consent-metrika]").is_checked() and not dialog(c.page).locator("[data-consent-umami]").is_checked())
+        check("keyboard: Space unticks the preselected Metrika", not dialog(c.page).locator("[data-consent-metrika]").is_checked())
+        c.page.keyboard.press("Space")
+        check("keyboard: Space ticks Metrika again, Umami stays off", dialog(c.page).locator("[data-consent-metrika]").is_checked() and not dialog(c.page).locator("[data-consent-umami]").is_checked())
         c.page.locator(DIALOG + " [data-analytics-save]").focus()
         c.page.keyboard.press("Enter")
         c.page.wait_for_function("window.__tagLoads === 1", timeout=5000)
-        check("keyboard: Enter on 'Сохранить выбор' stores Metrika-only choice", c.stored() == ["declined", "accepted"] and not dialog(c.page).is_visible())
+        check("keyboard: Enter on 'Принять выбранное' stores Metrika-only choice", c.stored() == ["declined", "accepted"] and not dialog(c.page).is_visible())
         c.page.locator("[data-analytics-settings]").first.focus()
         c.page.keyboard.press("Enter")
         check("keyboard: settings opens the dialog and moves focus into it", dialog(c.page).is_visible() and c.page.evaluate("document.activeElement.getAttribute('role') === 'dialog'"))
