@@ -66,7 +66,12 @@ class MetrikaStaticTest(unittest.TestCase):
         consent = subprocess.check_output(["git", "show", "48cd39f:privacy/consent/index.html"], cwd=ROOT, text=True)
         now = (ROOT / "privacy/consent/index.html").read_text(encoding="utf-8")
         strip = lambda h: re.sub(r'<script src="/assets/(?:metrika|analytics)\.js[^"]*" defer></script>', "", h)
-        self.assertEqual(strip(now), strip(consent), "consent text of version 2026-10-12.2 must not change")
+        # Immutable consent scope/version; allow only the factual SMTP service-description correction.
+        before_mail = "Уведомление оператора по электронной почте — необязательный способ; при его включении текст заявки передаётся почтовому провайдеру, о чём Политика указывает отдельно, и это не условие приёма заявки."
+        after_mail = "Служебное уведомление оператору направляется через почтовый сервис Selectel в Яндекс Почту: в письме указываются только номер и тип заявки, без контактных данных и текста обращения. Отправка письма не является условием приёма заявки. Подробности указаны в Политике."
+        self.assertEqual(strip(now).replace(after_mail, before_mail), strip(consent), "Consent scope/version must stay unchanged except accurate mail delivery description")
+        self.assertIn("почтовый сервис Selectel (SMTP)", policy)
+        self.assertNotIn("пока SMTP не настроен", policy)
 
     def test_banner_contrast_aa_neutral_theme_and_labels(self):
         js = (ROOT / "assets/analytics.js").read_text(encoding="utf-8")
