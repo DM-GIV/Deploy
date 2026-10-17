@@ -54,9 +54,11 @@ class MetrikaStaticTest(unittest.TestCase):
         self.assertEqual(policy.count("https://yandex.ru/legal/metrica_termsofuse/"), 1)
         self.assertEqual(policy.count("https://yandex.ru/legal/confidential/"), 1)
         self.assertIn("https://yandex.ru/support/metrica/ru/general/cookie-usage.html", policy)
-        for banned in ("100456724", "направлено уведомление", "подано изменение", "Яндекс Метрика использует cookie (см. выше)"):
+        self.assertEqual(policy.count("№ 100456724 от 12 октября 2026 года"), 2)
+        self.assertEqual(policy.count("Утвержден приказ, в который входит данное уведомление об изменении"), 2)
+        for banned in ("внесены в реестр", "отражены в реестре", "подано изменение", "Яндекс Метрика использует cookie (см. выше)"):
             self.assertNotIn(banned, policy)
-        self.assertEqual(policy.count("документально не подтвержд"), 3)  # registry (sec.1), registry (footer), Yandex retention (sec.9)
+        self.assertEqual(policy.count("документально не подтвержд"), 1)  # only Yandex-side retention (sec.9)
         self.assertIn("не удаляет данные, которые Яндекс уже получил", policy)
         consent = subprocess.check_output(["git", "show", "48cd39f:privacy/consent/index.html"], cwd=ROOT, text=True)
         now = (ROOT / "privacy/consent/index.html").read_text(encoding="utf-8")
