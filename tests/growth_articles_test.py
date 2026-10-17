@@ -195,7 +195,7 @@ class SitemapAndDrafts(unittest.TestCase):
 class MenuAndCatalogue(unittest.TestCase):
     def test_final_header_on_every_page(self):
         for path, html in all_html().items():
-            if path == "privacy/consent/index.html":
+            if path == "privacy/consent/index.html" or path.startswith("yandex_"):
                 continue
             nav = re.search(r'<nav class="nav" aria-label="Основное меню">.*?</nav>', html, flags=re.S)
             if path == "index.html":

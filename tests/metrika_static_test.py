@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 def pages():
     names = subprocess.check_output(["git", "ls-files", "*.html"], cwd=ROOT, text=True).split()
-    return [n for n in names if not n.startswith("tests/")]
+    return [n for n in names if not n.startswith("tests/") and not n.startswith("yandex_")]
 
 
 class MetrikaStaticTest(unittest.TestCase):
