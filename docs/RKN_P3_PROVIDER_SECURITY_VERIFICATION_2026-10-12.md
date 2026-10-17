@@ -1,3 +1,5 @@
+> **УСТАРЕЛО (17.10.2026):** статусы «NEVER_SUBMITTED / RKN_NOT_SUBMITTED / DRAFT» ниже относятся к черновику. Уведомление №100456724 фактически направлено через ЕСИА 12.10.2026, приказ №252 от 16.10.2026. Актуальные статусы: `docs/METRIKA_001_LEGAL_EVIDENCE.md`.
+
 # AUC-204/P3 — verified 2026-10-12 legal-form addendum: Sel​​ectel region ru-7a; measures; Metrika; providers
 
 **Status:** VERIFIED_PARTIAL / FORM_DRAFT / NEVER_SUBMITTED / NOT_ACTIVATED. To be read with RKN_P3_COMBINED_LEADS_METRICS_SCOPE_2026-10-12.md. All production scope remains outside this legal-document PR.

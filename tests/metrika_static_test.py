@@ -56,7 +56,10 @@ class MetrikaStaticTest(unittest.TestCase):
         self.assertIn("https://yandex.ru/support/metrica/ru/general/cookie-usage.html", policy)
         self.assertEqual(policy.count("№ 100456724 от 12 октября 2026 года"), 2)
         self.assertEqual(policy.count("Утвержден приказ, в который входит данное уведомление об изменении"), 2)
-        for banned in ("внесены в реестр", "отражены в реестре", "подано изменение", "Яндекс Метрика использует cookie (см. выше)"):
+        self.assertEqual(policy.count("приказ № 252 от 16 октября 2026 года"), 2)
+        for goal in ("ведение кадрового и бухгалтерского учёта", "анализ посещаемости сайта torgatlas.ru, источников переходов, действий посетителей и конверсий с применением Яндекс Метрики", "подготовка, заключение и исполнение гражданско-правового договора"):
+            self.assertIn(goal, policy)
+        for banned in ("внесены в реестр", "отражены в реестре", "не подана", "повторная подача", "подано изменение", "Яндекс Метрика использует cookie (см. выше)"):
             self.assertNotIn(banned, policy)
         self.assertEqual(policy.count("документально не подтвержд"), 1)  # only Yandex-side retention (sec.9)
         self.assertIn("не удаляет данные, которые Яндекс уже получил", policy)
