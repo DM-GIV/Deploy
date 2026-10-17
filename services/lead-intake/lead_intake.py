@@ -82,7 +82,7 @@ class App:
     def smtp_configured(self):
         e = self.env
         return (all(isinstance(e.get(k), str) and e[k].strip() for k in SMTP_KEYS)
-                and e["SMTP_PORT"] in ("465", "587"))
+                and e["SMTP_PORT"] in ("465", "587", "1126", "1127"))
 
     def ready(self):
         """enabled() plus a real, privately stored, durable, migrated database (cached 5 s)."""
@@ -259,15 +259,18 @@ class App:
         mail["From"] = env["SMTP_FROM"]
         mail["To"] = env["LEAD_EMAIL_TO"]
         mail["Subject"] = "TorgAtlas lead " + ident
-        mail.set_content("ID: " + ident + "\nType: " + kind + "\nContact: " + contact +
-                         "\nConsent: " + version + "\n\n" + message)
+        # Send only a receipt reference and a controlled category to the SMTP provider.
+        # Contact details and free-form message remain in the private, access-controlled lead DB.
+        mail.set_content("New TorgAtlas lead received.\nID: " + ident +
+                         "\nType: " + kind +
+                         "\nDetails: open the protected TorgAtlas administration interface.")
         port = int(env["SMTP_PORT"])
-        if port == 465:
+        if port in (465, 1127):
             smtp = smtplib.SMTP_SSL(env["SMTP_HOST"], port, timeout=7, context=ssl.create_default_context())
         else:
             smtp = smtplib.SMTP(env["SMTP_HOST"], port, timeout=7)
         with smtp:
-            if port == 587:
+            if port in (587, 1126):
                 smtp.ehlo()
                 smtp.starttls(context=ssl.create_default_context())
                 smtp.ehlo()

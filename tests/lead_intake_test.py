@@ -367,6 +367,69 @@ class SmtpTests(Base):
     def test_incomplete_smtp_config_is_not_configured(self):
         self.assertFalse(lead.App(dict(self.env, SMTP_HOST="smtp.example.invalid")).smtp_configured())
 
+    def test_selectel_and_legacy_ports_require_complete_config(self):
+        for port in ("465", "587", "1126", "1127"):
+            with self.subTest(port=port):
+                self.assertTrue(lead.App(dict(self.env, **dict(SMTP_ENV, SMTP_PORT=port))).smtp_configured())
+        self.assertFalse(lead.App(dict(self.env, **dict(SMTP_ENV, SMTP_PORT="25"))).smtp_configured())
+
+    def test_selectel_1127_uses_implicit_tls_and_1126_requires_starttls(self):
+        class FakeSMTP:
+            def __init__(self):
+                self.calls = []
+            def __enter__(self):
+                return self
+            def __exit__(self, *args):
+                return False
+            def ehlo(self):
+                self.calls.append("ehlo")
+            def starttls(self, **kwargs):
+                self.calls.append("starttls")
+            def login(self, user, password):
+                self.calls.append("login")
+            def send_message(self, message):
+                self.calls.append("send")
+                return {}
+
+        for port, implicit in (("1127", True), ("1126", False)):
+            with self.subTest(port=port):
+                client = FakeSMTP()
+                app = lead.App(dict(self.env, **dict(SMTP_ENV, SMTP_PORT=port)))
+                with patch.object(lead.smtplib, "SMTP_SSL", return_value=client) as ssl_client, \
+                     patch.object(lead.smtplib, "SMTP", return_value=client) as starttls_client:
+                    app.send_email("test-only-id", "lot", CONTACT, MESSAGE, "2026-10-12.2")
+                self.assertEqual(bool(ssl_client.called), implicit)
+                self.assertEqual(bool(starttls_client.called), not implicit)
+                self.assertEqual(client.calls[-2:], ["login", "send"])
+                self.assertEqual("starttls" in client.calls, not implicit)
+                if not implicit:
+                    self.assertLess(client.calls.index("starttls"), client.calls.index("login"))
+
+
+class MailPrivacyTests(Base):
+    def test_smtp_notifications_exclude_contact_and_free_text(self):
+        app = lead.App(dict(self.env, **dict(SMTP_ENV, SMTP_PORT="1127")))
+        captured = []
+
+        class FakeSMTP:
+            def __enter__(self): return self
+            def __exit__(self, *args): return False
+            def login(self, user, password): pass
+            def send_message(self, message):
+                captured.append(message)
+                return {}
+
+        with patch.object(lead.smtplib, "SMTP_SSL", return_value=FakeSMTP()):
+            app.send_email("test-receipt", "lot", "PRIVATE@example.invalid",
+                                "PRIVATE MESSAGE TEXT", "2026-10-12.2")
+        self.assertEqual(len(captured), 1)
+        body = captured[0].get_content()
+        self.assertIn("test-receipt", body)
+        self.assertIn("Type: lot", body)
+        self.assertNotIn("PRIVATE@example.invalid", body)
+        self.assertNotIn("PRIVATE MESSAGE TEXT", body)
+        self.assertNotIn("2026-10-12.2", body)
+
 
 class SmtpConfiguredTests(Base):
     smtp = True
