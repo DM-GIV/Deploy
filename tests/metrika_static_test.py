@@ -27,12 +27,20 @@ class MetrikaStaticTest(unittest.TestCase):
 
     def test_loader_is_off_by_default_and_privacy_safe(self):
         js = (ROOT / "assets/metrika.js").read_text(encoding="utf-8")
-        self.assertIn("METRIKA_ENABLED = false", js)
+        self.assertIn("METRIKA_ENABLED = true", js)
         self.assertEqual(js.count("COUNTER_ID = 113657048"), 1)
         self.assertIn("trackLinks: false", js)
         for banned in ("webvisor", "ecommerce", "userParams", "params(", "location.href,"):
             self.assertNotIn(banned, js.replace("Webvisor and ecommerce are not enabled", ""))
         self.assertEqual(sorted(re.findall(r"reachGoal", js)), ["reachGoal"])
+
+    def test_every_page_has_banner_script_and_no_stray_counter_code(self):
+        for name in pages():
+            html = (ROOT / name).read_text(encoding="utf-8")
+            self.assertEqual(len(re.findall(r'src="/assets/analytics\.js', html)), 1, name)
+        js = (ROOT / "assets/metrika.js").read_text(encoding="utf-8")
+        self.assertNotIn("noscript><div", js)
+        self.assertNotIn("watch/113657048", js)
 
     def test_goal_identifiers(self):
         js = (ROOT / "assets/metrika.js").read_text(encoding="utf-8")

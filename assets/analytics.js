@@ -1,4 +1,4 @@
-/* ТоргАтлас: self-hosted Umami, consent-gated and disabled by default.
+/* ТоргАтлас: self-hosted Umami and the single consent banner (Umami + Yandex.Metrika, independent choices), consent-gated and disabled by default.
  * WEBSITE_ID = '' means: no tracker script, no consent UI, no storage reads/writes, no events.
  * The tracker is loaded from our own origin (/ta/s.js) only AFTER the visitor accepts; no consent, GPC or DNT = zero requests.
  * Only pageview (path, no query/hash) and the allowlisted funnel events are sent; never form data, contacts or free text.
@@ -32,11 +32,6 @@
   function readConsent() {
     try { return window.localStorage.getItem(CONSENT_KEY); }
     catch (_) { return null; }
-  }
-
-  function writeConsent(value) {
-    try { window.localStorage.setItem(CONSENT_KEY, value); }
-    catch (_) {}
   }
 
   function isAllowedEvent(name) {
@@ -115,29 +110,97 @@
     else if (readConsent() === 'accepted' && queue.length < 30) queue.push({ name: name, channel: channel });
   }
 
-  function renderConsentBanner() {
-    if (!WEBSITE_ID || readConsent() || privacySignalEnabled()) return;
+  // Single banner for two independent services: Umami (own server) and Yandex.Metrika (third party, cookies).
+  // Nothing is pre-ticked; every service is stored under its own key; assets/metrika.js starts only on 'ta:metrika-consent'.
+  var METRIKA_KEY = 'ta_metrika_consent';
+  var banner = null;
+
+  function readKey(key) {
+    try { return window.localStorage.getItem(key); }
+    catch (_) { return null; }
+  }
+
+  function writeKey(key, value) {
+    try { window.localStorage.setItem(key, value); }
+    catch (_) {}
+  }
+
+  function clearMetrikaCookies() {
+    try {
+      var host = window.location.hostname || '';
+      var parts = host.split('.');
+      var domains = ['', host];
+      if (parts.length > 2) domains.push(parts.slice(-2).join('.'));
+      if (parts.length > 1) domains.push('.' + parts.slice(-2).join('.'));
+      (document.cookie || '').split(';').forEach(function (item) {
+        var name = item.split('=')[0].trim();
+        if (name.indexOf('_ym') !== 0) return;
+        domains.forEach(function (d) {
+          document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + (d ? '; domain=' + d : '');
+        });
+      });
+    } catch (_) {}
+  }
+
+  function saveChoice(umami, metrika) {
+    var hadUmami = readKey(CONSENT_KEY) === 'accepted';
+    var hadMetrika = readKey(METRIKA_KEY) === 'accepted';
+    writeKey(CONSENT_KEY, umami ? 'accepted' : 'declined');
+    writeKey(METRIKA_KEY, metrika ? 'accepted' : 'declined');
+    if (banner) { banner.remove(); banner = null; }
+    if ((hadUmami && !umami) || (hadMetrika && !metrika)) {
+      // Withdrawal: tags already running on this page cannot be unloaded, so remove Metrika cookies and reload without them.
+      if (hadMetrika && !metrika) clearMetrikaCookies();
+      try { window.location.reload(); } catch (_) {}
+      return;
+    }
+    if (umami) loadUmami();
+    if (metrika && !hadMetrika) {
+      try { window.dispatchEvent(new CustomEvent('ta:metrika-consent')); } catch (_) {}
+    }
+  }
+
+  function renderConsentBanner(force) {
+    if (!WEBSITE_ID || privacySignalEnabled() || banner) return;
+    if (!force && readKey(CONSENT_KEY) && readKey(METRIKA_KEY)) return;
 
     var box = document.createElement('div');
     box.setAttribute('role', 'dialog');
-    box.setAttribute('aria-label', 'Статистика посещений');
-    box.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;max-width:560px;margin:0 auto;background:#071c2e;color:#fff;padding:14px 16px;border-radius:12px;font:14px/1.45 system-ui,sans-serif;box-shadow:0 8px 30px rgba(0,0,0,.3)';
-    box.innerHTML = '<p style="margin:0 0 10px">С вашего согласия собираем статистику посещений через Umami на нашем сервере, без cookie и передачи третьим лицам. Контакты и тексты заявок не передаём. <a href="/privacy/" style="color:#9fd0ff">Подробнее</a></p>' +
-      '<button type="button" data-analytics-accept style="min-height:44px;padding:0 18px;border:0;border-radius:8px;background:#f5b942;color:#071c2e;font-weight:700;cursor:pointer">Принять</button> ' +
-      '<button type="button" data-analytics-decline style="min-height:44px;padding:0 18px;border:1px solid #6b7f92;border-radius:8px;background:transparent;color:#fff;cursor:pointer">Отказаться</button>';
+    box.setAttribute('aria-label', 'Настройки аналитики');
+    box.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;max-width:600px;margin:0 auto;background:#071c2e;color:#fff;padding:14px 16px;border-radius:12px;font:14px/1.45 system-ui,sans-serif;box-shadow:0 8px 30px rgba(0,0,0,.3);max-height:88vh;overflow:auto';
+    var btn = 'min-height:44px;padding:0 16px;border-radius:8px;cursor:pointer;margin:4px 6px 0 0;';
+    box.innerHTML = '<p style="margin:0 0 8px"><strong>Статистика посещений.</strong> Выберите, какие сервисы разрешить. Сайт работает и при отказе. Контакты и тексты заявок в статистику не передаём. <a href="/privacy/" style="color:#9fd0ff">Подробнее</a></p>' +
+      '<label style="display:block;margin:6px 0"><input type="checkbox" data-consent-umami> Umami — наша статистика на нашем сервере, без cookie и без передачи третьим лицам</label>' +
+      '<label style="display:block;margin:6px 0"><input type="checkbox" data-consent-metrika> Яндекс Метрика — сервис ООО «Яндекс»: cookie и сведения о посещённых страницах и обращениях; запись экрана (Вебвизор) не ведётся</label>' +
+      '<button type="button" data-analytics-all style="' + btn + 'border:0;background:#f5b942;color:#071c2e;font-weight:700">Принять всё</button>' +
+      '<button type="button" data-analytics-save style="' + btn + 'border:1px solid #9fd0ff;background:transparent;color:#fff">Сохранить выбор</button>' +
+      '<button type="button" data-analytics-none style="' + btn + 'border:1px solid #6b7f92;background:transparent;color:#fff">Отказаться от всего</button>';
 
     if (window.matchMedia && window.matchMedia('(max-width: 600px)').matches) { box.style.cssText += ';padding:10px 12px;font-size:12px;line-height:1.4;bottom:8px;left:8px;right:8px'; }
 
-    box.querySelector('[data-analytics-accept]').addEventListener('click', function () {
-      writeConsent('accepted');
-      box.remove();
-      loadUmami();
-    });
-    box.querySelector('[data-analytics-decline]').addEventListener('click', function () {
-      writeConsent('declined');
-      box.remove();
-    });
+    var cu = box.querySelector('[data-consent-umami]');
+    var cm = box.querySelector('[data-consent-metrika]');
+    cu.checked = readKey(CONSENT_KEY) === 'accepted';
+    cm.checked = readKey(METRIKA_KEY) === 'accepted';
+    box.querySelector('[data-analytics-all]').addEventListener('click', function () { saveChoice(true, true); });
+    box.querySelector('[data-analytics-none]').addEventListener('click', function () { saveChoice(false, false); });
+    box.querySelector('[data-analytics-save]').addEventListener('click', function () { saveChoice(cu.checked === true, cm.checked === true); });
+    banner = box;
     document.body.appendChild(box);
+  }
+
+  function addSettingsLink() {
+    try {
+      if (privacySignalEnabled() || document.querySelector('[data-analytics-settings]')) return;
+      var footer = document.querySelector('footer .wrap') || document.querySelector('footer');
+      if (!footer || typeof footer.appendChild !== 'function') return;
+      var link = document.createElement('button');
+      link.setAttribute('type', 'button');
+      link.setAttribute('data-analytics-settings', '');
+      link.textContent = 'Настройки аналитики';
+      link.style.cssText = 'margin-left:12px;background:none;border:0;padding:0;color:inherit;font:inherit;text-decoration:underline;cursor:pointer';
+      footer.appendChild(link);
+    } catch (_) {}
   }
 
   if (!WEBSITE_ID) return;
@@ -145,11 +208,16 @@
   window.addEventListener('auction:funnel', handleFunnel);
 
   if (privacySignalEnabled()) return;
+  document.addEventListener('click', function (event) {
+    var t = event && event.target;
+    if (t && typeof t.closest === 'function' && t.closest('[data-analytics-settings]')) renderConsentBanner(true);
+  });
   if (readConsent() === 'accepted') loadUmami();
 
+  function onReady() { renderConsentBanner(false); addSettingsLink(); }
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', renderConsentBanner, { once: true });
+    document.addEventListener('DOMContentLoaded', onReady, { once: true });
   } else {
-    renderConsentBanner();
+    onReady();
   }
 })();

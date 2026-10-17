@@ -59,3 +59,16 @@ test('vendored widget has no hard-coded third-party fetch endpoints and carries 
   assert.doesNotMatch(file, /sentinel|spamfilter|verifyurl|customfetch|obfuscated/i);  // optional widget features stay unconfigured
   assert.match(fs.readFileSync(new URL('../assets/vendor/altcha/LICENSE.txt', import.meta.url), 'utf8'), /MIT License/);
 });
+
+test('goal events: success only after the verified 200/ACCEPTED/receipt branch, once; form-start once per form', () => {
+  const successCalls = file.match(/auctionCROTrack\('lead_direct_accepted'/g) || [];
+  assert.equal(successCalls.length, 1);
+  assert.equal((file.match(/showSuccess\(/g) || []).length, 2); // one call + one definition
+  const verified = file.indexOf("response.status === 200 && body && body.ok === true && body.code === 'ACCEPTED'");
+  const call = file.indexOf('showSuccess(body.receipt);');
+  const definition = file.indexOf('function showSuccess');
+  assert.ok(verified > 0 && call > verified && definition > call);
+  assert.match(file.slice(call, call + 60), /showSuccess\(body\.receipt\);\s*return;/);
+  assert.equal((file.match(/auctionCROTrack\('lead_direct_started'/g) || []).length, 1);
+  assert.match(file, /startedTracking/);
+});

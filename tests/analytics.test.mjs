@@ -164,3 +164,89 @@ test('before-send keeps only a safe channel in data', () => {
   assert.equal(bs('event', {name:'funnel_contact_open', url:'/', data:{channel:'a@b.ru'}}).data, undefined);
   assert.equal(bs('event', {name:'lot_check_complete', url:'/', data:{channel:'email'}}).data, undefined);
 });
+
+function bannerHarness({umami=null, metrika=null, cookie='_ym_uid=1; other=2'}={}) {
+  const storage = new Map();
+  if (umami !== null) storage.set('ta_analytics_consent', umami);
+  if (metrika !== null) storage.set('ta_metrika_consent', metrika);
+  const nodes = {};
+  const mk = sel => nodes[sel] = nodes[sel] || { handlers:{}, checked:false, style:{}, attrs:{}, addEventListener(t,f){ this.handlers[t]=f; }, setAttribute(k,v){ this.attrs[k]=v; }, querySelector(s){ return mk(s); }, remove(){ this.removed=true; }, appendChild(){ } };
+  const appended = []; const cookieWrites = []; const events = []; let reloads = 0; const scripts = [];
+  const docListeners = {};
+  const document = {
+    readyState:'complete',
+    get cookie(){ return cookie; }, set cookie(v){ cookieWrites.push(v); },
+    head:{ appendChild(n){ scripts.push(n); } },
+    body:{ appendChild(n){ appended.push(n); } },
+    createElement: tag => ({ tag, style:{}, attrs:{}, setAttribute(k,v){ this.attrs[k]=v; }, addEventListener(t,f){ this._h=this._h||{}; this._h[t]=f; }, querySelector(s){ return mk(s); }, remove(){ this.removed=true; } }),
+    querySelector(sel){ if (sel === 'script[data-torgatlas-umami]') return scripts[0] || null; return null; },
+    addEventListener(t,f){ docListeners[t]=f; }
+  };
+  const window = {
+    doNotTrack:'0', location:{ origin:'https://torgatlas.ru', hostname:'torgatlas.ru', href:'https://torgatlas.ru/', reload(){ reloads++; } },
+    localStorage:{ getItem:k => storage.has(k) ? storage.get(k) : null, setItem:(k,v) => storage.set(k,String(v)) },
+    addEventListener(){}, dispatchEvent(e){ events.push(e.type); }, matchMedia: () => ({matches:false})
+  };
+  class CustomEvent { constructor(type){ this.type = type; } }
+  vm.runInNewContext(original, {window, document, navigator:{globalPrivacyControl:false, doNotTrack:'0'}, URL, Date, console, setTimeout, clearTimeout, CustomEvent});
+  return {storage, mk, appended, cookieWrites, events, scripts, docListeners, get reloads(){ return reloads; }};
+}
+
+test('banner: nothing is pre-ticked and both services start undecided', () => {
+  const h = bannerHarness();
+  assert.equal(h.appended.length, 1);
+  assert.match(h.appended[0].innerHTML, /Umami/);
+  assert.match(h.appended[0].innerHTML, /Яндекс Метрика/);
+  assert.doesNotMatch(h.appended[0].innerHTML, /checked/);
+  assert.equal(h.storage.size, 0);
+  assert.equal(h.scripts.length, 0);
+  assert.deepEqual(h.events, []);
+});
+
+test('banner: accept all stores two independent keys, loads Umami and signals Metrika', () => {
+  const h = bannerHarness();
+  h.mk('[data-analytics-all]').handlers.click();
+  assert.equal(h.storage.get('ta_analytics_consent'), 'accepted');
+  assert.equal(h.storage.get('ta_metrika_consent'), 'accepted');
+  assert.equal(h.scripts.length, 1);
+  assert.deepEqual(h.events, ['ta:metrika-consent']);
+});
+
+test('banner: independent choice - Umami only, Metrika declined, no Metrika signal', () => {
+  const h = bannerHarness();
+  h.mk('[data-consent-umami]').checked = true;
+  h.mk('[data-consent-metrika]').checked = false;
+  h.mk('[data-analytics-save]').handlers.click();
+  assert.equal(h.storage.get('ta_analytics_consent'), 'accepted');
+  assert.equal(h.storage.get('ta_metrika_consent'), 'declined');
+  assert.deepEqual(h.events, []);
+});
+
+test('banner: decline all loads nothing and signals nothing', () => {
+  const h = bannerHarness();
+  h.mk('[data-analytics-none]').handlers.click();
+  assert.equal(h.storage.get('ta_analytics_consent'), 'declined');
+  assert.equal(h.storage.get('ta_metrika_consent'), 'declined');
+  assert.equal(h.scripts.length, 0);
+  assert.deepEqual(h.events, []);
+  assert.equal(h.reloads, 0);
+});
+
+test('existing Umami-only visitor is asked again only for Metrika; no banner once both answered', () => {
+  assert.equal(bannerHarness({umami:'accepted'}).appended.length, 1);
+  assert.equal(bannerHarness({umami:'accepted', metrika:'declined'}).appended.length, 0);
+});
+
+test('withdrawal of Metrika clears _ym cookies and reloads the page', () => {
+  const h = bannerHarness({umami:'accepted', metrika:'accepted'});
+  assert.equal(h.appended.length, 0);
+  h.docListeners.click({target:{closest: s => s === '[data-analytics-settings]' ? {} : null}});
+  assert.equal(h.appended.length, 1);
+  h.mk('[data-consent-umami]').checked = true;
+  h.mk('[data-consent-metrika]').checked = false;
+  h.mk('[data-analytics-save]').handlers.click();
+  assert.equal(h.storage.get('ta_metrika_consent'), 'declined');
+  assert.ok(h.cookieWrites.some(c => c.startsWith('_ym_uid=;') && c.includes('expires=Thu, 01 Jan 1970')));
+  assert.ok(!h.cookieWrites.some(c => c.startsWith('other=')));
+  assert.equal(h.reloads, 1);
+});
